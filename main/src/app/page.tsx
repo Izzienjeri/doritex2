@@ -1,4 +1,3 @@
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
@@ -50,7 +49,7 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
   const activeBook = books[activeIndex];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8">
       <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
         {books.map((book, i) => {
           const offset = i - activeIndex;
@@ -59,7 +58,7 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
           return (
             <motion.div
               key={book.id}
-              className="absolute w-52 h-full top-0 left-1/2 -ml-28"
+              className="absolute w-40 sm:w-52 h-full top-0 left-1/2 -ml-20 sm:-ml-28"
               initial={false}
               animate={{
                 x: `${offset * 35}%`,
@@ -153,7 +152,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl"
+              className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl"
             >
               Gateway to <span className="text-primary">Educational</span> Excellence.
             </motion.h1>
@@ -179,7 +178,7 @@ export default function HomePage() {
             </motion.div>
           </div>
           
-          <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
+          <div className="w-full h-[28rem] lg:h-[30rem] flex items-center justify-center">
             {isMounted && <HeroBookCoverflow books={heroBooks} setBooks={setHeroBooks} />}
           </div>
 
@@ -196,7 +195,7 @@ export default function HomePage() {
             Handpicked selections from our experts to kickstart your intellectual adventure.
           </p>
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"

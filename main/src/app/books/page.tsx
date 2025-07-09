@@ -56,7 +56,7 @@ export default function BooksPage() {
           </motion.div>
           
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

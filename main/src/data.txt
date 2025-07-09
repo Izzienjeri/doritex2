@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 09:17:59
+# Date and Time: 2025-07-09 09:41:25
 # Files Included: 16
 
 # === lib/utils.ts ===
@@ -687,8 +687,9 @@ export default function CartPage() {
         <div className="text-center py-20 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-            Looks like you haven't added any books yet.
-            </p>
+  Looks like you haven&apos;t added any books yet.
+</p>
+
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>
@@ -761,11 +762,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
       <motion.div
+        className="w-full max-w-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <Card className="w-full max-w-lg bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">
@@ -785,11 +787,12 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Login</Button>
             <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link href="/register" className="font-semibold text-primary hover:underline">
-                Sign up
-            </Link>
-            </p>
+                Don&apos;t have an account?{" "}
+                <Link href="/register" className="font-semibold text-primary hover:underline">
+                    Sign up
+                </Link>
+                </p>
+
 
           </CardFooter>
         </Card>
@@ -976,11 +979,12 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
       <motion.div
+        className="w-full max-w-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <Card className="w-full max-w-lg bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">
@@ -1416,8 +1420,8 @@ export function Footer() {
               Contact
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><a href="mailto:info@doritex.com" className="hover:text-primary transition-colors">info@doritex.com</a></li>
-              <li><a href="tel:+254123456789" className="hover:text-primary transition-colors">+254 123 456 789</a></li>
+              <li><a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">investments.doritex@gmail.com</a></li>
+              <li><a href="tel: +254 722 316 210" className="hover:text-primary transition-colors">+254 722 316 210</a></li>
             </ul>
           </div>
           <div>
@@ -1433,7 +1437,7 @@ export function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
-          <p className="mt-2">Created by <Link href="https://example.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">A. Developer</Link></p>
+          <p className="mt-2">Created by <Link href="https://izziedevs.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">IzzieDevs</Link></p>
         </div>
       </div>
     </footer>
@@ -1501,14 +1505,14 @@ export function Header() {
     >
       <div className="container mx-auto px-4">
         <div className="grid h-20 grid-cols-3 items-center">
+          {/* Left Column */}
           <div className="flex justify-start">
-            <div className="hidden lg:flex">
-              <BrandLogo />
-            </div>
-            <div className="lg:hidden"></div>
+            <BrandLogo />
           </div>
 
+          {/* Center Column */}
           <div className="flex justify-center">
+            {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link
@@ -1520,12 +1524,11 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-            <div className="flex lg:hidden">
-              <BrandLogo />
-            </div>
           </div>
           
+          {/* Right Column */}
           <div className="flex justify-end">
+            {/* Desktop Buttons */}
             <div className="hidden lg:flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -1557,6 +1560,7 @@ export function Header() {
               </Button>
             </div>
 
+            {/* Mobile Buttons */}
             <div className="lg:hidden flex items-center gap-2">
               <Button
                 variant="outline"
