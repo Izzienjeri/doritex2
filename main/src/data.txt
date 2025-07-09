@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 10:05:29
+# Date and Time: 2025-07-09 10:25:57
 # Files Included: 16
 
 # === lib/utils.ts ===
@@ -86,12 +86,12 @@ export const dummyBooks: Book[] = [
 ];
 
 export const dummyCategories = [
-  { name: "Science", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Science" },
-  { name: "Technology", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Technology" },
-  { name: "History", imageUrl: "https://placehold.co/600x400/2e3192/ffffff?text=History" },
-  { name: "Business", imageUrl: "https://placehold.co/600x400/2b2b2b/ffffff?text=Business" },
-  { name: "Mathematics", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Mathematics" },
-  { name: "Literature", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Literature" },
+  { name: "Science", imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D" },
+  { name: "Technology", imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fHRlY2hub2xvZ3l8ZW58MHx8MHx8fDA%3D" },
+  { name: "History", imageUrl: "https://images.unsplash.com/photo-1515325595179-59cd5262ca53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fEhpc3Rvcnl8ZW58MHx8MHx8fDA%3D" },
+  { name: "Business", imageUrl: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzl8fGJ1c2luZXNzfGVufDB8fDB8fHww" },
+  { name: "Mathematics", imageUrl: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWF0aGVtYXRpY3N8ZW58MHx8MHx8fDA%3D" },
+  { name: "Literature", imageUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxpdGVyYXR1cmV8ZW58MHx8MHx8fDA%3D" },
 ];
 
 # === app/globals.css ===
@@ -153,6 +153,7 @@ export const dummyCategories = [
   --popover-foreground: #ffffff;
   
   --primary: #00aaeb;
+  --primary-rgb: 0, 170, 235;
   --primary-foreground: #101118;
   
   --secondary: #3871c1;
@@ -305,6 +306,23 @@ export const dummyCategories = [
   transform-origin: left;
 }
 
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
+  }
+}
+
+@keyframes button-pulse {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 12px rgba(var(--primary-rgb), 0);
+  }
+}
+
+.animate-button-pulse {
+  animation: button-pulse 2.5s infinite;
+}
+
 # === app/layout.tsx ===
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
@@ -364,10 +382,10 @@ export default function RootLayout({
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
 import { Book, dummyBooks, dummyCategories } from "@/lib/data";
-import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useMotionValue, useTransform, animate, PanInfo } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
@@ -375,43 +393,13 @@ const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
   return shuffled.slice(0, count);
 };
 
-const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React.Dispatch<React.SetStateAction<Book[]>> }) => {
+const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
   const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBooks((currentBooks) => {
-        if (currentBooks.length < 2) return currentBooks;
-        const [first, ...rest] = currentBooks;
-        return [...rest, first];
-      });
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [books.length, setBooks]);
-
-  const handleNext = () => {
-    setBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const [first, ...rest] = currentBooks;
-      return [...rest, first];
-    });
-  };
-
-  const handlePrev = () => {
-    setBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const last = currentBooks[currentBooks.length - 1];
-      const rest = currentBooks.slice(0, -1);
-      return [last, ...rest];
-    });
-  };
-
   if (!books.length) return null;
-
   const activeBook = books[activeIndex];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
       <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
         {books.map((book, i) => {
           const offset = i - activeIndex;
@@ -420,7 +408,7 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
           return (
             <motion.div
               key={book.id}
-              className="absolute w-40 sm:w-52 h-full top-0 left-1/2 -ml-20 sm:-ml-28"
+              className="absolute w-52 h-full top-0 left-1/2 -ml-28"
               initial={false}
               animate={{
                 x: `${offset * 35}%`,
@@ -444,41 +432,120 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
           );
         })}
       </div>
-
       <div className="flex items-center gap-4">
-        <Button 
-            size="icon" 
-            variant="outline" 
-            className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={handlePrev}
-        >
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onPrev}>
           <ChevronLeft className="h-6 w-6" />
         </Button>
         <div className="text-center w-64">
-             <Link href={`/books/${activeBook?.id}`}>
-                <motion.h3
-                    key={activeBook?.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="font-bold text-lg text-white/90 truncate"
-                >
-                    {activeBook?.title}
-                </motion.h3>
-            </Link>
-            <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
+          <Link href={`/books/${activeBook?.id}`}>
+            <motion.h3 key={activeBook?.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-lg text-white/90 truncate">
+              {activeBook?.title}
+            </motion.h3>
+          </Link>
+          <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
         </div>
-        <Button 
-            size="icon" 
-            variant="outline" 
-            className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={handleNext}
-        >
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onNext}>
           <ChevronRight className="h-6 w-6" />
         </Button>
       </div>
     </div>
   );
 };
+
+const InteractiveHero = ({ books }: { books: Book[] }) => {
+  const [stack, setStack] = useState(books);
+  const x = useMotionValue(0);
+
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (Math.abs(info.offset.x) > 100) {
+      animate(x, info.offset.x > 0 ? 200 : -200, {
+        onComplete: () => {
+          x.set(0);
+          setStack(prev => {
+            const newStack = [...prev];
+            newStack.shift();
+            return newStack;
+          });
+        }
+      });
+    } else {
+      animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
+    }
+  };
+
+  useEffect(() => {
+    if (stack.length < 5) {
+      setStack(prev => [...prev, ...getRandomUniqueBooks(dummyBooks, 5)]);
+    }
+  }, [stack.length]);
+
+  return (
+    <div className="lg:hidden flex flex-col justify-end text-center h-dvh pb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="absolute top-24 left-0 right-0 px-4 z-10"
+      >
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-white text-shadow">
+          Gateway to <span className="text-primary">Educational</span> Excellence.
+        </h1>
+        <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto font-sans text-shadow">
+          Swipe to discover our featured books.
+        </p>
+      </motion.div>
+
+      <div className="relative h-[60%] w-full">
+        {stack.slice(0, 4).reverse().map((book, index, arr) => {
+          const isTopCard = index === arr.length - 1;
+          const rotate = useTransform(x, [-200, 200], [-30, 30], { clamp: false });
+
+          return (
+            <motion.div
+              key={book.id}
+              className="absolute top-0 left-0 right-0 w-64 h-[24rem] mx-auto "
+              style={ isTopCard ? { x, rotate } : {}}
+              animate={{
+                scale: 1 - (arr.length - 1 - index) * 0.05,
+                y: (arr.length - 1 - index) * -20,
+              }}
+              drag={isTopCard ? "x" : false}
+              dragConstraints={{ left: 0, right: 0, top:0, bottom:0 }}
+              onDragEnd={handleDragEnd}
+              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            >
+              <Link href={`/books/${book.id}`} className="w-full h-full block">
+                <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl shadow-black/60 p-4 flex flex-col justify-end text-left">
+                  <Image
+                    src={book.imageUrl}
+                    alt={book.title}
+                    fill
+                    className="object-cover rounded-2xl pointer-events-none"
+                    priority={isTopCard}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-2xl"></div>
+                  <div className="relative z-10 text-white">
+                    <h3 className="text-xl font-bold leading-tight">{book.title}</h3>
+                    <p className="text-sm text-white/70">{book.author}</p>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+       <motion.div 
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         transition={{ delay: 1, duration: 1 }}
+         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
+       >
+         <ChevronDown className="h-8 w-8 text-white/50 animate-bounce" />
+       </motion.div>
+    </div>
+  );
+};
+
 
 export default function HomePage() {
   const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
@@ -487,15 +554,34 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
-    setHeroBooks(getRandomUniqueBooks(dummyBooks, 7)); 
+    setHeroBooks(getRandomUniqueBooks(dummyBooks, 10)); 
   }, []);
+
+  const handleCoverflowNext = () => {
+    setHeroBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const [first, ...rest] = currentBooks;
+      return [...rest, first];
+    });
+  };
+
+  const handleCoverflowPrev = () => {
+    setHeroBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const last = currentBooks[currentBooks.length - 1];
+      const rest = currentBooks.slice(0, -1);
+      return [last, ...rest];
+    });
+  };
+  
+  useEffect(() => {
+    const interval = setInterval(handleCoverflowNext, 3000);
+    return () => clearInterval(interval);
+  }, [heroBooks]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
   };
 
   const itemVariants: Variants = {
@@ -507,47 +593,41 @@ export default function HomePage() {
     <div className="flex flex-col">
       <section id="interactive-hero" className="interactive-aurora w-full overflow-hidden relative">
         <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
-        <div className="container relative z-10 mx-auto min-h-[90vh] grid lg:grid-cols-2 items-center px-4 gap-12">
+        <div className="container relative z-10 mx-auto px-4">
           
-          <div className="text-center lg:text-left">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl"
-            >
-              Gateway to <span className="text-primary">Educational</span> Excellence.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans"
-            >
-              Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-10"
-            >
-              <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
-                <Link href="/books">
-                  Explore Collection <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-          
-          <div className="w-full h-[28rem] lg:h-[30rem] flex items-center justify-center">
-            {isMounted && <HeroBookCoverflow books={heroBooks} setBooks={setHeroBooks} />}
-          </div>
+          {isMounted && <InteractiveHero books={heroBooks} />}
 
+          <div className="hidden lg:grid min-h-[90vh] lg:grid-cols-2 items-center gap-12">
+            <div className="text-center lg:text-left">
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl">
+                Gateway to <span className="text-primary">Educational</span> Excellence.
+              </motion.h1>
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans">
+                Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
+              </motion.p>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mt-10">
+                <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine animate-button-pulse">
+                  <Link href="/books">
+                    Explore Collection <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </div>
+            
+            <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
+              {isMounted && (
+                <HeroBookCoverflow 
+                  books={heroBooks.slice(0, 7)} 
+                  onPrev={handleCoverflowPrev} 
+                  onNext={handleCoverflowNext} 
+                />
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 relative">
+      <section className="py-24 md:py-32 relative bg-background z-10">
         <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-4 text-foreground">
@@ -557,7 +637,7 @@ export default function HomePage() {
             Handpicked selections from our experts to kickstart your intellectual adventure.
           </p>
           <motion.div
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:-gap-x-8 sm:gap-y-12"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -611,10 +691,7 @@ export default function HomePage() {
       </section>
 
       <section id="about" className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}
-        ></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}></div>
         <div className="container mx-auto text-center px-4 relative">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
             Our Mission: Empowering Minds
@@ -622,13 +699,7 @@ export default function HomePage() {
           <p className="max-w-3xl mx-auto text-lg text-white/70 leading-relaxed mb-20 font-sans">
             At Doritex, we believe in the transformative power of knowledge. Our mission is to provide high-quality, accessible educational resources that inspire curiosity and empower individuals to achieve their goals.
           </p>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {[
               { icon: BookOpen, title: "Vast Collection", desc: "Explore a diverse range of subjects and authors." },
               { icon: Lightbulb, title: "Quality Content", desc: "Carefully curated and peer-reviewed publications." },
@@ -1291,7 +1362,7 @@ export function BookCard({ book }: BookCardProps) {
         <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d">
           <Card
             style={{ transform: "translateZ(40px)" }} 
-            className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative preserve-3d"
+            className="flex h-full flex-col overflow-hidden rounded-xl bg-card border-none relative preserve-3d"
           >
             <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
               <div className="aspect-[3/4] w-full overflow-hidden">
@@ -1440,35 +1511,28 @@ export function Header() {
         "sticky top-0 z-50 w-full transition-all duration-300",
         hasScrolled
           ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg"
-          : "border-b border-transparent"
+          : "border-b border-transparent bg-gradient-to-b from-black/30 to-transparent"
       )}
     >
       <div className="container mx-auto px-4">
-        <div className="grid h-20 grid-cols-3 items-center">
-          {/* Left Column */}
-          <div className="flex justify-start">
+        <div className="relative flex h-20 items-center justify-between">
+          <div className="flex-shrink-0">
             <BrandLogo />
           </div>
 
-          {/* Center Column */}
-          <div className="flex justify-center">
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           
-          {/* Right Column */}
-          <div className="flex justify-end">
-            {/* Desktop Buttons */}
+          <div className="flex items-center gap-4">
             <div className="hidden lg:flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -1483,40 +1547,26 @@ export function Header() {
               >
                 <Link href="/register">Sign Up</Link>
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full relative"
-                asChild
-              >
-                <Link href="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-              </Button>
             </div>
 
-            {/* Mobile Buttons */}
-            <div className="lg:hidden flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full relative"
-                asChild
-              >
-                <Link href="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-              </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full relative flex-shrink-0"
+              asChild
+            >
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+            
+            <div className="lg:hidden">
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon" className="rounded-full">

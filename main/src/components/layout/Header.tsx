@@ -53,35 +53,28 @@ export function Header() {
         "sticky top-0 z-50 w-full transition-all duration-300",
         hasScrolled
           ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg"
-          : "border-b border-transparent"
+          : "border-b border-transparent bg-gradient-to-b from-black/30 to-transparent"
       )}
     >
       <div className="container mx-auto px-4">
-        <div className="grid h-20 grid-cols-3 items-center">
-          {/* Left Column */}
-          <div className="flex justify-start">
+        <div className="relative flex h-20 items-center justify-between">
+          <div className="flex-shrink-0">
             <BrandLogo />
           </div>
 
-          {/* Center Column */}
-          <div className="flex justify-center">
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           
-          {/* Right Column */}
-          <div className="flex justify-end">
-            {/* Desktop Buttons */}
+          <div className="flex items-center gap-4">
             <div className="hidden lg:flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -96,40 +89,26 @@ export function Header() {
               >
                 <Link href="/register">Sign Up</Link>
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full relative"
-                asChild
-              >
-                <Link href="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-              </Button>
             </div>
 
-            {/* Mobile Buttons */}
-            <div className="lg:hidden flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full relative"
-                asChild
-              >
-                <Link href="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-              </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full relative flex-shrink-0"
+              asChild
+            >
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+            
+            <div className="lg:hidden">
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon" className="rounded-full">

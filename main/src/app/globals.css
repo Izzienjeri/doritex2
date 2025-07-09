@@ -56,6 +56,7 @@
   --popover-foreground: #ffffff;
   
   --primary: #00aaeb;
+  --primary-rgb: 0, 170, 235;
   --primary-foreground: #101118;
   
   --secondary: #3871c1;
@@ -206,4 +207,21 @@
 .link-underline:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
+  }
+}
+
+@keyframes button-pulse {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 12px rgba(var(--primary-rgb), 0);
+  }
+}
+
+.animate-button-pulse {
+  animation: button-pulse 2.5s infinite;
 }

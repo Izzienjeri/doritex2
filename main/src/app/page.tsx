@@ -2,54 +2,31 @@
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
 import { Book, dummyBooks, dummyCategories } from "@/lib/data";
-import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, Variants, useMotionValue, useTransform, animate, PanInfo } from "framer-motion";
+import { useEffect, useState, useRef, useCallback } from "react";
 
-const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
+const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<string>): Book[] => {
   const shuffled = [...source].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+  const uniqueBooks: Book[] = [];
+  for (const book of shuffled) {
+    if (!existingIds.has(book.id) && uniqueBooks.length < count) {
+      uniqueBooks.push(book);
+    }
+  }
+  return uniqueBooks;
 };
 
-const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React.Dispatch<React.SetStateAction<Book[]>> }) => {
+// --- Desktop-only Coverflow Component ---
+const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
   const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBooks((currentBooks) => {
-        if (currentBooks.length < 2) return currentBooks;
-        const [first, ...rest] = currentBooks;
-        return [...rest, first];
-      });
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [books.length, setBooks]);
-
-  const handleNext = () => {
-    setBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const [first, ...rest] = currentBooks;
-      return [...rest, first];
-    });
-  };
-
-  const handlePrev = () => {
-    setBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const last = currentBooks[currentBooks.length - 1];
-      const rest = currentBooks.slice(0, -1);
-      return [last, ...rest];
-    });
-  };
-
   if (!books.length) return null;
-
   const activeBook = books[activeIndex];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
       <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
         {books.map((book, i) => {
           const offset = i - activeIndex;
@@ -57,8 +34,8 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
 
           return (
             <motion.div
-              key={book.id}
-              className="absolute w-40 sm:w-52 h-full top-0 left-1/2 -ml-20 sm:-ml-28"
+              key={`${book.id}-${i}`}
+              className="absolute w-52 h-full top-0 left-1/2 -ml-28"
               initial={false}
               animate={{
                 x: `${offset * 35}%`,
@@ -82,41 +59,151 @@ const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React
           );
         })}
       </div>
-
       <div className="flex items-center gap-4">
-        <Button 
-            size="icon" 
-            variant="outline" 
-            className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={handlePrev}
-        >
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onPrev}>
           <ChevronLeft className="h-6 w-6" />
         </Button>
         <div className="text-center w-64">
-             <Link href={`/books/${activeBook?.id}`}>
-                <motion.h3
-                    key={activeBook?.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="font-bold text-lg text-white/90 truncate"
-                >
-                    {activeBook?.title}
-                </motion.h3>
-            </Link>
-            <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
+          <Link href={`/books/${activeBook?.id}`}>
+            <motion.h3 key={activeBook?.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-lg text-white/90 truncate">
+              {activeBook?.title}
+            </motion.h3>
+          </Link>
+          <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
         </div>
-        <Button 
-            size="icon" 
-            variant="outline" 
-            className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={handleNext}
-        >
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onNext}>
           <ChevronRight className="h-6 w-6" />
         </Button>
       </div>
     </div>
   );
 };
+
+// --- "All-In" Interactive Mobile Hero ---
+const InteractiveHero = ({ books }: { books: Book[] }) => {
+  const [stack, setStack] = useState(() => books.map(book => ({ ...book, uniqueId: crypto.randomUUID() })));
+  const x = useMotionValue(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const rotate = useTransform(x, [-200, 200], [-30, 30], { clamp: false });
+
+  const animateCardOffScreen = useCallback(() => {
+    animate(x, 200, {
+      type: "spring", stiffness: 100, damping: 30,
+      onComplete: () => {
+        x.set(0);
+        setStack(prev => {
+          const newStack = [...prev];
+          newStack.shift();
+          return newStack;
+        });
+      }
+    });
+  }, [x]);
+
+  const stopAutoPlay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  }, []);
+
+  const startAutoPlay = useCallback(() => {
+    stopAutoPlay();
+    intervalRef.current = setInterval(() => {
+      animateCardOffScreen();
+    }, 2500);
+  }, [animateCardOffScreen, stopAutoPlay]);
+
+  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (Math.abs(info.offset.x) > 100) {
+      animateCardOffScreen();
+    } else {
+      animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
+    }
+    startAutoPlay();
+  }, [x, animateCardOffScreen, startAutoPlay]);
+
+  const handleDragStart = useCallback(() => {
+    stopAutoPlay();
+  }, [stopAutoPlay]);
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => stopAutoPlay();
+  }, [startAutoPlay, stopAutoPlay]);
+
+  useEffect(() => {
+    if (stack.length < 5) {
+      const existingIds = new Set(stack.map(b => b.id));
+      const newBooks = getRandomUniqueBooks(dummyBooks, 5, existingIds);
+      setStack(prev => [...prev, ...newBooks.map(book => ({ ...book, uniqueId: crypto.randomUUID() }))]);
+    }
+  }, [stack]);
+
+  return (
+    <div className="lg:hidden flex flex-col justify-end text-center h-dvh pb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="absolute top-24 left-0 right-0 px-4 z-10"
+      >
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-white text-shadow">
+          Gateway to <span className="text-primary">Educational</span> Excellence.
+        </h1>
+        <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto font-sans text-shadow">
+          Swipe or let it play to discover.
+        </p>
+      </motion.div>
+
+      <div className="relative h-[60%] w-full">
+        {stack.slice(0, 4).reverse().map((book, index, arr) => {
+          const isTopCard = index === arr.length - 1;
+          return (
+            <motion.div
+              key={book.uniqueId}
+              className="absolute top-0 left-0 right-0 w-64 h-[24rem] mx-auto "
+              style={ isTopCard ? { x, rotate } : {}}
+              animate={{
+                scale: 1 - (arr.length - 1 - index) * 0.05,
+                y: (arr.length - 1 - index) * -20,
+              }}
+              drag={isTopCard ? "x" : false}
+              dragConstraints={{ left: 0, right: 0, top:0, bottom:0 }}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            >
+              <Link href={`/books/${book.id}`} className="w-full h-full block">
+                <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl shadow-black/60 p-4 flex flex-col justify-end text-left">
+                  <Image
+                    src={book.imageUrl}
+                    alt={book.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover rounded-2xl pointer-events-none"
+                    priority={isTopCard}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-2xl"></div>
+                  <div className="relative z-10 text-white">
+                    <h3 className="text-xl font-bold leading-tight">{book.title}</h3>
+                    <p className="text-sm text-white/70">{book.author}</p>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+       <motion.div 
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         transition={{ delay: 1, duration: 1 }}
+         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
+       >
+         <ChevronDown className="h-8 w-8 text-white/50 animate-bounce" />
+       </motion.div>
+    </div>
+  );
+};
+
 
 export default function HomePage() {
   const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
@@ -125,15 +212,34 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
-    setHeroBooks(getRandomUniqueBooks(dummyBooks, 7)); 
+    setHeroBooks(getRandomUniqueBooks(dummyBooks, 10, new Set())); 
   }, []);
+
+  const handleCoverflowNext = useCallback(() => {
+    setHeroBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const [first, ...rest] = currentBooks;
+      return [...rest, first];
+    });
+  }, []);
+
+  const handleCoverflowPrev = () => {
+    setHeroBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const last = currentBooks[currentBooks.length - 1];
+      const rest = currentBooks.slice(0, -1);
+      return [last, ...rest];
+    });
+  };
+  
+  useEffect(() => {
+    const interval = setInterval(handleCoverflowNext, 3000);
+    return () => clearInterval(interval);
+  }, [handleCoverflowNext]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
   };
 
   const itemVariants: Variants = {
@@ -145,47 +251,41 @@ export default function HomePage() {
     <div className="flex flex-col">
       <section id="interactive-hero" className="interactive-aurora w-full overflow-hidden relative">
         <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
-        <div className="container relative z-10 mx-auto min-h-[90vh] grid lg:grid-cols-2 items-center px-4 gap-12">
+        <div className="container relative z-10 mx-auto px-4">
           
-          <div className="text-center lg:text-left">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl"
-            >
-              Gateway to <span className="text-primary">Educational</span> Excellence.
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans"
-            >
-              Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-10"
-            >
-              <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
-                <Link href="/books">
-                  Explore Collection <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-          
-          <div className="w-full h-[28rem] lg:h-[30rem] flex items-center justify-center">
-            {isMounted && <HeroBookCoverflow books={heroBooks} setBooks={setHeroBooks} />}
-          </div>
+          {isMounted && <InteractiveHero books={heroBooks} />}
 
+          <div className="hidden lg:grid min-h-[90vh] lg:grid-cols-2 items-center gap-12">
+            <div className="text-center lg:text-left">
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl">
+                Gateway to <span className="text-primary">Educational</span> Excellence.
+              </motion.h1>
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans">
+                Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
+              </motion.p>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mt-10">
+                <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine animate-button-pulse">
+                  <Link href="/books">
+                    Explore Collection <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </div>
+            
+            <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
+              {isMounted && (
+                <HeroBookCoverflow 
+                  books={heroBooks.slice(0, 7)} 
+                  onPrev={handleCoverflowPrev} 
+                  onNext={handleCoverflowNext} 
+                />
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 relative">
+      <section className="py-24 md:py-32 relative bg-background z-10">
         <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-4 text-foreground">
@@ -249,10 +349,7 @@ export default function HomePage() {
       </section>
 
       <section id="about" className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}
-        ></div>
+        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}></div>
         <div className="container mx-auto text-center px-4 relative">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
             Our Mission: Empowering Minds
@@ -260,13 +357,7 @@ export default function HomePage() {
           <p className="max-w-3xl mx-auto text-lg text-white/70 leading-relaxed mb-20 font-sans">
             At Doritex, we believe in the transformative power of knowledge. Our mission is to provide high-quality, accessible educational resources that inspire curiosity and empower individuals to achieve their goals.
           </p>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {[
               { icon: BookOpen, title: "Vast Collection", desc: "Explore a diverse range of subjects and authors." },
               { icon: Lightbulb, title: "Quality Content", desc: "Carefully curated and peer-reviewed publications." },

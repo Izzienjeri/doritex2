@@ -64,7 +64,7 @@ export function BookCard({ book }: BookCardProps) {
         <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d">
           <Card
             style={{ transform: "translateZ(40px)" }} 
-            className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative preserve-3d"
+            className="flex h-full flex-col overflow-hidden rounded-xl bg-card border-none relative preserve-3d"
           >
             <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
               <div className="aspect-[3/4] w-full overflow-hidden">
