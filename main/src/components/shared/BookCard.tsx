@@ -1,4 +1,3 @@
-// components/shared/BookCard.tsx
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,29 +10,30 @@ interface BookCardProps {
 
 export function BookCard({ book }: BookCardProps) {
   return (
-    <Card className="flex flex-col overflow-hidden rounded-xl shadow-lg border-2 border-transparent hover:border-brand-accent transition-all duration-300 ease-in-out transform hover:-translate-y-2 group">
-        <CardHeader className="p-0">
-            <div className="aspect-[2/3] w-full overflow-hidden bg-muted">
-                <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    width={300}
-                    height={450}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                />
-            </div>
-        </CardHeader>
-        <CardContent className="flex-grow p-4">
-            <CardTitle className="text-xl font-semibold leading-tight mb-2 text-brand-foreground">{book.title}</CardTitle>
-            <p className="text-sm text-muted-foreground">{book.author}</p>
-        </CardContent>
-        <CardFooter className="flex justify-between items-center p-4 pt-0">
-            <p className="text-2xl font-extrabold text-brand-primary">${book.price.toFixed(2)}</p>
-            <Button size="default" className="bg-brand-accent hover:bg-brand-accent/90 text-brand-background font-semibold rounded-full px-5 py-2 shadow-md">
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                Add to Cart
-            </Button>
-        </CardFooter>
+    <Card className="flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-md transition-all duration-300 ease-in-out hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 group border">
+      <CardHeader className="p-0 border-b">
+        <div className="aspect-[3/4] w-full overflow-hidden">
+          <Image
+            src={book.imageUrl}
+            alt={book.title}
+            width={400}
+            height={600}
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      </CardHeader>
+      <CardContent className="flex-grow p-5 flex flex-col">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{book.category}</p>
+        <CardTitle className="text-xl font-bold leading-tight mb-2 text-[--color-brand-text] flex-grow">{book.title}</CardTitle>
+        <p className="text-sm text-muted-foreground">{book.author}</p>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center p-5 pt-0">
+        <p className="text-2xl font-extrabold text-[--color-brand-tertiary]">${book.price.toFixed(2)}</p>
+        <Button size="icon" className="bg-[--color-brand-primary] hover:bg-[--color-brand-primary]/90 text-white rounded-full h-11 w-11 shadow-lg group-hover:scale-110 transition-transform duration-300 ease-out">
+          <ShoppingCart className="h-5 w-5" />
+          <span className="sr-only">Add to Cart</span>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
