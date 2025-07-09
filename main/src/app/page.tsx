@@ -250,31 +250,6 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container mx-auto text-center px-4 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-foreground">
-            Stay Ahead of the Curve
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-10 font-sans">
-            Join our newsletter for updates on new releases, exclusive offers, and insights from leading academics.
-          </p>
-          <form className="relative max-w-lg mx-auto mt-12 group">
-            <input
-              type="email"
-              placeholder="your.email@example.com"
-              className="w-full p-4 pr-36 rounded-full border-2 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-secondary focus:ring-4 focus:ring-secondary/20 transition-all duration-300 h-16 text-base font-sans"
-            />
-            <Button
-              type="submit"
-              size="lg"
-              className="absolute top-2 right-2 bottom-2 bg-gradient-to-r from-secondary to-tertiary hover:shadow-lg hover:shadow-tertiary/40 text-white font-bold h-auto px-7 rounded-full btn-shine transition-transform duration-300 group-hover:scale-105"
-            >
-              Subscribe
-            </Button>
-          </form>
-        </div>
-      </section>
     </div>
   );
 }

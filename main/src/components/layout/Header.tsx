@@ -3,10 +3,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "#", label: "Books" },
+  { href: "#featured", label: "Publications" },
   { href: "#", label: "Categories" },
   { href: "#", label: "About" },
   { href: "#", label: "Contact" },
@@ -14,9 +15,22 @@ const navLinks = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-lg">
+    <header className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        hasScrolled ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg" : "border-b border-transparent"
+    )}>
       <div className="container flex h-20 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
@@ -43,7 +57,7 @@ export function Header() {
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine">
             Sign Up
           </Button>
-          <Button variant="secondary" size="icon" className="rounded-full">
+          <Button variant="outline" size="icon" className="rounded-full">
             <ShoppingCart className="h-5 w-5" />
           </Button>
         </div>
@@ -55,27 +69,45 @@ export function Header() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background flex flex-col p-0">
-              <div className="p-6 border-b flex justify-between items-center">
-                <span className="text-2xl font-bold font-display text-primary">
-                  Doritex
-                </span>
+            <SheetContent
+              side="right"
+              className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
+            >
+              <div className="p-6 border-b border-border flex justify-between items-center">
+                <Link href="/" onClick={() => setIsOpen(false)}>
+                  <span className="text-2xl font-bold font-display text-primary">
+                    Doritex
+                  </span>
+                </Link>
               </div>
               <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
                 {navLinks.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="font-semibold text-foreground transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
+                    className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
-              <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
-                <Button variant="outline" size="lg" className="h-12 text-base" onClick={() => setIsOpen(false)}>Login</Button>
-                <Button size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine" onClick={() => setIsOpen(false)}>Sign Up</Button>
+              <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-12 text-base"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Button>
+                <Button
+                  size="lg"
+                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign Up
+                </Button>
               </div>
             </SheetContent>
           </Sheet>

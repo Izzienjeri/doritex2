@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 06:42:23
+# Date and Time: 2025-07-09 06:59:26
 # Files Included: 8
 
 # === lib/utils.ts ===
@@ -307,15 +307,15 @@ export const dummyCategories = [
 
 # === app/layout.tsx ===
 import type { Metadata } from "next";
-import { Oswald, Poppins } from "next/font/google";
+import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-const fontSans = Poppins({
+const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
 });
 
@@ -607,87 +607,125 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
-
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container mx-auto text-center px-4 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4 text-foreground">
-            Stay Ahead of the Curve
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-10 font-sans">
-            Join our newsletter for updates on new releases, exclusive offers, and insights from leading academics.
-          </p>
-          <form className="relative max-w-lg mx-auto mt-12 group">
-            <input
-              type="email"
-              placeholder="your.email@example.com"
-              className="w-full p-4 pr-36 rounded-full border-2 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-secondary focus:ring-4 focus:ring-secondary/20 transition-all duration-300 h-16 text-base font-sans"
-            />
-            <Button
-              type="submit"
-              size="lg"
-              className="absolute top-2 right-2 bottom-2 bg-gradient-to-r from-secondary to-tertiary hover:shadow-lg hover:shadow-tertiary/40 text-white font-bold h-auto px-7 rounded-full btn-shine transition-transform duration-300 group-hover:scale-105"
-            >
-              Subscribe
-            </Button>
-          </form>
-        </div>
-      </section>
     </div>
   );
 }
 
 # === components/shared/BookCard.tsx ===
+import React, { useRef } from 'react';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book } from "@/lib/data";
-import { ShoppingCart } from "lucide-react";
+import { Eye, ShoppingCart } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!cardRef.current) return;
+    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - left - width / 2;
+    const y = e.clientY - top - height / 2;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+  
+  const handleMouseLeave = () => {
+      mouseX.set(0);
+      mouseY.set(0);
+  };
+
+  const springConfig = { stiffness: 300, damping: 20 };
+  const springX = useSpring(mouseX, springConfig);
+  const springY = useSpring(mouseY, springConfig);
+
+  const rotateX = useTransform(springY, [-150, 150], [-10, 10]);
+  const rotateY = useTransform(springX, [-150, 150], [10, -10]);
+  const glareX = useTransform(mouseX, [-150, 150], [-50, 150]);
+  const glareY = useTransform(mouseY, [-150, 150], [-50, 150]);
+  
   return (
-    <div className="p-px bg-gradient-to-br from-primary/20 via-secondary/10 to-transparent rounded-2xl h-full group transition-all duration-300 hover:from-primary/80 hover:via-secondary/60 hover:to-tertiary/40">
-      <Card className="flex h-full flex-col overflow-hidden rounded-[15px] bg-card transition-all duration-500 ease-out group-hover:-translate-y-2 border-none relative">
-        <div className="absolute -inset-px rounded-[15px] bg-card z-10"></div>
-        <CardHeader className="p-0 relative z-20">
-          <div className="aspect-[3/4] w-full overflow-hidden">
-            <Image
-              src={book.imageUrl}
-              alt={book.title}
-              width={400}
-              height={600}
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-            />
-          </div>
-        </CardHeader>
-        <CardContent className="flex-grow p-5 flex flex-col relative z-20 bg-card">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2 font-sans">
-            {book.category}
-          </p>
-          <CardTitle className="text-xl font-bold leading-tight mb-2 text-foreground transition-colors duration-300 flex-grow">
-            {book.title}
-          </CardTitle>
-          <p className="text-sm text-muted-foreground font-sans">
-            by {book.author}
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-between items-center p-5 pt-2 bg-card/50 relative z-20 backdrop-blur-sm">
-          <p className="text-2xl font-extrabold text-foreground font-sans">
-            ${book.price.toFixed(2)}
-          </p>
-          <Button
-            size="icon"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-11 w-11 shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300 ease-out btn-shine"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="sr-only">Add to Cart</span>
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+    <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+            rotateX,
+            rotateY,
+            transformStyle: "preserve-3d",
+            perspective: '1000px'
+        }}
+        className="relative h-full"
+    >
+      <div
+        className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d"
+      >
+        <Card
+          style={{ transform: "translateZ(40px)" }} 
+          className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative preserve-3d"
+        >
+          <motion.div
+            style={{
+                x: glareX,
+                y: glareY,
+                background: "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
+            }}
+            className="absolute top-0 left-0 w-48 h-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"
+           />
+          <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
+            <div className="aspect-[3/4] w-full overflow-hidden">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={400}
+                height={600}
+                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                 <Button
+                    size="icon"
+                    variant="outline"
+                    className="bg-background/50 hover:bg-background border-border hover:border-primary backdrop-blur-sm rounded-full h-12 w-12"
+                 >
+                    <Eye className="h-5 w-5" />
+                 </Button>
+                 <Button
+                    size="icon"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-12 w-12 shadow-lg shadow-primary/30"
+                 >
+                    <ShoppingCart className="h-5 w-5" />
+                 </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="flex-grow p-5 flex flex-col relative z-0 bg-card">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">
+              {book.category}
+            </p>
+            <CardTitle className="text-lg font-bold leading-snug mb-2 text-foreground/90 flex-grow">
+              {book.title}
+            </CardTitle>
+            <p className="text-sm text-muted-foreground font-sans">
+              by {book.author}
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
+            <p className="text-xl font-bold text-foreground font-sans">
+              ${book.price.toFixed(2)}
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    </motion.div>
   );
 }
 
@@ -754,10 +792,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { href: "#", label: "Books" },
+  { href: "#featured", label: "Publications" },
   { href: "#", label: "Categories" },
   { href: "#", label: "About" },
   { href: "#", label: "Contact" },
@@ -765,9 +804,22 @@ const navLinks = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHasScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-lg">
+    <header className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        hasScrolled ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg" : "border-b border-transparent"
+    )}>
       <div className="container flex h-20 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
@@ -794,7 +846,7 @@ export function Header() {
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine">
             Sign Up
           </Button>
-          <Button variant="secondary" size="icon" className="rounded-full">
+          <Button variant="outline" size="icon" className="rounded-full">
             <ShoppingCart className="h-5 w-5" />
           </Button>
         </div>
@@ -806,27 +858,45 @@ export function Header() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background flex flex-col p-0">
-              <div className="p-6 border-b flex justify-between items-center">
-                <span className="text-2xl font-bold font-display text-primary">
-                  Doritex
-                </span>
+            <SheetContent
+              side="right"
+              className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
+            >
+              <div className="p-6 border-b border-border flex justify-between items-center">
+                <Link href="/" onClick={() => setIsOpen(false)}>
+                  <span className="text-2xl font-bold font-display text-primary">
+                    Doritex
+                  </span>
+                </Link>
               </div>
               <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
                 {navLinks.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="font-semibold text-foreground transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
+                    className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
-              <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
-                <Button variant="outline" size="lg" className="h-12 text-base" onClick={() => setIsOpen(false)}>Login</Button>
-                <Button size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine" onClick={() => setIsOpen(false)}>Sign Up</Button>
+              <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-12 text-base"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Button>
+                <Button
+                  size="lg"
+                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign Up
+                </Button>
               </div>
             </SheetContent>
           </Sheet>

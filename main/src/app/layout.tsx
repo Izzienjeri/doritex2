@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Oswald, Poppins } from "next/font/google";
+import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-const fontSans = Poppins({
+const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
 });
 
