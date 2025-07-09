@@ -102,7 +102,7 @@ export function BookCard({ book }: BookCardProps) {
         }}
         className="relative h-full"
     >
-      <Link href={`/books/${book.id}`} className="block h-full">
+      <Link href={`/books/${book.id}`} className="block h-full" tabIndex={0}>
         <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d">
           <Card
             style={{ transform: "translateZ(40px)" }} 
@@ -128,12 +128,12 @@ export function BookCard({ book }: BookCardProps) {
               </div>
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                    <Button
-                      asChild
                       size="icon"
                       variant="outline"
                       className="bg-background/50 hover:bg-background border-border hover:border-primary backdrop-blur-sm rounded-full h-12 w-12"
+                      tabIndex={-1} 
                    >
-                      <Link href={`/books/${book.id}`}><Eye className="h-5 w-5" /></Link>
+                      <Eye className="h-5 w-5" />
                    </Button>
                    <Button
                       size="icon"
@@ -146,6 +146,7 @@ export function BookCard({ book }: BookCardProps) {
             </CardHeader>
             <CardContent className="flex-grow p-5 flex flex-col relative z-0 bg-card">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
+
               <CardTitle className="text-lg font-bold leading-snug mb-2 text-foreground/90 flex-grow">{book.title}</CardTitle>
               <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
             </CardContent>

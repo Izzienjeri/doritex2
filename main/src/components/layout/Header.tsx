@@ -1,7 +1,14 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -18,7 +25,10 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const { state } = useCart();
-  const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
+  const cartItemCount = state.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,10 +40,14 @@ export function Header() {
   }, []);
 
   return (
-    <header className={cn(
+    <header
+      className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        hasScrolled ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg" : "border-b border-transparent"
-    )}>
+        hasScrolled
+          ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg"
+          : "border-b border-transparent"
+      )}
+    >
       <div className="container flex h-20 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 group">
           <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
@@ -54,29 +68,49 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <Button variant="ghost" className="text-foreground font-medium rounded-full" asChild>
+          <Button
+            variant="ghost"
+            className="text-foreground font-medium rounded-full"
+            asChild
+          >
             <Link href="/login">Login</Link>
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine" asChild>
+          <Button
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine"
+            asChild
+          >
             <Link href="/register">Sign Up</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full relative"
+            asChild
+          >
             <Link href="/cart">
               <ShoppingCart className="h-5 w-5" />
               {cartItemCount > 0 && (
-                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                  {cartItemCount}
+                </span>
               )}
             </Link>
           </Button>
         </div>
 
-        {/* Mobile Menu (unchanged from original but shown for completeness) */}
         <div className="lg:hidden flex items-center gap-2">
-           <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full relative"
+            asChild
+          >
             <Link href="/cart">
               <ShoppingCart className="h-5 w-5" />
               {cartItemCount > 0 && (
-                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                  {cartItemCount}
+                </span>
               )}
             </Link>
           </Button>
@@ -84,19 +118,25 @@ export function Header() {
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
                 <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent
               side="right"
               className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
             >
-              <div className="p-6 border-b border-border flex justify-between items-center">
-                <Link href="/" onClick={() => setIsOpen(false)}>
-                  <span className="text-2xl font-bold font-display text-primary">
-                    Doritex
-                  </span>
-                </Link>
-              </div>
+              <SheetHeader className="p-6 border-b border-border">
+                <SheetTitle asChild>
+                  <Link href="/" onClick={() => setIsOpen(false)}>
+                    <span className="text-2xl font-bold font-display text-primary">
+                      Doritex
+                    </span>
+                  </Link>
+                </SheetTitle>
+                <SheetDescription className="sr-only">
+                  Mobile navigation menu
+                </SheetDescription>
+              </SheetHeader>
               <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
                 {navLinks.map((link) => (
                   <Link
@@ -110,10 +150,21 @@ export function Header() {
                 ))}
               </nav>
               <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
-                <Button variant="outline" size="lg" className="h-12 text-base" onClick={() => setIsOpen(false)} asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-12 text-base"
+                  onClick={() => setIsOpen(false)}
+                  asChild
+                >
                   <Link href="/login">Login</Link>
                 </Button>
-                <Button size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine" onClick={() => setIsOpen(false)} asChild>
+                <Button
+                  size="lg"
+                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
+                  onClick={() => setIsOpen(false)}
+                  asChild
+                >
                   <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
