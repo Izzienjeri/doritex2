@@ -5,13 +5,13 @@ export function Footer() {
   return (
     <footer className="bg-[#0D0E13] text-muted-foreground relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
-      <div className="container relative py-16 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="container mx-auto relative py-16 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left max-w-5xl mx-auto">
           <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
+            <Link href="/" className="inline-block text-2xl font-bold font-display uppercase tracking-widest text-primary">
               Doritex
             </Link>
-            <p className="text-sm leading-relaxed mt-4 font-sans">
+            <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto md:mx-0">
               Your Gateway to Educational Excellence.
             </p>
           </div>
@@ -20,9 +20,9 @@ export function Footer() {
               Links
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><Link href="#" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">Books</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link href="/books" className="hover:text-primary transition-colors">Books</Link></li>
+              <li><Link href="/#about" className="hover:text-primary transition-colors">About Us</Link></li>
             </ul>
           </div>
           <div>
@@ -30,16 +30,16 @@ export function Footer() {
               Support
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><Link href="#" className="hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link href="/#contact" className="hover:text-primary transition-colors">Contact</Link></li>
               <li><Link href="#" className="hover:text-primary transition-colors">FAQ</Link></li>
               <li><Link href="#" className="hover:text-primary transition-colors">Terms</Link></li>
             </ul>
           </div>
-          <div>
+          <div id="contact">
             <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
               Connect
             </h4>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center md:justify-start">
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Twitter size={22} /></Link>
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Facebook size={22} /></Link>
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Linkedin size={22} /></Link>
@@ -48,6 +48,7 @@ export function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
+          <p className="mt-2">Created by <Link href="https://example.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">A. Developer</Link></p>
         </div>
       </div>
     </footer>

@@ -1,3 +1,4 @@
+
 "use client";
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
@@ -8,44 +9,57 @@ import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 
-// Helper function to get random unique books from the dummy data
 const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
   const shuffled = [...source].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 };
 
-// The new "Coverflow" component for the hero section
-const HeroBookCoverflow = ({ books }: { books: Book[] }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const HeroBookCoverflow = ({ books, setBooks }: { books: Book[]; setBooks: React.Dispatch<React.SetStateAction<Book[]>> }) => {
+  const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
 
-  // Set the initial active book to be the one in the middle
-  useEffect(() => {
-    if (books.length > 0) {
-      setActiveIndex(Math.floor(books.length / 2));
-    }
-  }, [books.length]);
-  
-  // Auto-play functionality to cycle through books
   useEffect(() => {
     const interval = setInterval(() => {
-        setActiveIndex((prevIndex) => (prevIndex + 1) % books.length);
-    }, 4000); // Change book every 4 seconds
+      setBooks((currentBooks) => {
+        if (currentBooks.length < 2) return currentBooks;
+        const [first, ...rest] = currentBooks;
+        return [...rest, first];
+      });
+    }, 3000);
     return () => clearInterval(interval);
-  }, [books.length]);
+  }, [books.length, setBooks]);
+
+  const handleNext = () => {
+    setBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const [first, ...rest] = currentBooks;
+      return [...rest, first];
+    });
+  };
+
+  const handlePrev = () => {
+    setBooks((currentBooks) => {
+      if (currentBooks.length < 2) return currentBooks;
+      const last = currentBooks[currentBooks.length - 1];
+      const rest = currentBooks.slice(0, -1);
+      return [last, ...rest];
+    });
+  };
 
   if (!books.length) return null;
+
+  const activeBook = books[activeIndex];
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-8">
       <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
         {books.map((book, i) => {
           const offset = i - activeIndex;
-          const isVisible = Math.abs(offset) <= 2; // Only render the active book and its immediate neighbours for performance
+          const isVisible = Math.abs(offset) <= 2;
 
           return (
             <motion.div
               key={book.id}
-              className="absolute w-52 h-full top-0 left-1/2 -ml-28 cursor-pointer" // Centered with negative margin
+              className="absolute w-52 h-full top-0 left-1/2 -ml-28"
               initial={false}
               animate={{
                 x: `${offset * 35}%`,
@@ -55,15 +69,16 @@ const HeroBookCoverflow = ({ books }: { books: Book[] }) => {
                 opacity: isVisible ? 1 : 0,
               }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              onClick={() => setActiveIndex(i)}
             >
-              <Image
-                src={book.imageUrl}
-                alt={book.title}
-                width={400}
-                height={600}
-                className="object-cover w-full h-full rounded-lg shadow-2xl shadow-black/50 pointer-events-none"
-              />
+              <Link href={`/books/${book.id}`} className="cursor-pointer" tabIndex={-1}>
+                <Image
+                  src={book.imageUrl}
+                  alt={book.title}
+                  width={400}
+                  height={600}
+                  className="object-cover w-full h-full rounded-lg shadow-2xl shadow-black/50 pointer-events-none"
+                />
+              </Link>
             </motion.div>
           );
         })}
@@ -74,28 +89,28 @@ const HeroBookCoverflow = ({ books }: { books: Book[] }) => {
             size="icon" 
             variant="outline" 
             className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : books.length - 1)}
+            onClick={handlePrev}
         >
           <ChevronLeft className="h-6 w-6" />
         </Button>
         <div className="text-center w-64">
-             <Link href={`/books/${books[activeIndex]?.id}`}>
+             <Link href={`/books/${activeBook?.id}`}>
                 <motion.h3
-                    key={books[activeIndex]?.id} // Use key to trigger animation on change
+                    key={activeBook?.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="font-bold text-lg text-white/90 truncate"
                 >
-                    {books[activeIndex]?.title}
+                    {activeBook?.title}
                 </motion.h3>
             </Link>
-            <p className="text-sm text-muted-foreground">{books[activeIndex]?.author}</p>
+            <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
         </div>
         <Button 
             size="icon" 
             variant="outline" 
             className="rounded-full bg-background/50 backdrop-blur-sm"
-            onClick={() => setActiveIndex((activeIndex + 1) % books.length)}
+            onClick={handleNext}
         >
           <ChevronRight className="h-6 w-6" />
         </Button>
@@ -104,7 +119,6 @@ const HeroBookCoverflow = ({ books }: { books: Book[] }) => {
   );
 };
 
-// The main page component
 export default function HomePage() {
   const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
   const [heroBooks, setHeroBooks] = useState<Book[]>([]);
@@ -112,7 +126,6 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Use an odd number like 5 or 7 for a visually balanced coverflow
     setHeroBooks(getRandomUniqueBooks(dummyBooks, 7)); 
   }, []);
 
@@ -167,13 +180,12 @@ export default function HomePage() {
           </div>
           
           <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
-            {isMounted && <HeroBookCoverflow books={heroBooks} />}
+            {isMounted && <HeroBookCoverflow books={heroBooks} setBooks={setHeroBooks} />}
           </div>
 
         </div>
       </section>
 
-      {/* --- The rest of the page remains exactly the same --- */}
       <section className="py-24 md:py-32 relative">
         <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
         <div className="container mx-auto px-4">

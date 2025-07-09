@@ -39,6 +39,14 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const BrandLogo = () => (
+    <Link href="/" className="flex items-center gap-2 group" onClick={() => isOpen && setIsOpen(false)}>
+      <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
+        Doritex
+      </span>
+    </Link>
+  );
+
   return (
     <header
       className={cn(
@@ -48,128 +56,146 @@ export function Header() {
           : "border-b border-transparent"
       )}
     >
-      <div className="container flex h-20 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
-            Doritex
-          </span>
-        </Link>
+      <div className="container mx-auto px-4">
+        <div className="grid h-20 grid-cols-3 items-center">
+          {/* Left Column */}
+          <div className="flex justify-start">
+            <div className="hidden lg:flex">
+              <BrandLogo />
+            </div>
+            {/* On mobile, this side is empty to allow logo to be in center */}
+            <div className="lg:hidden"></div>
+          </div>
 
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden lg:flex items-center gap-4">
-          <Button
-            variant="ghost"
-            className="text-foreground font-medium rounded-full"
-            asChild
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine"
-            asChild
-          >
-            <Link href="/register">Sign Up</Link>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full relative"
-            asChild
-          >
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
-          </Button>
-        </div>
-
-        <div className="lg:hidden flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full relative"
-            asChild
-          >
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
-          </Button>
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
+          {/* Center Column */}
+          <div className="flex justify-center">
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            {/* Mobile Logo */}
+            <div className="flex lg:hidden">
+              <BrandLogo />
+            </div>
+          </div>
+          
+          {/* Right Column */}
+          <div className="flex justify-end">
+            {/* Desktop Buttons */}
+            <div className="hidden lg:flex items-center gap-4">
+              <Button
+                variant="ghost"
+                className="text-foreground font-medium rounded-full"
+                asChild
+              >
+                <Link href="/login">Login</Link>
               </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
-            >
-              <SheetHeader className="p-6 border-b border-border">
-                <SheetTitle asChild>
-                  <Link href="/" onClick={() => setIsOpen(false)}>
-                    <span className="text-2xl font-bold font-display text-primary">
-                      Doritex
+              <Button
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine"
+                asChild
+              >
+                <Link href="/register">Sign Up</Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full relative"
+                asChild
+              >
+                <Link href="/cart">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                      {cartItemCount}
                     </span>
-                  </Link>
-                </SheetTitle>
-                <SheetDescription className="sr-only">
-                  Mobile navigation menu
-                </SheetDescription>
-              </SheetHeader>
-              <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-              <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-12 text-base"
-                  onClick={() => setIsOpen(false)}
-                  asChild
+                  )}
+                </Link>
+              </Button>
+            </div>
+
+            {/* Mobile Buttons */}
+            <div className="lg:hidden flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full relative"
+                asChild
+              >
+                <Link href="/cart">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </Link>
+              </Button>
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
                 >
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
-                  onClick={() => setIsOpen(false)}
-                  asChild
-                >
-                  <Link href="/register">Sign Up</Link>
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+                  <SheetHeader className="p-6 border-b border-border">
+                    <SheetTitle asChild>
+                      <Link href="/" onClick={() => setIsOpen(false)}>
+                        <span className="text-2xl font-bold font-display text-primary">
+                          Doritex
+                        </span>
+                      </Link>
+                    </SheetTitle>
+                    <SheetDescription className="sr-only">
+                      Mobile navigation menu
+                    </SheetDescription>
+                  </SheetHeader>
+                  <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </nav>
+                  <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="h-12 text-base"
+                      onClick={() => setIsOpen(false)}
+                      asChild
+                    >
+                      <Link href="/login">Login</Link>
+                    </Button>
+                    <Button
+                      size="lg"
+                      className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
+                      onClick={() => setIsOpen(false)}
+                      asChild
+                    >
+                      <Link href="/register">Sign Up</Link>
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
         </div>
       </div>
     </header>
