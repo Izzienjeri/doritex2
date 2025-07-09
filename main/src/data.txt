@@ -1,6 +1,6 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 06:59:26
-# Files Included: 8
+# Date and Time: 2025-07-09 07:22:20
+# Files Included: 16
 
 # === lib/utils.ts ===
 import { clsx, type ClassValue } from "clsx"
@@ -312,6 +312,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -344,11 +345,13 @@ export default function RootLayout({
           fontDisplay.variable
         )}
       >
-        <div className="relative flex min-h-dvh flex-col bg-background">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
+        <CartProvider>
+          <div className="relative flex min-h-dvh flex-col bg-background">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </CartProvider>
       </body>
     </html>
   );
@@ -364,6 +367,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants, Transition } from "framer-motion";
 import { useEffect, useState } from "react";
+
 
 const BookImage = ({ book }: { book: Book }) => (
   <div className="relative shadow-2xl shadow-black/50 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-primary/30">
@@ -384,11 +388,15 @@ export default function HomePage() {
   const heroBooks = dummyBooks.slice(0, 3);
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-      if (!rect) return;
+      const heroElement = event.currentTarget as HTMLElement;
+      if (!heroElement) return;
+      const rect = heroElement.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       setMousePosition({ x, y });
@@ -405,6 +413,21 @@ export default function HomePage() {
       }
     };
   }, []);
+
+  const getHeroStyle = () => {
+    if (typeof window === "undefined" || !isMounted) {
+        return { "--x": "50%", "--y": "50%" } as any;
+    }
+    
+    const heroElement = document.getElementById("interactive-hero");
+    const xPercent = (mousePosition.x / (heroElement?.clientWidth || 1)) * 100;
+    const yPercent = (mousePosition.y / (heroElement?.clientHeight || 1)) * 100;
+
+    return {
+      "--x": `${xPercent}%`,
+      "--y": `${yPercent}%`,
+    } as any;
+  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -442,22 +465,7 @@ export default function HomePage() {
       <section
         id="interactive-hero"
         className="interactive-aurora w-full overflow-hidden"
-        style={
-          {
-            "--x": `${
-              (mousePosition.x /
-                (typeof window !== "undefined"
-                  ? document.getElementById("interactive-hero")?.clientWidth || 1
-                  : 1)) * 100
-            }%`,
-            "--y": `${
-              (mousePosition.y /
-                (typeof window !== "undefined"
-                  ? document.getElementById("interactive-hero")?.clientHeight || 1
-                  : 1)) * 100
-            }%`,
-          } as React.CSSProperties
-        }
+        style={getHeroStyle()}
       >
         <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
         <div className="container relative z-10 mx-auto min-h-[90vh] flex items-center px-4">
@@ -491,17 +499,19 @@ export default function HomePage() {
               </Button>
             </motion.div>
           </div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block z-0">
-            <motion.div variants={floatingVariants} animate="animate" custom={0} className="absolute top-[15%] right-[40%] w-48">
-              <BookImage book={heroBooks[0]} />
-            </motion.div>
-            <motion.div variants={floatingVariants} animate="animate" custom={1} className="absolute top-[45%] right-[10%] w-56">
-              <BookImage book={heroBooks[1]} />
-            </motion.div>
-            <motion.div variants={floatingVariants} animate="animate" custom={2} className="absolute top-[65%] right-[50%] w-40">
-              <BookImage book={heroBooks[2]} />
-            </motion.div>
-          </div>
+          {isMounted && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block z-0">
+                <motion.div variants={floatingVariants} animate="animate" custom={0} className="absolute top-[15%] right-[40%] w-48">
+                <BookImage book={heroBooks[0]} />
+                </motion.div>
+                <motion.div variants={floatingVariants} animate="animate" custom={1} className="absolute top-[45%] right-[10%] w-56">
+                <BookImage book={heroBooks[1]} />
+                </motion.div>
+                <motion.div variants={floatingVariants} animate="animate" custom={2} className="absolute top-[65%] right-[50%] w-40">
+                <BookImage book={heroBooks[2]} />
+                </motion.div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -530,7 +540,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 bg-secondary/5 relative overflow-hidden">
+      <section id="categories" className="py-24 md:py-32 bg-secondary/5 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
         <div className="container mx-auto px-4 relative">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-20 text-foreground">
@@ -568,7 +578,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
+      <section id="about" className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
         <div
           className="absolute inset-0 opacity-5"
           style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}
@@ -611,12 +621,578 @@ export default function HomePage() {
   );
 }
 
-# === components/shared/BookCard.tsx ===
-import React, { useRef } from 'react';
+# === app/cart/page.tsx ===
+"use client";
+
+import { useCart } from "@/context/CartContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import Link from "next/link";
+import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function CartPage() {
+  const { state, dispatch } = useCart();
+  const { items } = state;
+
+  const updateQuantity = (id: string, quantity: number) => {
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+  };
+  
+  const removeItem = (id: string) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: { id } });
+  };
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = subtotal > 0 ? 5.00 : 0;
+  const total = subtotal + shipping;
+
+  return (
+    <div className="container mx-auto px-4 py-16 md:py-24">
+      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12">Shopping Cart</h1>
+      
+      {items.length === 0 ? (
+        <div className="text-center py-20 bg-muted/30 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
+          <p className="text-muted-foreground mb-8">Looks like you haven't added any books yet.</p>
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
+            <Link href="/books">Explore Books</Link>
+          </Button>
+        </div>
+      ) : (
+        <div className="grid lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 space-y-6">
+            {items.map(item => (
+              <Card key={item.id} className="flex items-center p-4 bg-card/80 border-white/10">
+                <Image src={item.imageUrl} alt={item.title} width={100} height={150} className="rounded-md object-cover" />
+                <div className="flex-grow ml-6">
+                  <h3 className="text-lg font-bold">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">by {item.author}</p>
+                  <p className="text-lg font-bold text-primary mt-2">${item.price.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center border border-input rounded-full p-1">
+                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                        <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="w-8 text-center font-bold">{item.quantity}</span>
+                    <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                   <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.id)}>
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <div className="lg:col-span-1">
+            <Card className="bg-card/80 backdrop-blur-sm border-white/10 shadow-xl shadow-black/20 sticky top-28">
+              <CardHeader>
+                <CardTitle className="text-2xl">Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 text-lg">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
+                <hr className="border-border" />
+                <div className="flex justify-between font-bold text-xl"><span>Total</span><span>${total.toFixed(2)}</span></div>
+              </CardContent>
+              <CardFooter>
+                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+                    <Link href="/checkout">
+                        Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                 </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+# === app/login/page.tsx ===
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export default function LoginPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Sign in to continue your journey.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="you@example.com" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" />
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4">
+            <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Login</Button>
+            <p className="text-sm text-muted-foreground">
+              Don't have an account?{" "}
+              <Link href="/register" className="font-semibold text-primary hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
+
+# === app/books/page.tsx ===
+"use client";
+
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { BookCard } from '@/components/shared/BookCard';
+import { dummyBooks } from '@/lib/data';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
+
+export default function BooksPage() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredBooks = dummyBooks.filter(book => 
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent_80%)]"></div>
+      <section className="py-24 md:py-32">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center text-foreground">
+              Our Collection
+            </h1>
+            <p className="text-center text-muted-foreground text-lg mt-4 mb-12 max-w-2xl mx-auto font-sans">
+              Search and explore our full range of publications. Your next great read is just a click away.
+            </p>
+            <div className="max-w-xl mx-auto mb-20 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                placeholder="Search by title or author..."
+                className="pl-12 h-14 text-lg"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </motion.div>
+          
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {filteredBooks.map((book) => (
+              <motion.div key={book.id} variants={itemVariants}>
+                <BookCard book={book} />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+# === app/books/[id]/page.tsx ===
+"use client";
+
+import { useParams } from 'next/navigation';
+import { dummyBooks } from '@/lib/data';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { useState } from 'react';
+import Link from 'next/link';
+
+export default function BookDetailPage() {
+  const params = useParams();
+  const book = dummyBooks.find(b => b.id === params.id);
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
+
+  if (!book) {
+    return <div className="container py-20 text-center">Book not found.</div>;
+  }
+  
+  const handleAddToCart = () => {
+    for(let i = 0; i < quantity; i++) {
+        dispatch({ type: 'ADD_ITEM', payload: book });
+    }
+  }
+
+  return (
+    <div className="bg-background relative">
+      <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_70%)] opacity-30"></div>
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        <div className="mb-12">
+            <Button variant="ghost" asChild>
+                <Link href="/books">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Collection
+                </Link>
+            </Button>
+        </div>
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div className="relative shadow-2xl shadow-black/50 rounded-lg overflow-hidden">
+                <Image
+                    src={book.imageUrl}
+                    alt={book.title}
+                    width={800}
+                    height={1200}
+                    className="w-full h-auto object-cover"
+                />
+            </div>
+            <div className="flex flex-col">
+                <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-2 font-sans">
+                  {book.category}
+                </p>
+                <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-3">
+                    {book.title}
+                </h1>
+                <p className="text-xl text-muted-foreground mb-6 font-sans">by {book.author}</p>
+                <p className="text-4xl font-bold text-foreground mb-8 font-sans">
+                    ${book.price.toFixed(2)}
+                </p>
+                <p className="text-foreground/80 leading-relaxed font-sans mb-10">
+                    {book.description}
+                </p>
+                
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="flex items-center border border-input rounded-full p-1">
+                        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+                            <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-12 text-center text-lg font-bold">{quantity}</span>
+                        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
+                            <Plus className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    <Button size="lg" className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" onClick={handleAddToCart}>
+                        <ShoppingCart className="mr-2 h-5 w-5" />
+                        Add to Cart
+                    </Button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+# === app/register/page.tsx ===
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export default function RegisterPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Begin your educational journey with us.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" placeholder="John Doe" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="you@example.com" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" />
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4">
+            <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Create Account</Button>
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link href="/login" className="font-semibold text-primary hover:underline">
+                Login
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
+
+# === app/order/confirmation/page.tsx ===
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { CheckCircle } from "lucide-react"
+
+export default function OrderConfirmationPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 text-center bg-dot-grid">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        className="bg-card/50 backdrop-blur-md p-10 md:p-16 rounded-2xl border border-white/10 shadow-2xl shadow-black/30"
+      >
+        <CheckCircle className="h-20 w-20 text-primary mx-auto mb-6" />
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+          Thank You For Your Order!
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-10">
+          Your order has been placed successfully. You will receive a confirmation email shortly with the order details.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
+                <Link href="/books">Continue Shopping</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-full text-base font-bold">
+                <Link href="/profile/orders">View Order History</Link>
+            </Button>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+# === app/checkout/page.tsx ===
+"use client"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useCart } from "@/context/CartContext"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+
+export default function CheckoutPage() {
+  const { state } = useCart()
+  const router = useRouter()
+  const { items } = state
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shipping = subtotal > 0 ? 5.00 : 0
+  const total = subtotal + shipping
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/order/confirmation');
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-16 md:py-24">
+      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12">Checkout</h1>
+      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-10">
+          <Card className="bg-card/80 border-white/10">
+            <CardHeader><CardTitle className="text-2xl">Shipping & Delivery</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" required /></div>
+              <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" required /></div>
+              <div className="col-span-full space-y-2"><Label htmlFor="address">Address</Label><Input id="address" required /></div>
+              <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" required /></div>
+              <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
+            </CardContent>
+          </Card>
+          <Card className="bg-card/80 border-white/10">
+            <CardHeader><CardTitle className="text-2xl">M-Pesa Payment</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">You will receive an STK Push on your phone to complete the payment.</p>
+                <div className="space-y-2">
+                    <Label htmlFor="phone">M-Pesa Phone Number</Label>
+                    <Input id="phone" placeholder="e.g. 0712345678" required />
+                </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-1">
+          <Card className="bg-card/80 border-white/10 sticky top-28">
+            <CardHeader><CardTitle className="text-2xl">Order Summary</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4 mb-6">
+                {items.map(item => (
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-3">
+                        <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded" />
+                        <div>
+                            <p className="font-semibold">{item.title}</p>
+                            <p className="text-muted-foreground">Qty: {item.quantity}</p>
+                        </div>
+                    </div>
+                    <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2 text-md border-t border-border pt-4">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl mt-2"><span>Total</span><span>${total.toFixed(2)}</span></div>
+              </div>
+            </CardContent>
+          </Card>
+          <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+            Place Order
+          </Button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+# === context/CartContext.tsx ===
+"use client";
+
+import { Book } from "@/lib/data";
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
+
+interface CartItem extends Book {
+  quantity: number;
+}
+
+type CartState = {
+  items: CartItem[];
+};
+
+type CartAction =
+  | { type: "ADD_ITEM"; payload: Book }
+  | { type: "REMOVE_ITEM"; payload: { id: string } }
+  | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } };
+
+const initialState: CartState = {
+  items: [],
+};
+
+const CartContext = createContext<{
+  state: CartState;
+  dispatch: React.Dispatch<CartAction>;
+}>({
+  state: initialState,
+  dispatch: () => null,
+});
+
+const cartReducer = (state: CartState, action: CartAction): CartState => {
+  switch (action.type) {
+    case "ADD_ITEM": {
+      const existingItem = state.items.find(item => item.id === action.payload.id);
+      if (existingItem) {
+        return {
+          ...state,
+          items: state.items.map(item =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          ),
+        };
+      }
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, quantity: 1 }],
+      };
+    }
+    case "REMOVE_ITEM": {
+      return {
+        ...state,
+        items: state.items.filter(item => item.id !== action.payload.id),
+      };
+    }
+    case "UPDATE_QUANTITY": {
+      return {
+        ...state,
+        items: state.items.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        ).filter(item => item.quantity > 0),
+      };
+    }
+    default:
+      return state;
+  }
+};
+
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  return (
+    <CartContext.Provider value={{ state, dispatch }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useCart = () => useContext(CartContext);
+
+# === components/shared/BookCard.tsx ===
+import React, { useRef, useState, useEffect } from 'react';
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book } from "@/lib/data";
+import { useCart } from "@/context/CartContext";
 import { Eye, ShoppingCart } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
@@ -624,8 +1200,50 @@ interface BookCardProps {
   book: Book;
 }
 
+const StaticCard = ({ book }: BookCardProps) => (
+  <div className="relative h-full">
+    <Link href={`/books/${book.id}`} className="block h-full">
+      <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50">
+        <Card className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative">
+          <CardHeader className="p-0 relative">
+            <div className="aspect-[3/4] w-full overflow-hidden">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={400}
+                height={600}
+                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+          </CardHeader>
+          <CardContent className="flex-grow p-5 flex flex-col relative z-0 bg-card">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
+            <CardTitle className="text-lg font-bold leading-snug mb-2 text-foreground/90 flex-grow">{book.title}</CardTitle>
+            <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
+          </CardContent>
+          <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
+            <p className="text-xl font-bold text-foreground font-sans">${book.price.toFixed(2)}</p>
+          </CardFooter>
+        </Card>
+      </div>
+    </Link>
+  </div>
+);
+
 export function BookCard({ book }: BookCardProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const cardRef = useRef<HTMLDivElement>(null);
+  const { dispatch } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    dispatch({ type: "ADD_ITEM", payload: book });
+  };
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -640,8 +1258,8 @@ export function BookCard({ book }: BookCardProps) {
   };
   
   const handleMouseLeave = () => {
-      mouseX.set(0);
-      mouseY.set(0);
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   const springConfig = { stiffness: 300, damping: 20 };
@@ -652,6 +1270,10 @@ export function BookCard({ book }: BookCardProps) {
   const rotateY = useTransform(springX, [-150, 150], [10, -10]);
   const glareX = useTransform(mouseX, [-150, 150], [-50, 150]);
   const glareY = useTransform(mouseY, [-150, 150], [-50, 150]);
+
+  if (!isMounted) {
+    return <StaticCard book={book} />;
+  }
   
   return (
     <motion.div
@@ -666,65 +1288,59 @@ export function BookCard({ book }: BookCardProps) {
         }}
         className="relative h-full"
     >
-      <div
-        className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d"
-      >
-        <Card
-          style={{ transform: "translateZ(40px)" }} 
-          className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative preserve-3d"
-        >
-          <motion.div
-            style={{
-                x: glareX,
-                y: glareY,
-                background: "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
-            }}
-            className="absolute top-0 left-0 w-48 h-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"
-           />
-          <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
-            <div className="aspect-[3/4] w-full overflow-hidden">
-              <Image
-                src={book.imageUrl}
-                alt={book.title}
-                width={400}
-                height={600}
-                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                 <Button
-                    size="icon"
-                    variant="outline"
-                    className="bg-background/50 hover:bg-background border-border hover:border-primary backdrop-blur-sm rounded-full h-12 w-12"
-                 >
-                    <Eye className="h-5 w-5" />
-                 </Button>
-                 <Button
-                    size="icon"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-12 w-12 shadow-lg shadow-primary/30"
-                 >
-                    <ShoppingCart className="h-5 w-5" />
-                 </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-grow p-5 flex flex-col relative z-0 bg-card">
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">
-              {book.category}
-            </p>
-            <CardTitle className="text-lg font-bold leading-snug mb-2 text-foreground/90 flex-grow">
-              {book.title}
-            </CardTitle>
-            <p className="text-sm text-muted-foreground font-sans">
-              by {book.author}
-            </p>
-          </CardContent>
-          <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
-            <p className="text-xl font-bold text-foreground font-sans">
-              ${book.price.toFixed(2)}
-            </p>
-          </CardFooter>
-        </Card>
-      </div>
+      <Link href={`/books/${book.id}`} className="block h-full">
+        <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d">
+          <Card
+            style={{ transform: "translateZ(40px)" }} 
+            className="flex h-full flex-col overflow-hidden rounded-lg bg-card border-none relative preserve-3d"
+          >
+            <motion.div
+              style={{
+                  x: glareX,
+                  y: glareY,
+                  background: "radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%)"
+              }}
+              className="absolute top-0 left-0 w-48 h-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20"
+             />
+            <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
+              <div className="aspect-[3/4] w-full overflow-hidden">
+                <Image
+                  src={book.imageUrl}
+                  alt={book.title}
+                  width={400}
+                  height={600}
+                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                   <Button
+                      asChild
+                      size="icon"
+                      variant="outline"
+                      className="bg-background/50 hover:bg-background border-border hover:border-primary backdrop-blur-sm rounded-full h-12 w-12"
+                   >
+                      <Link href={`/books/${book.id}`}><Eye className="h-5 w-5" /></Link>
+                   </Button>
+                   <Button
+                      size="icon"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-12 w-12 shadow-lg shadow-primary/30"
+                      onClick={handleAddToCart}
+                   >
+                      <ShoppingCart className="h-5 w-5" />
+                   </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-grow p-5 flex flex-col relative z-0 bg-card">
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
+              <CardTitle className="text-lg font-bold leading-snug mb-2 text-foreground/90 flex-grow">{book.title}</CardTitle>
+              <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
+              <p className="text-xl font-bold text-foreground font-sans">${book.price.toFixed(2)}</p>
+            </CardFooter>
+          </Card>
+        </div>
+      </Link>
     </motion.div>
   );
 }
@@ -794,17 +1410,20 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
-  { href: "#featured", label: "Publications" },
-  { href: "#", label: "Categories" },
-  { href: "#", label: "About" },
-  { href: "#", label: "Contact" },
+  { href: "/books", label: "Books" },
+  { href: "/#categories", label: "Categories" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const { state } = useCart();
+  const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -840,18 +1459,32 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <Button variant="ghost" className="text-foreground font-medium rounded-full">
-            Login
+          <Button variant="ghost" className="text-foreground font-medium rounded-full" asChild>
+            <Link href="/login">Login</Link>
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine">
-            Sign Up
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine" asChild>
+            <Link href="/register">Sign Up</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <ShoppingCart className="h-5 w-5" />
+          <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+              )}
+            </Link>
           </Button>
         </div>
 
-        <div className="lg:hidden">
+        {/* Mobile Menu (unchanged from original but shown for completeness) */}
+        <div className="lg:hidden flex items-center gap-2">
+           <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+              )}
+            </Link>
+          </Button>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
@@ -882,20 +1515,11 @@ export function Header() {
                 ))}
               </nav>
               <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-12 text-base"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
+                <Button variant="outline" size="lg" className="h-12 text-base" onClick={() => setIsOpen(false)} asChild>
+                  <Link href="/login">Login</Link>
                 </Button>
-                <Button
-                  size="lg"
-                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sign Up
+                <Button size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine" onClick={() => setIsOpen(false)} asChild>
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
             </SheetContent>

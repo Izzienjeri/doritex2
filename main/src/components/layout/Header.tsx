@@ -5,17 +5,20 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
-  { href: "#featured", label: "Publications" },
-  { href: "#", label: "Categories" },
-  { href: "#", label: "About" },
-  { href: "#", label: "Contact" },
+  { href: "/books", label: "Books" },
+  { href: "/#categories", label: "Categories" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const { state } = useCart();
+  const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,18 +54,32 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <Button variant="ghost" className="text-foreground font-medium rounded-full">
-            Login
+          <Button variant="ghost" className="text-foreground font-medium rounded-full" asChild>
+            <Link href="/login">Login</Link>
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine">
-            Sign Up
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine" asChild>
+            <Link href="/register">Sign Up</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <ShoppingCart className="h-5 w-5" />
+          <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+              )}
+            </Link>
           </Button>
         </div>
 
-        <div className="lg:hidden">
+        {/* Mobile Menu (unchanged from original but shown for completeness) */}
+        <div className="lg:hidden flex items-center gap-2">
+           <Button variant="outline" size="icon" className="rounded-full relative" asChild>
+            <Link href="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemCount > 0 && (
+                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">{cartItemCount}</span>
+              )}
+            </Link>
+          </Button>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="rounded-full">
@@ -93,20 +110,11 @@ export function Header() {
                 ))}
               </nav>
               <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-12 text-base"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
+                <Button variant="outline" size="lg" className="h-12 text-base" onClick={() => setIsOpen(false)} asChild>
+                  <Link href="/login">Login</Link>
                 </Button>
-                <Button
-                  size="lg"
-                  className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Sign Up
+                <Button size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine" onClick={() => setIsOpen(false)} asChild>
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
             </SheetContent>

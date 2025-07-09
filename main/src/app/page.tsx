@@ -8,6 +8,7 @@ import Link from "next/link";
 import { motion, Variants, Transition } from "framer-motion";
 import { useEffect, useState } from "react";
 
+
 const BookImage = ({ book }: { book: Book }) => (
   <div className="relative shadow-2xl shadow-black/50 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-primary/30">
     <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 opacity-50" />
@@ -27,11 +28,15 @@ export default function HomePage() {
   const heroBooks = dummyBooks.slice(0, 3);
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-      if (!rect) return;
+      const heroElement = event.currentTarget as HTMLElement;
+      if (!heroElement) return;
+      const rect = heroElement.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       setMousePosition({ x, y });
@@ -48,6 +53,21 @@ export default function HomePage() {
       }
     };
   }, []);
+
+  const getHeroStyle = () => {
+    if (typeof window === "undefined" || !isMounted) {
+        return { "--x": "50%", "--y": "50%" } as any;
+    }
+    
+    const heroElement = document.getElementById("interactive-hero");
+    const xPercent = (mousePosition.x / (heroElement?.clientWidth || 1)) * 100;
+    const yPercent = (mousePosition.y / (heroElement?.clientHeight || 1)) * 100;
+
+    return {
+      "--x": `${xPercent}%`,
+      "--y": `${yPercent}%`,
+    } as any;
+  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -85,22 +105,7 @@ export default function HomePage() {
       <section
         id="interactive-hero"
         className="interactive-aurora w-full overflow-hidden"
-        style={
-          {
-            "--x": `${
-              (mousePosition.x /
-                (typeof window !== "undefined"
-                  ? document.getElementById("interactive-hero")?.clientWidth || 1
-                  : 1)) * 100
-            }%`,
-            "--y": `${
-              (mousePosition.y /
-                (typeof window !== "undefined"
-                  ? document.getElementById("interactive-hero")?.clientHeight || 1
-                  : 1)) * 100
-            }%`,
-          } as React.CSSProperties
-        }
+        style={getHeroStyle()}
       >
         <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
         <div className="container relative z-10 mx-auto min-h-[90vh] flex items-center px-4">
@@ -134,17 +139,19 @@ export default function HomePage() {
               </Button>
             </motion.div>
           </div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block z-0">
-            <motion.div variants={floatingVariants} animate="animate" custom={0} className="absolute top-[15%] right-[40%] w-48">
-              <BookImage book={heroBooks[0]} />
-            </motion.div>
-            <motion.div variants={floatingVariants} animate="animate" custom={1} className="absolute top-[45%] right-[10%] w-56">
-              <BookImage book={heroBooks[1]} />
-            </motion.div>
-            <motion.div variants={floatingVariants} animate="animate" custom={2} className="absolute top-[65%] right-[50%] w-40">
-              <BookImage book={heroBooks[2]} />
-            </motion.div>
-          </div>
+          {isMounted && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block z-0">
+                <motion.div variants={floatingVariants} animate="animate" custom={0} className="absolute top-[15%] right-[40%] w-48">
+                <BookImage book={heroBooks[0]} />
+                </motion.div>
+                <motion.div variants={floatingVariants} animate="animate" custom={1} className="absolute top-[45%] right-[10%] w-56">
+                <BookImage book={heroBooks[1]} />
+                </motion.div>
+                <motion.div variants={floatingVariants} animate="animate" custom={2} className="absolute top-[65%] right-[50%] w-40">
+                <BookImage book={heroBooks[2]} />
+                </motion.div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -173,7 +180,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 bg-secondary/5 relative overflow-hidden">
+      <section id="categories" className="py-24 md:py-32 bg-secondary/5 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
         <div className="container mx-auto px-4 relative">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-20 text-foreground">
@@ -211,7 +218,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
+      <section id="about" className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
         <div
           className="absolute inset-0 opacity-5"
           style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}
