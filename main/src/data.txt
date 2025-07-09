@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 10:25:57
+# Date and Time: 2025-07-09 10:48:30
 # Files Included: 16
 
 # === lib/utils.ts ===
@@ -385,12 +385,18 @@ import { Book, dummyBooks, dummyCategories } from "@/lib/data";
 import { ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants, useMotionValue, useTransform, animate, PanInfo } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, Variants, useMotionValue, useTransform, animate, PanInfo, useVelocity } from "framer-motion";
+import { useEffect, useState, useRef, useCallback } from "react";
 
-const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
+const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<string>): Book[] => {
   const shuffled = [...source].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+  const uniqueBooks: Book[] = [];
+  for (const book of shuffled) {
+    if (!existingIds.has(book.id) && uniqueBooks.length < count) {
+      uniqueBooks.push(book);
+    }
+  }
+  return uniqueBooks;
 };
 
 const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
@@ -407,7 +413,7 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
 
           return (
             <motion.div
-              key={book.id}
+              key={`${book.id}-${i}`}
               className="absolute w-52 h-full top-0 left-1/2 -ml-28"
               initial={false}
               animate={{
@@ -453,66 +459,102 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
 };
 
 const InteractiveHero = ({ books }: { books: Book[] }) => {
-  const [stack, setStack] = useState(books);
+  const [stack, setStack] = useState(() => books.map(book => ({ ...book, uniqueId: crypto.randomUUID() })));
   const x = useMotionValue(0);
+  const xVelocity = useVelocity(x);
+  const rotate = useTransform(xVelocity, [-1500, 1500], [-45, 45]);
+  const scale = useTransform(x, [-300, 0, 300], [0.8, 1, 0.8]);
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (Math.abs(info.offset.x) > 100) {
-      animate(x, info.offset.x > 0 ? 200 : -200, {
-        onComplete: () => {
-          x.set(0);
-          setStack(prev => {
-            const newStack = [...prev];
-            newStack.shift();
-            return newStack;
-          });
-        }
-      });
-    } else {
-      animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
-    }
+  const backgroundCardScale = useTransform(x, [-300, 0, 300], [1, 0.95, 1]);
+  const backgroundCardY = useTransform(x, [-300, 0, 300], [-20, -20, -20]);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const flyAway = (velocity: number) => {
+    const FLY_AWAY_DURATION = 0.5;
+    animate(x, x.get() + velocity, {
+      type: "spring",
+      stiffness: 400,
+      damping: 60,
+      onComplete: () => {
+        x.set(0);
+        setStack(prev => prev.slice(1));
+      },
+    });
   };
+
+  const autoPlayNext = useCallback(() => flyAway(400), []);
+  
+  const stopAutoPlay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  }, []);
+  
+  const startAutoPlay = useCallback(() => {
+    stopAutoPlay();
+    intervalRef.current = setInterval(autoPlayNext, 3000);
+  }, [autoPlayNext, stopAutoPlay]);
+  
+  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (Math.abs(info.velocity.x) > 300 || Math.abs(info.offset.x) > 150) {
+      flyAway(info.velocity.x * 2);
+    } else {
+      animate(x, 0, { type: "spring", stiffness: 800, damping: 80 });
+    }
+    startAutoPlay();
+  }, [x, startAutoPlay]);
+  
+  const handleDragStart = useCallback(() => {
+    stopAutoPlay();
+  }, [stopAutoPlay]);
+
+  useEffect(() => {
+    startAutoPlay();
+    return stopAutoPlay;
+  }, [startAutoPlay, stopAutoPlay]);
 
   useEffect(() => {
     if (stack.length < 5) {
-      setStack(prev => [...prev, ...getRandomUniqueBooks(dummyBooks, 5)]);
+      const existingIds = new Set(stack.map(b => b.id));
+      const newBooks = getRandomUniqueBooks(dummyBooks, 5, existingIds);
+      setStack(prev => [...prev, ...newBooks.map(book => ({ ...book, uniqueId: crypto.randomUUID() }))]);
     }
-  }, [stack.length]);
+  }, [stack]);
 
   return (
-    <div className="lg:hidden flex flex-col justify-end text-center h-dvh pb-8">
+    <div className="lg:hidden flex flex-col justify-end text-center h-dvh pb-8 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="absolute top-24 left-0 right-0 px-4 z-10"
+        className="absolute top-24 left-0 right-0 px-4 z-20"
       >
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-white text-shadow">
           Gateway to <span className="text-primary">Educational</span> Excellence.
         </h1>
         <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto font-sans text-shadow">
-          Swipe to discover our featured books.
+          Swipe or let it play to discover.
         </p>
       </motion.div>
 
       <div className="relative h-[60%] w-full">
-        {stack.slice(0, 4).reverse().map((book, index, arr) => {
-          const isTopCard = index === arr.length - 1;
-          const rotate = useTransform(x, [-200, 200], [-30, 30], { clamp: false });
-
+        {stack.map((book, index) => {
+          const isTopCard = index === 0;
           return (
             <motion.div
-              key={book.id}
+              key={book.uniqueId}
               className="absolute top-0 left-0 right-0 w-64 h-[24rem] mx-auto "
-              style={ isTopCard ? { x, rotate } : {}}
-              animate={{
-                scale: 1 - (arr.length - 1 - index) * 0.05,
-                y: (arr.length - 1 - index) * -20,
+              style={ isTopCard ? { x, rotate, scale } : {
+                scale: backgroundCardScale,
+                y: backgroundCardY
               }}
+              initial={ isTopCard ? {} : { y: -20, scale: 0.95 }}
+              animate={ isTopCard ? { y: 0, scale: 1} : {}}
+              transition={{ type: 'spring', stiffness: 400, damping: 40 }}
               drag={isTopCard ? "x" : false}
               dragConstraints={{ left: 0, right: 0, top:0, bottom:0 }}
+              dragElastic={0.2}
+              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
             >
               <Link href={`/books/${book.id}`} className="w-full h-full block">
                 <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl shadow-black/60 p-4 flex flex-col justify-end text-left">
@@ -520,6 +562,7 @@ const InteractiveHero = ({ books }: { books: Book[] }) => {
                     src={book.imageUrl}
                     alt={book.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover rounded-2xl pointer-events-none"
                     priority={isTopCard}
                   />
@@ -532,7 +575,7 @@ const InteractiveHero = ({ books }: { books: Book[] }) => {
               </Link>
             </motion.div>
           );
-        })}
+        }).slice(0, 2).reverse()}
       </div>
        <motion.div 
          initial={{ opacity: 0 }}
@@ -554,16 +597,16 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsMounted(true);
-    setHeroBooks(getRandomUniqueBooks(dummyBooks, 10)); 
+    setHeroBooks(getRandomUniqueBooks(dummyBooks, 10, new Set())); 
   }, []);
 
-  const handleCoverflowNext = () => {
+  const handleCoverflowNext = useCallback(() => {
     setHeroBooks((currentBooks) => {
       if (currentBooks.length < 2) return currentBooks;
       const [first, ...rest] = currentBooks;
       return [...rest, first];
     });
-  };
+  }, []);
 
   const handleCoverflowPrev = () => {
     setHeroBooks((currentBooks) => {
@@ -577,7 +620,7 @@ export default function HomePage() {
   useEffect(() => {
     const interval = setInterval(handleCoverflowNext, 3000);
     return () => clearInterval(interval);
-  }, [heroBooks]);
+  }, [handleCoverflowNext]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -637,7 +680,7 @@ export default function HomePage() {
             Handpicked selections from our experts to kickstart your intellectual adventure.
           </p>
           <motion.div
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:-gap-x-8 sm:gap-y-12"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -1306,6 +1349,7 @@ import { useCart } from "@/context/CartContext";
 import { ShoppingCart } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { toast } from "sonner";
+import { cn } from '@/lib/utils';
 
 interface BookCardProps {
   book: Book;
@@ -1338,61 +1382,65 @@ export function BookCard({ book }: BookCardProps) {
     mouseY.set(0);
   };
 
-  const springConfig = { stiffness: 300, damping: 20 };
+  const springConfig = { stiffness: 150, damping: 20 };
   const springX = useSpring(mouseX, springConfig);
   const springY = useSpring(mouseY, springConfig);
 
-  const rotateX = useTransform(springY, [-150, 150], [-10, 10]);
-  const rotateY = useTransform(springX, [-150, 150], [10, -10]);
+  const rotateX = useTransform(springY, [-200, 200], [-12, 12]);
+  const rotateY = useTransform(springX, [-200, 200], [12, -12]);
   
   return (
     <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-            rotateX,
-            rotateY,
-            transformStyle: "preserve-3d",
-            perspective: '1000px'
-        }}
-        className="relative h-full"
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: '1000px' }}
+      className="relative h-full"
     >
-      <Link href={`/books/${book.id}`} className="block h-full" tabIndex={0}>
-        <div className="p-px bg-gradient-to-br from-white/10 to-transparent rounded-xl h-full group transition-all duration-300 hover:from-primary/50 hover:to-secondary/50 preserve-3d">
-          <Card
-            style={{ transform: "translateZ(40px)" }} 
-            className="flex h-full flex-col overflow-hidden rounded-xl bg-card border-none relative preserve-3d"
-          >
-            <CardHeader className="p-0 relative z-10" style={{ transform: "translateZ(50px)" }}>
-              <div className="aspect-[3/4] w-full overflow-hidden">
-                <Image
-                  src={book.imageUrl}
-                  alt={book.title}
-                  width={400}
-                  height={600}
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow p-4 flex flex-col relative z-0 bg-card">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
+      <Link href={`/books/${book.id}`} className="block h-full group" tabIndex={0}>
+        <Card className={cn(
+          "flex h-full flex-col overflow-hidden rounded-xl border-none relative preserve-3d",
+          "bg-card/80 backdrop-blur-sm border border-white/10",
+          "transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20"
+        )}>
+          <div 
+            className="absolute inset-0 bg-card/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ transform: "translateZ(20px)" }}
+          />
 
-              <CardTitle className="text-base font-bold leading-snug mb-2 text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
-              <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center p-4 pt-2 bg-card/80">
-              <p className="text-base sm:text-lg font-bold text-foreground font-sans">Kshs {book.price.toFixed(2)}</p>
-              <Button
-                size="icon"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-10 w-10 shrink-0"
-                onClick={handleAddToCart}
-              >
-                <ShoppingCart className="h-5 w-5" />
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
+          <CardHeader className="p-0 relative" style={{ transform: "translateZ(60px)" }}>
+            <div className="aspect-[3/4] w-full overflow-hidden rounded-t-xl">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={400}
+                height={600}
+                className="object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            </div>
+          </CardHeader>
+          <CardContent 
+            className="flex-grow p-4 flex flex-col relative z-10 bg-transparent"
+            style={{ transform: "translateZ(40px)" }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
+            <CardTitle className="text-base font-bold leading-snug mb-2 text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
+            <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
+          </CardContent>
+          <CardFooter 
+            className="flex justify-between items-center p-4 pt-2 bg-transparent z-10"
+            style={{ transform: "translateZ(50px)" }}
+          >
+            <p className="text-base font-bold text-foreground font-sans">Kshs {book.price.toFixed(2)}</p>
+            <Button
+              size="icon"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-9 w-9 shrink-0 sm:h-10 sm:w-10"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+            </Button>
+          </CardFooter>
+        </Card>
       </Link>
     </motion.div>
   );

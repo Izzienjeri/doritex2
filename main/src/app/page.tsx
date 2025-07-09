@@ -2,11 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
 import { Book, dummyBooks, dummyCategories } from "@/lib/data";
-import { ArrowRight, BookOpen, ChevronDown, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants, useMotionValue, useTransform, animate, PanInfo } from "framer-motion";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { motion, Variants } from "framer-motion";
+import { useEffect, useState, useCallback } from "react";
 
 const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<string>): Book[] => {
   const shuffled = [...source].sort(() => 0.5 - Math.random());
@@ -19,15 +19,14 @@ const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<st
   return uniqueBooks;
 };
 
-// --- Desktop-only Coverflow Component ---
 const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
   const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
   if (!books.length) return null;
   const activeBook = books[activeIndex];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
-      <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4 sm:gap-8">
+      <div className="relative w-full h-64 sm:h-80" style={{ perspective: "1200px" }}>
         {books.map((book, i) => {
           const offset = i - activeIndex;
           const isVisible = Math.abs(offset) <= 2;
@@ -35,7 +34,7 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
           return (
             <motion.div
               key={`${book.id}-${i}`}
-              className="absolute w-52 h-full top-0 left-1/2 -ml-28"
+              className="absolute w-40 h-full top-0 left-1/2 -ml-20 sm:w-52 sm:-ml-28"
               initial={false}
               animate={{
                 x: `${offset * 35}%`,
@@ -60,10 +59,10 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
         })}
       </div>
       <div className="flex items-center gap-4">
-        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onPrev}>
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm shrink-0" onClick={onPrev}>
           <ChevronLeft className="h-6 w-6" />
         </Button>
-        <div className="text-center w-64">
+        <div className="text-center w-56 sm:w-64">
           <Link href={`/books/${activeBook?.id}`}>
             <motion.h3 key={activeBook?.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-lg text-white/90 truncate">
               {activeBook?.title}
@@ -71,135 +70,10 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
           </Link>
           <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
         </div>
-        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm" onClick={onNext}>
+        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm shrink-0" onClick={onNext}>
           <ChevronRight className="h-6 w-6" />
         </Button>
       </div>
-    </div>
-  );
-};
-
-// --- "All-In" Interactive Mobile Hero ---
-const InteractiveHero = ({ books }: { books: Book[] }) => {
-  const [stack, setStack] = useState(() => books.map(book => ({ ...book, uniqueId: crypto.randomUUID() })));
-  const x = useMotionValue(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const rotate = useTransform(x, [-200, 200], [-30, 30], { clamp: false });
-
-  const animateCardOffScreen = useCallback(() => {
-    animate(x, 200, {
-      type: "spring", stiffness: 100, damping: 30,
-      onComplete: () => {
-        x.set(0);
-        setStack(prev => {
-          const newStack = [...prev];
-          newStack.shift();
-          return newStack;
-        });
-      }
-    });
-  }, [x]);
-
-  const stopAutoPlay = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  }, []);
-
-  const startAutoPlay = useCallback(() => {
-    stopAutoPlay();
-    intervalRef.current = setInterval(() => {
-      animateCardOffScreen();
-    }, 2500);
-  }, [animateCardOffScreen, stopAutoPlay]);
-
-  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (Math.abs(info.offset.x) > 100) {
-      animateCardOffScreen();
-    } else {
-      animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
-    }
-    startAutoPlay();
-  }, [x, animateCardOffScreen, startAutoPlay]);
-
-  const handleDragStart = useCallback(() => {
-    stopAutoPlay();
-  }, [stopAutoPlay]);
-
-  useEffect(() => {
-    startAutoPlay();
-    return () => stopAutoPlay();
-  }, [startAutoPlay, stopAutoPlay]);
-
-  useEffect(() => {
-    if (stack.length < 5) {
-      const existingIds = new Set(stack.map(b => b.id));
-      const newBooks = getRandomUniqueBooks(dummyBooks, 5, existingIds);
-      setStack(prev => [...prev, ...newBooks.map(book => ({ ...book, uniqueId: crypto.randomUUID() }))]);
-    }
-  }, [stack]);
-
-  return (
-    <div className="lg:hidden flex flex-col justify-end text-center h-dvh pb-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="absolute top-24 left-0 right-0 px-4 z-10"
-      >
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter text-white text-shadow">
-          Gateway to <span className="text-primary">Educational</span> Excellence.
-        </h1>
-        <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto font-sans text-shadow">
-          Swipe or let it play to discover.
-        </p>
-      </motion.div>
-
-      <div className="relative h-[60%] w-full">
-        {stack.slice(0, 4).reverse().map((book, index, arr) => {
-          const isTopCard = index === arr.length - 1;
-          return (
-            <motion.div
-              key={book.uniqueId}
-              className="absolute top-0 left-0 right-0 w-64 h-[24rem] mx-auto "
-              style={ isTopCard ? { x, rotate } : {}}
-              animate={{
-                scale: 1 - (arr.length - 1 - index) * 0.05,
-                y: (arr.length - 1 - index) * -20,
-              }}
-              drag={isTopCard ? "x" : false}
-              dragConstraints={{ left: 0, right: 0, top:0, bottom:0 }}
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
-              transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            >
-              <Link href={`/books/${book.id}`} className="w-full h-full block">
-                <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl shadow-black/60 p-4 flex flex-col justify-end text-left">
-                  <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover rounded-2xl pointer-events-none"
-                    priority={isTopCard}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-2xl"></div>
-                  <div className="relative z-10 text-white">
-                    <h3 className="text-xl font-bold leading-tight">{book.title}</h3>
-                    <p className="text-sm text-white/70">{book.author}</p>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          );
-        })}
-      </div>
-       <motion.div 
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         transition={{ delay: 1, duration: 1 }}
-         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
-       >
-         <ChevronDown className="h-8 w-8 text-white/50 animate-bounce" />
-       </motion.div>
     </div>
   );
 };
@@ -253,11 +127,9 @@ export default function HomePage() {
         <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
         <div className="container relative z-10 mx-auto px-4">
           
-          {isMounted && <InteractiveHero books={heroBooks} />}
-
-          <div className="hidden lg:grid min-h-[90vh] lg:grid-cols-2 items-center gap-12">
-            <div className="text-center lg:text-left">
-              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl">
+          <div className="grid min-h-dvh lg:min-h-[90vh] lg:grid-cols-2 items-center gap-12 pt-28 pb-8 lg:pt-0 lg:pb-0">
+            <div className="text-center lg:text-left row-start-2 lg:row-start-1">
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl">
                 Gateway to <span className="text-primary">Educational</span> Excellence.
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans">
@@ -272,7 +144,7 @@ export default function HomePage() {
               </motion.div>
             </div>
             
-            <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
+            <div className="w-full h-[22rem] sm:h-[26rem] lg:h-[30rem] flex items-center justify-center row-start-1 lg:row-start-1">
               {isMounted && (
                 <HeroBookCoverflow 
                   books={heroBooks.slice(0, 7)} 
