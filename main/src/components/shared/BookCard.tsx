@@ -1,3 +1,4 @@
+// === components/shared/BookCard.tsx ===
 import React, { useRef } from 'react';
 import Image from "next/image";
 import Link from "next/link";
@@ -68,7 +69,7 @@ export function BookCard({ book }: BookCardProps) {
           />
 
           <CardHeader className="p-0 relative" style={{ transform: "translateZ(60px)" }}>
-            <div className="aspect-[3/4] w-full overflow-hidden rounded-t-xl">
+            <div className="aspect-[3/2] w-full overflow-hidden rounded-t-xl">
               <Image
                 src={book.imageUrl}
                 alt={book.title}
