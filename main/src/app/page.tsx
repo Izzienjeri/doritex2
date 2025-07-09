@@ -43,7 +43,7 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
                 zIndex: books.length - Math.abs(offset),
                 opacity: isVisible ? 1 : 0,
               }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              transition={{ type: "tween", ease: [0.25, 0.1, 0.25, 1], duration: 0.6 }}
             >
               <Link href={`/books/${book.id}`} className="cursor-pointer" tabIndex={-1}>
                 <Image
