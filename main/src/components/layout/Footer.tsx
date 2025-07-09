@@ -30,8 +30,8 @@ export function Footer() {
               Contact
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><a href="mailto:info@doritex.com" className="hover:text-primary transition-colors">info@doritex.com</a></li>
-              <li><a href="tel:+254123456789" className="hover:text-primary transition-colors">+254 123 456 789</a></li>
+              <li><a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">investments.doritex@gmail.com</a></li>
+              <li><a href="tel: +254 722 316 210" className="hover:text-primary transition-colors">+254 722 316 210</a></li>
             </ul>
           </div>
           <div>
@@ -47,7 +47,7 @@ export function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
-          <p className="mt-2">Created by <Link href="https://example.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">A. Developer</Link></p>
+          <p className="mt-2">Created by <Link href="https://izziedevs.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">IzzieDevs</Link></p>
         </div>
       </div>
     </footer>
