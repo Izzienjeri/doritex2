@@ -73,10 +73,10 @@ export const dummyBooks: Book[] = [
 ];
 
 export const dummyCategories = [
-  { name: "Science", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Science" },
-  { name: "Technology", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Technology" },
-  { name: "History", imageUrl: "https://placehold.co/600x400/2e3192/ffffff?text=History" },
-  { name: "Business", imageUrl: "https://placehold.co/600x400/2b2b2b/ffffff?text=Business" },
-  { name: "Mathematics", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Mathematics" },
-  { name: "Literature", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Literature" },
+  { name: "Science", imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D" },
+  { name: "Technology", imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fHRlY2hub2xvZ3l8ZW58MHx8MHx8fDA%3D" },
+  { name: "History", imageUrl: "https://images.unsplash.com/photo-1515325595179-59cd5262ca53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fEhpc3Rvcnl8ZW58MHx8MHx8fDA%3D" },
+  { name: "Business", imageUrl: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzl8fGJ1c2luZXNzfGVufDB8fDB8fHww" },
+  { name: "Mathematics", imageUrl: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWF0aGVtYXRpY3N8ZW58MHx8MHx8fDA%3D" },
+  { name: "Literature", imageUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxpdGVyYXR1cmV8ZW58MHx8MHx8fDA%3D" },
 ];
