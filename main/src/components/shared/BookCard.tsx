@@ -7,6 +7,7 @@ import { Book } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
 import { Eye, ShoppingCart } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { toast } from "sonner";
 
 interface BookCardProps {
   book: Book;
@@ -55,6 +56,7 @@ export function BookCard({ book }: BookCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch({ type: "ADD_ITEM", payload: book });
+    toast.success(`${book.title} added to cart!`);
   };
 
   const mouseX = useMotionValue(0);

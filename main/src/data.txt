@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 07:22:20
+# Date and Time: 2025-07-09 08:18:12
 # Files Included: 16
 
 # === lib/utils.ts ===
@@ -26,9 +26,9 @@ export const dummyBooks: Book[] = [
   {
     id: "1",
     title: "Quantum Physics for Beginners",
-    author: "Dr. Evelyn Reed",
-    price: 29.99,
-    imageUrl: "https://placehold.co/400x600/2e3192/ffffff?text=Quantum+Physics",
+    author: "Dr. Wanjiku Mwangi",
+    price: 3200,
+    imageUrl: "https://images.unsplash.com/photo-1667312939934-60fc3bfa4ec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Ym9va3N8ZW58MHx8MHx8fDA%3D",
     category: "Science",
     isFeatured: true,
     description: "An accessible introduction to the fascinating world of quantum mechanics."
@@ -36,9 +36,9 @@ export const dummyBooks: Book[] = [
   {
     id: "2",
     title: "The Art of Python",
-    author: "Leo Chen",
-    price: 45.50,
-    imageUrl: "https://placehold.co/400x600/3871c1/ffffff?text=The+Art+of+Python",
+    author: "Brian Otieno",
+    price: 4800,
+    imageUrl: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ym9va3N8ZW58MHx8MHx8fDA%3D",
     category: "Technology",
     isFeatured: true,
     description: "Master the elegant and powerful Python programming language."
@@ -46,9 +46,9 @@ export const dummyBooks: Book[] = [
   {
     id: "3",
     title: "History of Ancient Civilizations",
-    author: "Prof. Alistair Finch",
-    price: 35.00,
-    imageUrl: "https://placehold.co/400x600/00aaeb/2b2b2b?text=Ancient+History",
+    author: "Prof. Achieng' Omondi",
+    price: 3700,
+    imageUrl: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJvb2tzfGVufDB8fDB8fHww",
     category: "History",
     isFeatured: true,
     description: "A comprehensive survey of the world's greatest ancient empires."
@@ -56,19 +56,19 @@ export const dummyBooks: Book[] = [
   {
     id: "4",
     title: "Fundamentals of Economics",
-    author: "Maria Garcia",
-    price: 52.00,
-    imageUrl: "https://placehold.co/400x600/2b2b2b/ffffff?text=Economics",
+    author: "Grace Wairimu",
+    price: 5500,
+    imageUrl: "https://images.unsplash.com/photo-1732304720653-86e4fa903345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZWNvbm9taWNzJTIwYm9va3N8ZW58MHx8MHx8fDA%3D",
     category: "Business",
     isFeatured: true,
     description: "Explore the core principles that drive modern economies."
   },
-    {
+  {
     id: "5",
     title: "Introduction to Calculus",
-    author: "Johnathan Sterling",
-    price: 65.00,
-    imageUrl: "https://placehold.co/400x600/2e3192/ffffff?text=Calculus",
+    author: "Samuel Kiprotich",
+    price: 6800,
+    imageUrl: "https://images.unsplash.com/photo-1731983568664-9c1d8a87e7a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhbGN1bHVzJTVDJTIwYm9va3N8ZW58MHx8MHx8fDA%3D",
     category: "Mathematics",
     isFeatured: false,
     description: "A rigorous yet clear guide to the concepts of limits, derivatives, and integrals."
@@ -76,9 +76,9 @@ export const dummyBooks: Book[] = [
   {
     id: "6",
     title: "Modernist Literature",
-    author: "Eleanor Vance",
-    price: 28.75,
-    imageUrl: "https://placehold.co/400x600/3871c1/ffffff?text=Modernist+Lit",
+    author: "Linda Naliaka",
+    price: 3000,
+    imageUrl: "https://images.unsplash.com/photo-1630852722952-5a87d3ca2d95?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGxpdGVyYXR1cmUlMjBib29rc3xlbnwwfHwwfHx8MA%3D%3D",
     category: "Literature",
     isFeatured: false,
     description: "An analysis of the groundbreaking works of the early 20th century."
@@ -313,6 +313,7 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -351,6 +352,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          <Toaster />
         </CartProvider>
       </body>
     </html>
@@ -362,72 +364,119 @@ export default function RootLayout({
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
 import { Book, dummyBooks, dummyCategories } from "@/lib/data";
-import { ArrowRight, BookOpen, Lightbulb, TrendingUp } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants, Transition } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 
+// Helper function to get random unique books from the dummy data
+const getRandomUniqueBooks = (source: Book[], count: number): Book[] => {
+  const shuffled = [...source].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
 
-const BookImage = ({ book }: { book: Book }) => (
-  <div className="relative shadow-2xl shadow-black/50 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-primary/30">
-    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 opacity-50" />
-    <Image
-      src={book.imageUrl}
-      alt={book.title}
-      width={300}
-      height={450}
-      className="object-cover w-full h-full"
-    />
-  </div>
-);
+// The new "Coverflow" component for the hero section
+const HeroBookCoverflow = ({ books }: { books: Book[] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
+  // Set the initial active book to be the one in the middle
+  useEffect(() => {
+    if (books.length > 0) {
+      setActiveIndex(Math.floor(books.length / 2));
+    }
+  }, [books.length]);
+  
+  // Auto-play functionality to cycle through books
+  useEffect(() => {
+    const interval = setInterval(() => {
+        setActiveIndex((prevIndex) => (prevIndex + 1) % books.length);
+    }, 4000); // Change book every 4 seconds
+    return () => clearInterval(interval);
+  }, [books.length]);
 
+  if (!books.length) return null;
+
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-8">
+      <div className="relative w-full h-80" style={{ perspective: "1200px" }}>
+        {books.map((book, i) => {
+          const offset = i - activeIndex;
+          const isVisible = Math.abs(offset) <= 2; // Only render the active book and its immediate neighbours for performance
+
+          return (
+            <motion.div
+              key={book.id}
+              className="absolute w-52 h-full top-0 left-1/2 -ml-28 cursor-pointer" // Centered with negative margin
+              initial={false}
+              animate={{
+                x: `${offset * 35}%`,
+                scale: offset === 0 ? 1 : 0.75,
+                rotateY: offset * -25,
+                zIndex: books.length - Math.abs(offset),
+                opacity: isVisible ? 1 : 0,
+              }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              onClick={() => setActiveIndex(i)}
+            >
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={400}
+                height={600}
+                className="object-cover w-full h-full rounded-lg shadow-2xl shadow-black/50 pointer-events-none"
+              />
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-4">
+        <Button 
+            size="icon" 
+            variant="outline" 
+            className="rounded-full bg-background/50 backdrop-blur-sm"
+            onClick={() => setActiveIndex(activeIndex > 0 ? activeIndex - 1 : books.length - 1)}
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </Button>
+        <div className="text-center w-64">
+             <Link href={`/books/${books[activeIndex]?.id}`}>
+                <motion.h3
+                    key={books[activeIndex]?.id} // Use key to trigger animation on change
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="font-bold text-lg text-white/90 truncate"
+                >
+                    {books[activeIndex]?.title}
+                </motion.h3>
+            </Link>
+            <p className="text-sm text-muted-foreground">{books[activeIndex]?.author}</p>
+        </div>
+        <Button 
+            size="icon" 
+            variant="outline" 
+            className="rounded-full bg-background/50 backdrop-blur-sm"
+            onClick={() => setActiveIndex((activeIndex + 1) % books.length)}
+        >
+          <ChevronRight className="h-6 w-6" />
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// The main page component
 export default function HomePage() {
   const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
-  const heroBooks = dummyBooks.slice(0, 3);
-
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [heroBooks, setHeroBooks] = useState<Book[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-
-    const handleMouseMove = (event: MouseEvent) => {
-      const heroElement = event.currentTarget as HTMLElement;
-      if (!heroElement) return;
-      const rect = heroElement.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      setMousePosition({ x, y });
-    };
-
-    const heroElement = document.getElementById("interactive-hero");
-    if (heroElement) {
-      heroElement.addEventListener("mousemove", handleMouseMove);
-    }
-
-    return () => {
-      if (heroElement) {
-        heroElement.removeEventListener("mousemove", handleMouseMove);
-      }
-    };
+    // Use an odd number like 5 or 7 for a visually balanced coverflow
+    setHeroBooks(getRandomUniqueBooks(dummyBooks, 7)); 
   }, []);
-
-  const getHeroStyle = () => {
-    if (typeof window === "undefined" || !isMounted) {
-        return { "--x": "50%", "--y": "50%" } as any;
-    }
-    
-    const heroElement = document.getElementById("interactive-hero");
-    const xPercent = (mousePosition.x / (heroElement?.clientWidth || 1)) * 100;
-    const yPercent = (mousePosition.y / (heroElement?.clientHeight || 1)) * 100;
-
-    return {
-      "--x": `${xPercent}%`,
-      "--y": `${yPercent}%`,
-    } as any;
-  };
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -437,39 +486,18 @@ export default function HomePage() {
     },
   };
 
-  const itemSpringTransition: Transition = {
-    type: "spring",
-    stiffness: 100,
-    damping: 15,
-  };
-
   const itemVariants: Variants = {
     hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: itemSpringTransition },
-  };
-  
-  const floatingVariants: Variants = {
-    animate: (i: number) => ({
-      y: [0, -10, 0, 10, 0],
-      rotate: [0, i % 2 === 0 ? 3 : -3, 0],
-      transition: {
-        duration: 12 + i * 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    }),
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
   };
 
   return (
     <div className="flex flex-col">
-      <section
-        id="interactive-hero"
-        className="interactive-aurora w-full overflow-hidden"
-        style={getHeroStyle()}
-      >
-        <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
-        <div className="container relative z-10 mx-auto min-h-[90vh] flex items-center px-4">
-          <div className="max-w-3xl text-left z-10">
+      <section id="interactive-hero" className="interactive-aurora w-full overflow-hidden relative">
+        <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
+        <div className="container relative z-10 mx-auto min-h-[90vh] grid lg:grid-cols-2 items-center px-4 gap-12">
+          
+          <div className="text-center lg:text-left">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -482,7 +510,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl font-sans"
+              className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans"
             >
               Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
             </motion.p>
@@ -499,22 +527,15 @@ export default function HomePage() {
               </Button>
             </motion.div>
           </div>
-          {isMounted && (
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 h-full hidden lg:block z-0">
-                <motion.div variants={floatingVariants} animate="animate" custom={0} className="absolute top-[15%] right-[40%] w-48">
-                <BookImage book={heroBooks[0]} />
-                </motion.div>
-                <motion.div variants={floatingVariants} animate="animate" custom={1} className="absolute top-[45%] right-[10%] w-56">
-                <BookImage book={heroBooks[1]} />
-                </motion.div>
-                <motion.div variants={floatingVariants} animate="animate" custom={2} className="absolute top-[65%] right-[50%] w-40">
-                <BookImage book={heroBooks[2]} />
-                </motion.div>
-            </div>
-          )}
+          
+          <div className="w-full h-[30rem] hidden lg:flex items-center justify-center">
+            {isMounted && <HeroBookCoverflow books={heroBooks} />}
+          </div>
+
         </div>
       </section>
 
+      {/* --- The rest of the page remains exactly the same --- */}
       <section className="py-24 md:py-32 relative">
         <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
         <div className="container mx-auto px-4">
@@ -626,7 +647,6 @@ export default function HomePage() {
 
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
@@ -851,6 +871,7 @@ import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 export default function BookDetailPage() {
   const params = useParams();
@@ -866,6 +887,7 @@ export default function BookDetailPage() {
     for(let i = 0; i < quantity; i++) {
         dispatch({ type: 'ADD_ITEM', payload: book });
     }
+    toast.success(`${quantity} x ${book.title} added to cart!`);
   }
 
   return (
@@ -1018,7 +1040,6 @@ export default function OrderConfirmationPage() {
 
 # === app/checkout/page.tsx ===
 "use client"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -1195,6 +1216,7 @@ import { Book } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
 import { Eye, ShoppingCart } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { toast } from "sonner";
 
 interface BookCardProps {
   book: Book;
@@ -1243,6 +1265,7 @@ export function BookCard({ book }: BookCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch({ type: "ADD_ITEM", payload: book });
+    toast.success(`${book.title} added to cart!`);
   };
 
   const mouseX = useMotionValue(0);

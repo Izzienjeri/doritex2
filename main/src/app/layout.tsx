@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          <Toaster />
         </CartProvider>
       </body>
     </html>

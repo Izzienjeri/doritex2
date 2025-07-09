@@ -2,7 +2,6 @@
 
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
@@ -31,7 +30,9 @@ export default function CartPage() {
       {items.length === 0 ? (
         <div className="text-center py-20 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
-          <p className="text-muted-foreground mb-8">Looks like you haven't added any books yet.</p>
+          <p className="text-muted-foreground mb-8">
+            Looks like you haven&apos;t added any books yet.
+            </p>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>

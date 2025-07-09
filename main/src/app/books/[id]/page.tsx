@@ -8,6 +8,7 @@ import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 export default function BookDetailPage() {
   const params = useParams();
@@ -23,6 +24,7 @@ export default function BookDetailPage() {
     for(let i = 0; i < quantity; i++) {
         dispatch({ type: 'ADD_ITEM', payload: book });
     }
+    toast.success(`${quantity} x ${book.title} added to cart!`);
   }
 
   return (

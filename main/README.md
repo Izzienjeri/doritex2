@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+npm run build
 
-## Getting Started
+> main@0.1.0 build
+> next build
 
-First, run the development server:
+   ▲ Next.js 15.3.5
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 7.0s
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Failed to compile.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+./src/app/cart/page.tsx
+5:10  Error: 'Input' is defined but never used.  @typescript-eslint/no-unused-vars
+34:73  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+./src/app/checkout/page.tsx
+2:8  Error: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
 
-## Learn More
+./src/app/login/page.tsx
+37:18  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
 
-To learn more about Next.js, take a look at the following resources:
+./src/app/page.tsx
+4:28  Error: 'dummyCategories' is defined but never used.  @typescript-eslint/no-unused-vars
+5:22  Error: 'BookOpen' is defined but never used.  @typescript-eslint/no-unused-vars
+5:59  Error: 'Lightbulb' is defined but never used.  @typescript-eslint/no-unused-vars
+5:70  Error: 'TrendingUp' is defined but never used.  @typescript-eslint/no-unused-vars
+69:6  Warning: React Hook useEffect has a missing dependency: 'paginate'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+./src/components/ui/input.tsx
+4:18  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
