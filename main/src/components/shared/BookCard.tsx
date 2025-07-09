@@ -35,7 +35,7 @@ const StaticCard = ({ book }: BookCardProps) => (
             <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
           </CardContent>
           <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
-            <p className="text-xl font-bold text-foreground font-sans">${book.price.toFixed(2)}</p>
+            <p className="text-xl font-bold text-foreground font-sans">Kshs {book.price.toFixed(2)}</p>
           </CardFooter>
         </Card>
       </div>
@@ -151,7 +151,7 @@ export function BookCard({ book }: BookCardProps) {
               <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
             </CardContent>
             <CardFooter className="flex justify-between items-center p-5 pt-3 bg-card/80">
-              <p className="text-xl font-bold text-foreground font-sans">${book.price.toFixed(2)}</p>
+              <p className="text-xl font-bold text-foreground font-sans">Kshs {book.price.toFixed(2)}</p>
             </CardFooter>
           </Card>
         </div>

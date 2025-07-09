@@ -10,11 +10,12 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
       <motion.div
+        className="w-full max-w-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl shadow-black/30">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">

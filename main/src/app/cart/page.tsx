@@ -31,7 +31,7 @@ export default function CartPage() {
         <div className="text-center py-20 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-            Looks like you haven&apos;t added any books yet.
+            Looks like you haven't added any books yet.
             </p>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
@@ -46,7 +46,7 @@ export default function CartPage() {
                 <div className="flex-grow ml-6">
                   <h3 className="text-lg font-bold">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">by {item.author}</p>
-                  <p className="text-lg font-bold text-primary mt-2">${item.price.toFixed(2)}</p>
+                  <p className="text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center border border-input rounded-full p-1">
@@ -72,10 +72,10 @@ export default function CartPage() {
                 <CardTitle className="text-2xl">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-lg">
-                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs {shipping.toFixed(2)}</span></div>
                 <hr className="border-border" />
-                <div className="flex justify-between font-bold text-xl"><span>Total</span><span>${total.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>
               <CardFooter>
                  <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">

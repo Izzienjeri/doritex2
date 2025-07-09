@@ -15,10 +15,10 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
   { href: "/#categories", label: "Categories" },
   { href: "/#about", label: "About" },
-  { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -60,11 +60,7 @@ export function Header() {
         <div className="grid h-20 grid-cols-3 items-center">
           {/* Left Column */}
           <div className="flex justify-start">
-            <div className="hidden lg:flex">
-              <BrandLogo />
-            </div>
-            {/* On mobile, this side is empty to allow logo to be in center */}
-            <div className="lg:hidden"></div>
+            <BrandLogo />
           </div>
 
           {/* Center Column */}
@@ -81,10 +77,6 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-            {/* Mobile Logo */}
-            <div className="flex lg:hidden">
-              <BrandLogo />
-            </div>
           </div>
           
           {/* Right Column */}

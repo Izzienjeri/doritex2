@@ -58,7 +58,7 @@ export default function BookDetailPage() {
                 </h1>
                 <p className="text-xl text-muted-foreground mb-6 font-sans">by {book.author}</p>
                 <p className="text-4xl font-bold text-foreground mb-8 font-sans">
-                    ${book.price.toFixed(2)}
+                    Kshs {book.price.toFixed(2)}
                 </p>
                 <p className="text-foreground/80 leading-relaxed font-sans mb-10">
                     {book.description}

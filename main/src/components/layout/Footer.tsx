@@ -27,15 +27,14 @@ export function Footer() {
           </div>
           <div>
             <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
-              Support
+              Contact
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><Link href="/#contact" className="hover:text-primary transition-colors">Contact</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">FAQ</Link></li>
-              <li><Link href="#" className="hover:text-primary transition-colors">Terms</Link></li>
+              <li><a href="mailto:info@doritex.com" className="hover:text-primary transition-colors">info@doritex.com</a></li>
+              <li><a href="tel:+254123456789" className="hover:text-primary transition-colors">+254 123 456 789</a></li>
             </ul>
           </div>
-          <div id="contact">
+          <div>
             <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
               Connect
             </h4>

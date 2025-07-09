@@ -62,14 +62,14 @@ export default function CheckoutPage() {
                             <p className="text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
                     </div>
-                    <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold">Kshs {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
               <div className="space-y-2 text-md border-t border-border pt-4">
-                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold text-xl mt-2"><span>Total</span><span>${total.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl mt-2"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </div>
             </CardContent>
           </Card>
