@@ -35,11 +35,12 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Login</Button>
             <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link href="/register" className="font-semibold text-primary hover:underline">
-                Sign up
-            </Link>
-            </p>
+                Don&apos;t have an account?{" "}
+                <Link href="/register" className="font-semibold text-primary hover:underline">
+                    Sign up
+                </Link>
+                </p>
+
 
           </CardFooter>
         </Card>

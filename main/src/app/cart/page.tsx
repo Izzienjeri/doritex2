@@ -31,8 +31,9 @@ export default function CartPage() {
         <div className="text-center py-20 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-            Looks like you haven't added any books yet.
-            </p>
+  Looks like you haven&apos;t added any books yet.
+</p>
+
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>
