@@ -86,12 +86,12 @@ export const dummyBooks: Book[] = [
 ];
 
 export const dummyCategories = [
-  { name: "Science", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Science" },
-  { name: "Technology", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Technology" },
-  { name: "History", imageUrl: "https://placehold.co/600x400/2e3192/ffffff?text=History" },
-  { name: "Business", imageUrl: "https://placehold.co/600x400/2b2b2b/ffffff?text=Business" },
-  { name: "Mathematics", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff?text=Mathematics" },
-  { name: "Literature", imageUrl: "https://placehold.co/600x400/3871c1/ffffff?text=Literature" },
+  { name: "Science", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff" },
+  { name: "Technology", imageUrl: "https://placehold.co/600x400/3871c1/ffffff" },
+  { name: "History", imageUrl: "https://placehold.co/600x400/2e3192/ffffff" },
+  { name: "Business", imageUrl: "https://placehold.co/600x400/2b2b2b/ffffff" },
+  { name: "Mathematics", imageUrl: "https://placehold.co/600x400/00aaeb/ffffff" },
+  { name: "Literature", imageUrl: "https://placehold.co/600x400/3871c1/ffffff" },
 ];
 
 # === app/globals.css ===

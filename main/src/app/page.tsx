@@ -216,7 +216,7 @@ export default function HomePage() {
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-20 text-foreground">
             Browse By Category
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
             {dummyCategories.map((category, i) => (
               <motion.div
                 key={category.name}
@@ -236,8 +236,8 @@ export default function HomePage() {
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/90 transition-all duration-500"></div>
-                  <div className="relative h-80 p-6 flex flex-col justify-end">
-                    <h3 className="text-3xl font-bold text-white drop-shadow-md transition-transform duration-500 group-hover:-translate-y-2">
+                  <div className="relative h-60 sm:h-80 p-4 sm:p-6 flex flex-col justify-end">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-md transition-transform duration-500 group-hover:-translate-y-2">
                       {category.name}
                     </h3>
                   </div>
