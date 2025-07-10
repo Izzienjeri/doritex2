@@ -12,7 +12,7 @@ type CartState = {
 };
 
 type CartAction =
-  | { type: "ADD_ITEM"; payload: Book }
+  | { type: "ADD_ITEM"; payload: { quantity: number } & Book }
   | { type: "REMOVE_ITEM"; payload: { id: string } }
   | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } };
 
@@ -37,14 +37,14 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ...state,
           items: state.items.map(item =>
             item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + 1 }
+              ? { ...item, quantity: item.quantity + action.payload.quantity }
               : item
           ),
         };
       }
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: [...state.items, { ...action.payload, quantity: action.payload.quantity }],
       };
     }
     case "REMOVE_ITEM": {

@@ -30,6 +30,7 @@ export const CursorGlow = () => {
                 x: springX,
                 y: springY,
             }}
+            className="opacity-0"
         />
     );
 };

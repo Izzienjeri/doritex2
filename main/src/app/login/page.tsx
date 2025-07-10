@@ -15,9 +15,9 @@ export default function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <Card className="w-full bg-card/50 backdrop-blur-lg border-white/10 shadow-2xl shadow-black/30">
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-white">Welcome Back</CardTitle>
+            <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">
               Sign in to continue your journey.
             </CardDescription>

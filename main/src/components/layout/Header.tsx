@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -17,7 +18,6 @@ import { useCart } from "@/context/CartContext";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "Books" },
-  { href: "/#categories", label: "Categories" },
   { href: "/#about", label: "About" },
 ];
 
@@ -40,10 +40,15 @@ export function Header() {
   }, []);
 
   const BrandLogo = () => (
-    <Link href="/" className="flex items-center gap-2 group" onClick={() => isOpen && setIsOpen(false)}>
-      <span className="text-2xl font-bold font-display uppercase tracking-widest text-primary">
-        Doritex
-      </span>
+    <Link href="/" className="flex items-center" onClick={() => isOpen && setIsOpen(false)}>
+      <Image
+        src="/logo2.png"
+        alt="Doritex Logo"
+        width={160}
+        height={45}
+        priority
+        className="h-11 w-auto"
+      />
     </Link>
   );
 
@@ -52,7 +57,7 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         hasScrolled
-          ? "border-b bg-background/80 backdrop-blur-xl shadow-md"
+          ? "border-b bg-background/80 backdrop-blur-xl shadow-sm"
           : "border-b border-transparent"
       )}
     >
@@ -67,7 +72,7 @@ export function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-base font-medium text-brand-text/70 transition-colors hover:text-brand-text link-underline"
+                className="text-base font-medium text-foreground/70 transition-colors hover:text-foreground link-underline"
               >
                 {link.label}
               </Link>
@@ -123,9 +128,7 @@ export function Header() {
                   <SheetHeader className="p-6 border-b">
                     <SheetTitle asChild>
                       <Link href="/" onClick={() => setIsOpen(false)}>
-                        <span className="text-2xl font-bold font-display text-primary">
-                          Doritex
-                        </span>
+                         <Image src="/logo2.png" alt="Doritex Logo" width={160} height={45} className="h-11 w-auto" />
                       </Link>
                     </SheetTitle>
                     <SheetDescription className="sr-only">
@@ -137,7 +140,7 @@ export function Header() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-semibold text-brand-text/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
+                        className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
                         onClick={() => setIsOpen(false)}
                       >
                         {link.label}

@@ -20,7 +20,7 @@ export default function CartPage() {
   };
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal > 0 ? 5.00 : 0;
+  const shipping = subtotal > 0 ? 500 : 0;
   const total = subtotal + shipping;
 
   return (
@@ -71,8 +71,8 @@ export default function CartPage() {
                 <CardTitle className="text-2xl text-foreground">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-lg">
-                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className='text-brand-text'>Kshs {subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className='text-brand-text'>Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between text-card-foreground/80"><span>Subtotal</span><span className='font-semibold text-foreground'>Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-card-foreground/80"><span>Shipping</span><span className='font-semibold text-foreground'>Kshs {shipping.toFixed(2)}</span></div>
                 <hr className="border-border" />
                 <div className="flex justify-between font-bold text-xl text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>

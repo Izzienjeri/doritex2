@@ -9,7 +9,6 @@ import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Card, CardContent } from '@/components/ui/card';
 
 export default function BookDetailPage() {
   const params = useParams();
@@ -22,9 +21,7 @@ export default function BookDetailPage() {
   }
   
   const handleAddToCart = () => {
-    for(let i = 0; i < quantity; i++) {
-        dispatch({ type: 'ADD_ITEM', payload: book });
-    }
+    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
     toast.success(`${quantity} x ${book.title} added to cart!`);
   }
 

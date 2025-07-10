@@ -18,7 +18,7 @@ export default function BooksPage() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.05, delayChildren: 0.2 },
     },
   };
 
@@ -37,7 +37,7 @@ export default function BooksPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center text-white">
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center">
               Our Collection
             </h1>
             <p className="text-center text-muted-foreground text-lg mt-4 mb-12 max-w-2xl mx-auto font-sans">
@@ -47,7 +47,7 @@ export default function BooksPage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 placeholder="Search by title..."
-                className="pl-12 h-14 text-lg bg-input border-border focus-visible:ring-primary focus-visible:ring-offset-background"
+                className="pl-12 h-14 text-lg bg-card border-border focus-visible:ring-primary focus-visible:ring-offset-background rounded-full shadow-sm"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -55,7 +55,7 @@ export default function BooksPage() {
           </motion.div>
           
           <motion.div
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

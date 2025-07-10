@@ -13,7 +13,7 @@ export default function CheckoutPage() {
   const { items } = state
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = subtotal > 0 ? 5.00 : 0
+  const shipping = subtotal > 0 ? 500.00 : 0
   const total = subtotal + shipping
 
   const handlePlaceOrder = (e: React.FormEvent) => {
@@ -22,11 +22,16 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12">Checkout</h1>
-      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12">
+    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Checkout</h1>
+      {items.length === 0 ? (
+        <div className="text-center">
+          <p className="text-xl text-muted-foreground">Your cart is empty. Please add books to proceed.</p>
+        </div>
+      ) : (
+      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12 items-start">
         <div className="lg:col-span-2 space-y-10">
-          <Card className="bg-card/80 border-white/10">
+          <Card className="bg-card/80 border">
             <CardHeader><CardTitle className="text-2xl">Shipping & Delivery</CardTitle></CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" required /></div>
@@ -36,7 +41,7 @@ export default function CheckoutPage() {
               <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
             </CardContent>
           </Card>
-          <Card className="bg-card/80 border-white/10">
+          <Card className="bg-card/80 border">
             <CardHeader><CardTitle className="text-2xl">M-Pesa Payment</CardTitle></CardHeader>
             <CardContent className="space-y-4">
                 <p className="text-muted-foreground text-sm">You will receive an STK Push on your phone to complete the payment.</p>
@@ -49,7 +54,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <Card className="bg-card/80 border-white/10 sticky top-28">
+          <Card className="bg-card/80 border sticky top-28 shadow-lg">
             <CardHeader><CardTitle className="text-2xl">Order Summary</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-4 mb-6">
@@ -58,26 +63,27 @@ export default function CheckoutPage() {
                     <div className="flex items-center gap-3">
                         <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded" />
                         <div>
-                            <p className="font-semibold">{item.title}</p>
+                            <p className="font-semibold text-foreground">{item.title}</p>
                             <p className="text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
                     </div>
-                    <p className="font-semibold">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-foreground">Kshs {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
               <div className="space-y-2 text-md border-t border-border pt-4">
-                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs {shipping.toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold text-xl mt-2"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-semibold text-foreground">Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className="font-semibold text-foreground">Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl mt-2 text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </div>
+               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+                  Place Order
+                </Button>
             </CardContent>
           </Card>
-          <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
-            Place Order
-          </Button>
         </div>
       </form>
+      )}
     </div>
   )
 }

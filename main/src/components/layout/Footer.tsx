@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 export function Footer() {
@@ -8,8 +9,14 @@ export function Footer() {
       <div className="container mx-auto relative py-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left max-w-5xl mx-auto">
           <div className="md:col-span-1">
-            <Link href="/" className="inline-block text-2xl font-bold font-display uppercase tracking-widest text-primary">
-              Doritex
+            <Link href="/" className="inline-block">
+              <Image
+                src="/logo2.png"
+                alt="Doritex Logo"
+                width={160}
+                height={45}
+                className="h-11 w-auto filter brightness-0 invert mx-auto md:mx-0"
+              />
             </Link>
             <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto md:mx-0">
               Your Gateway to Educational Excellence.
@@ -47,7 +54,6 @@ export function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
-          <p className="mt-2">Created by <Link href="https://.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"></Link></p>
         </div>
       </div>
     </footer>

@@ -11,9 +11,11 @@ export default function OrderConfirmationPage() {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, type: "spring" }}
-        className="bg-card/50 backdrop-blur-md p-10 md:p-16 rounded-2xl border border-white/10 shadow-2xl shadow-black/30"
+        className="bg-card/80 backdrop-blur-md p-10 md:p-16 rounded-2xl border"
       >
-        <CheckCircle className="h-20 w-20 text-primary mx-auto mb-6" />
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 10 }}>
+          <CheckCircle className="h-20 w-20 text-primary mx-auto mb-6" />
+        </motion.div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
           Thank You For Your Order!
         </h1>
