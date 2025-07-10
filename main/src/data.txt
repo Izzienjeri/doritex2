@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-09 11:26:34
+# Date and Time: 2025-07-10 07:51:19
 # Files Included: 16
 
 # === lib/utils.ts ===
@@ -310,6 +310,14 @@ export const dummyCategories = [
   .text-shadow {
     text-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @keyframes button-pulse {
@@ -399,6 +407,7 @@ const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<st
   return uniqueBooks;
 };
 
+// Kept for Desktop view
 const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
   const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
   if (!books.length) return null;
@@ -458,6 +467,42 @@ const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: (
   );
 };
 
+// New Component for Mobile Hero
+const MobileBookScroller = ({ books }: { books: Book[] }) => {
+  return (
+    <motion.div
+      className="mt-16 w-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="w-full relative">
+        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
+          {books.slice(0, 6).map((book, i) => (
+            <Link href={`/books/${book.id}`} key={book.id} className="shrink-0 block w-36 sm:w-40 group">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}
+                className="w-full aspect-[2/3] rounded-lg shadow-2xl shadow-black/50 overflow-hidden transform transition-transform duration-300 group-hover:-translate-y-2"
+              >
+                <Image
+                  src={book.imageUrl}
+                  alt={book.title}
+                  width={200}
+                  height={300}
+                  className="object-cover w-full h-full pointer-events-none"
+                />
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+        <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+        <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+      </div>
+    </motion.div>
+  );
+};
 
 export default function HomePage() {
   const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
@@ -487,6 +532,7 @@ export default function HomePage() {
   };
   
   useEffect(() => {
+    if (window.innerWidth < 1024) return; // Only run carousel on desktop
     const interval = setInterval(handleCoverflowNext, 3000);
     return () => clearInterval(interval);
   }, [handleCoverflowNext]);
@@ -507,13 +553,13 @@ export default function HomePage() {
         <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
         <div className="container relative z-10 mx-auto px-4">
           
-          <div className="grid min-h-dvh lg:min-h-[90vh] lg:grid-cols-2 items-center gap-12 pt-28 pb-8 lg:pt-0 lg:pb-0">
-            <div className="text-center lg:text-left row-start-2 lg:row-start-1">
-              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl lg:text-8xl">
+          <div className="flex flex-col justify-center text-center min-h-[90vh] pt-24 pb-12 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12 lg:text-left lg:pt-0 lg:pb-0 lg:min-h-[90vh]">
+            <div className="lg:col-start-1">
+              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl">
                 Gateway to <span className="text-primary">Educational</span> Excellence.
               </motion.h1>
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans">
-                Discover a curated collection of academic and professional publications designed to empower your learning journey and fuel your growth.
+                Discover a curated collection of academic and professional publications designed to empower your learning journey.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mt-10">
                 <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine animate-button-pulse">
@@ -524,7 +570,11 @@ export default function HomePage() {
               </motion.div>
             </div>
             
-            <div className="w-full h-[22rem] sm:h-[26rem] lg:h-[30rem] flex items-center justify-center row-start-1 lg:row-start-1">
+            <div className="lg:hidden">
+              <MobileBookScroller books={dummyBooks} />
+            </div>
+
+            <div className="hidden lg:flex w-full h-[30rem] items-center justify-center">
               {isMounted && (
                 <HeroBookCoverflow 
                   books={heroBooks.slice(0, 7)} 
@@ -540,10 +590,15 @@ export default function HomePage() {
       <section className="py-24 md:py-32 relative bg-background z-10">
         <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-4 text-foreground">
-            Featured Publications
-          </h2>
-          <p className="text-center text-muted-foreground text-lg mb-20 max-w-2xl mx-auto font-sans">
+          <div className="flex justify-between items-baseline mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter text-foreground">
+              Featured Publications
+            </h2>
+            <Link href="/books" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
+              View All <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <p className="text-muted-foreground text-base mb-12 max-w-3xl font-sans">
             Handpicked selections from our experts to kickstart your intellectual adventure.
           </p>
           <motion.div
@@ -559,6 +614,11 @@ export default function HomePage() {
               </motion.div>
             ))}
           </motion.div>
+          <div className="mt-12 text-center sm:hidden">
+            <Button variant="outline" size="lg" asChild className="rounded-full px-8 h-12">
+                <Link href="/books">View All Publications</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -609,7 +669,7 @@ export default function HomePage() {
           <p className="max-w-3xl mx-auto text-lg text-white/70 leading-relaxed mb-20 font-sans">
             At Doritex, we believe in the transformative power of knowledge. Our mission is to provide high-quality, accessible educational resources that inspire curiosity and empower individuals to achieve their goals.
           </p>
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {[
               { icon: BookOpen, title: "Vast Collection", desc: "Explore a diverse range of subjects and authors." },
               { icon: Lightbulb, title: "Quality Content", desc: "Carefully curated and peer-reviewed publications." },
@@ -618,13 +678,17 @@ export default function HomePage() {
               <motion.div
                 key={item.title}
                 variants={itemVariants}
-                className="bg-white/10 p-8 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-primary hover:-translate-y-2 hover:shadow-primary/20"
+                className="bg-white/10 p-6 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-primary hover:-translate-y-1"
               >
-                <div className="mb-5 inline-block rounded-full bg-white/10 p-4">
-                  <item.icon className="h-10 w-10 text-primary" />
+                <div className="flex flex-row items-center gap-5">
+                  <div className="flex-shrink-0 rounded-full bg-primary/20 p-3 border border-primary/30">
+                    <item.icon className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold mb-1 text-white">{item.title}</h3>
+                    <p className="text-sm text-white/70 font-sans leading-relaxed">{item.desc}</p>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold mb-2 text-white">{item.title}</h3>
-                <p className="text-sm text-white/60 font-sans">{item.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -1206,6 +1270,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 export const useCart = () => useContext(CartContext);
 
 # === components/shared/BookCard.tsx ===
+// === components/shared/BookCard.tsx ===
 import React, { useRef } from 'react';
 import Image from "next/image";
 import Link from "next/link";
@@ -1276,7 +1341,7 @@ export function BookCard({ book }: BookCardProps) {
           />
 
           <CardHeader className="p-0 relative" style={{ transform: "translateZ(60px)" }}>
-            <div className="aspect-[3/4] w-full overflow-hidden rounded-t-xl">
+            <div className="aspect-[3/2] w-full overflow-hidden rounded-t-xl">
               <Image
                 src={book.imageUrl}
                 alt={book.title}
@@ -1363,7 +1428,7 @@ export function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
-          <p className="mt-2">Created by <Link href="https://izziedevs.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">IzzieDevs</Link></p>
+          <p className="mt-2">Created by <Link href="https://.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"></Link></p>
         </div>
       </div>
     </footer>
