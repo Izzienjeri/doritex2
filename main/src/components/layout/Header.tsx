@@ -11,7 +11,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Menu, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 
@@ -23,21 +23,11 @@ const navLinks = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const { state } = useCart();
   const cartItemCount = state.items.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const BrandLogo = () => (
     <Link href="/" className="flex items-center" onClick={() => isOpen && setIsOpen(false)}>
@@ -55,10 +45,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        hasScrolled
-          ? "border-b bg-background/80 backdrop-blur-xl shadow-sm"
-          : "border-b border-transparent"
+        "sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
       )}
     >
       <div className="container mx-auto px-4">
@@ -175,4 +162,3 @@ export function Header() {
     </header>
   );
 }
-
