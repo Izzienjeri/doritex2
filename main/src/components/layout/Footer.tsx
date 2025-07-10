@@ -3,7 +3,7 @@ import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-[#0D0E13] text-muted-foreground relative overflow-hidden border-t border-white/5">
+    <footer className="bg-accent text-white/80 relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
       <div className="container mx-auto relative py-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left max-w-5xl mx-auto">
@@ -16,7 +16,7 @@ export function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Links
             </h4>
             <ul className="space-y-3 text-sm font-sans">
@@ -26,7 +26,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Contact
             </h4>
             <ul className="space-y-3 text-sm font-sans">
@@ -35,7 +35,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Connect
             </h4>
             <div className="flex space-x-4 justify-center md:justify-start">
@@ -45,9 +45,9 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
+        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
-          <p className="mt-2">Created by <Link href="https://izziedevs.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">IzzieDevs</Link></p>
+          <p className="mt-2">Created by <Link href="https://.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"></Link></p>
         </div>
       </div>
     </footer>

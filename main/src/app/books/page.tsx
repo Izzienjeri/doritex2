@@ -11,8 +11,7 @@ export default function BooksPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredBooks = dummyBooks.filter(book => 
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const containerVariants = {
@@ -38,7 +37,7 @@ export default function BooksPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center text-foreground">
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center text-white">
               Our Collection
             </h1>
             <p className="text-center text-muted-foreground text-lg mt-4 mb-12 max-w-2xl mx-auto font-sans">
@@ -47,8 +46,8 @@ export default function BooksPage() {
             <div className="max-w-xl mx-auto mb-20 relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
-                placeholder="Search by title or author..."
-                className="pl-12 h-14 text-lg"
+                placeholder="Search by title..."
+                className="pl-12 h-14 text-lg bg-input border-border focus-visible:ring-primary focus-visible:ring-offset-background"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

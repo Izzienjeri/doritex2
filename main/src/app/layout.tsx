@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "@/components/ui/sonner";
+import { CursorGlow } from "@/components/layout/CursorGlow";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -33,18 +34,28 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           fontSans.variable,
           fontDisplay.variable
         )}
       >
+        <CursorGlow />
         <CartProvider>
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="relative flex min-h-dvh flex-col">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <Toaster />
+          <Toaster 
+            theme="light" 
+            toastOptions={{
+              classNames: {
+                toast: 'bg-card border-border shadow-lg',
+                title: 'text-foreground',
+                description: 'text-muted-foreground',
+              },
+            }}
+          />
         </CartProvider>
       </body>
     </html>

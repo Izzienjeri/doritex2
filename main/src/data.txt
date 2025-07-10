@@ -1,6 +1,6 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-10 07:51:19
-# Files Included: 16
+# Date and Time: 2025-07-10 09:03:09
+# Files Included: 17
 
 # === lib/utils.ts ===
 import { clsx, type ClassValue } from "clsx"
@@ -11,87 +11,72 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 # === lib/data.ts ===
+// === lib/data.ts ===
 export interface Book {
   id: string;
   title: string;
-  author: string;
   price: number;
   imageUrl: string;
-  category: string;
-  isFeatured: boolean;
   description: string;
 }
 
 export const dummyBooks: Book[] = [
   {
-    id: "1",
-    title: "Quantum Physics for Beginners",
-    author: "Dr. Wanjiku Mwangi",
-    price: 3200,
-    imageUrl: "https://images.unsplash.com/photo-1667312939934-60fc3bfa4ec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Ym9va3N8ZW58MHx8MHx8fDA%3D",
-    category: "Science",
-    isFeatured: true,
-    description: "An accessible introduction to the fascinating world of quantum mechanics."
+    id: "grade-1",
+    title: "Champion Creative Activities - Grade 1",
+    price: 850,
+    imageUrl: "/image1.png",
+    description: "Engaging creative activities for Grade 1 learners, fostering imagination and foundational skills. Approved by KICD."
   },
   {
-    id: "2",
-    title: "The Art of Python",
-    author: "Brian Otieno",
-    price: 4800,
-    imageUrl: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ym9va3N8ZW58MHx8MHx8fDA%3D",
-    category: "Technology",
-    isFeatured: true,
-    description: "Master the elegant and powerful Python programming language."
+    id: "grade-2",
+    title: "Champion Creative Activities - Grade 2",
+    price: 900,
+    imageUrl: "/image2.png",
+    description: "A fun and interactive book to build upon the creative skills of Grade 2 students. Approved by KICD."
   },
   {
-    id: "3",
-    title: "History of Ancient Civilizations",
-    author: "Prof. Achieng' Omondi",
-    price: 3700,
-    imageUrl: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJvb2tzfGVufDB8fDB8fHww",
-    category: "History",
-    isFeatured: true,
-    description: "A comprehensive survey of the world's greatest ancient empires."
+    id: "grade-3",
+    title: "Champion Creative Activities - Grade 3",
+    price: 950,
+    imageUrl: "/image3.png",
+    description: "Encourages creativity and critical thinking with a variety of activities for Grade 3. Approved by KICD."
   },
   {
-    id: "4",
-    title: "Fundamentals of Economics",
-    author: "Grace Wairimu",
-    price: 5500,
-    imageUrl: "https://images.unsplash.com/photo-1732304720653-86e4fa903345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZWNvbm9taWNzJTIwYm9va3N8ZW58MHx8MHx8fDA%3D",
-    category: "Business",
-    isFeatured: true,
-    description: "Explore the core principles that drive modern economies."
+    id: "grade-4",
+    title: "Champion Creative Arts - Grade 4",
+    price: 1000,
+    imageUrl: "/image4.png",
+    description: "An introduction to the world of creative arts, covering various mediums and techniques for Grade 4. Approved by KICD."
   },
   {
-    id: "5",
-    title: "Introduction to Calculus",
-    author: "Samuel Kiprotich",
-    price: 6800,
-    imageUrl: "https://images.unsplash.com/photo-1731983568664-9c1d8a87e7a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhbGN1bHVzJTVDJTIwYm9va3N8ZW58MHx8MHx8fDA%3D",
-    category: "Mathematics",
-    isFeatured: false,
-    description: "A rigorous yet clear guide to the concepts of limits, derivatives, and integrals."
+    id: "grade-5",
+    title: "Champion Creative Arts - Grade 5",
+    price: 1100,
+    imageUrl: "/image5.png",
+    description: "Develops artistic talents and appreciation with advanced projects and lessons for Grade 5 learners. Approved by KICD."
   },
   {
-    id: "6",
-    title: "Modernist Literature",
-    author: "Linda Naliaka",
-    price: 3000,
-    imageUrl: "https://images.unsplash.com/photo-1630852722952-5a87d3ca2d95?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGxpdGVyYXR1cmUlMjBib29rc3xlbnwwfHwwfHx8MA%3D%3D",
-    category: "Literature",
-    isFeatured: false,
-    description: "An analysis of the groundbreaking works of the early 20th century."
+    id: "grade-6",
+    title: "Champion Creative Arts - Grade 6",
+    price: 1250,
+    imageUrl: "/image6.png",
+    description: "A comprehensive guide to creative arts for Grade 6, preparing students for more complex artistic expression. Approved by KICD."
   },
-];
-
-export const dummyCategories = [
-  { name: "Science", imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D" },
-  { name: "Technology", imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fHRlY2hub2xvZ3l8ZW58MHx8MHx8fDA%3D" },
-  { name: "History", imageUrl: "https://images.unsplash.com/photo-1515325595179-59cd5262ca53?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fEhpc3Rvcnl8ZW58MHx8MHx8fDA%3D" },
-  { name: "Business", imageUrl: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzl8fGJ1c2luZXNzfGVufDB8fDB8fHww" },
-  { name: "Mathematics", imageUrl: "https://images.unsplash.com/photo-1635372722656-389f87a941b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWF0aGVtYXRpY3N8ZW58MHx8MHx8fDA%3D" },
-  { name: "Literature", imageUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGxpdGVyYXR1cmV8ZW58MHx8MHx8fDA%3D" },
+  {
+    id: "grade-7",
+    title: "Champion Creative Arts and Sports - Grade 7",
+    price: 1400,
+    imageUrl: "/image7.png",
+    description: "An integrated approach to both creative arts and sports, promoting well-rounded development for Grade 7 students. Approved by KICD."
+  },
+  {
+    id: "grade-8",
+    title: "Champion Creative Arts and Sports - Grade 8",
+    price: 1500,
+    imageUrl: "/image8.png",
+    description: "Advanced concepts in creative arts and sports to challenge and inspire Grade 8 learners. Approved by KICD."
+  }
 ];
 
 # === app/globals.css ===
@@ -143,41 +128,38 @@ export const dummyCategories = [
 :root {
   --radius: 0.75rem;
 
-  --background: #101118;
-  --foreground: #ffffff;
+  --background: #fdfcf9;
+  --foreground: #2e3192;
   
-  --card: #2b2b2b;
-  --card-foreground: #ffffff;
+  --card: #ffffffeb;
+  --card-foreground: #2e3192;
   
-  --popover: #1a1a1d;
-  --popover-foreground: #ffffff;
+  --popover: #ffffff;
+  --popover-foreground: #2e3192;
   
   --primary: #00aaeb;
   --primary-rgb: 0, 170, 235;
-  --primary-foreground: #101118;
+  --primary-foreground: #ffffff;
   
   --secondary: #3871c1;
   --secondary-foreground: #ffffff;
-  
-  --muted: #22242e;
-  --muted-foreground: #a0a0b0;
-  
-  --accent: #3871c1;
+
+  --accent: #2e3192;
   --accent-foreground: #ffffff;
+  
+  --muted: #f1f1f1;
+  --muted-foreground: #3871c199;
   
   --destructive: oklch(0.58 0.24 27.32);
   
-  --border: hsl(224, 23%, 20%);
-  --input: hsl(224, 23%, 20%);
+  --border: #dfdfe6;
+  --input: #eef2f7;
   --ring: #00aaeb;
 
   --color-brand-primary: #00aaeb;
   --color-brand-secondary: #3871c1;
   --color-brand-tertiary: #2e3192;
-  --color-brand-text: #2b2b2b;
-
-  --font-sans: var(--font-sans);
-  --font-display: var(--font-display);
+  --color-brand-text: #2e3192;
 }
 
 @layer base {
@@ -185,7 +167,7 @@ export const dummyCategories = [
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
     background-color: var(--background);
   }
   h1,
@@ -198,137 +180,86 @@ export const dummyCategories = [
   }
 }
 
-.interactive-aurora {
-  --x: 50%;
-  --y: 50%;
-  position: relative;
+.bg-paper-texture {
   background-color: var(--background);
-}
-.interactive-aurora::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(
-      circle at var(--x) var(--y),
-      var(--color-brand-secondary),
-      transparent 25%
-    ),
-    radial-gradient(
-      circle at calc(100% - var(--x)) calc(100% - var(--y)),
-      var(--color-brand-primary),
-      transparent 25%
-    ),
-    radial-gradient(
-      circle at calc(var(--x) / 2 + 10%) calc(var(--y) * 1.5 - 20%),
-      var(--color-brand-tertiary),
-      transparent 40%
-    );
-  filter: blur(80px);
-  opacity: 0.5;
-  transition: background-position 0.4s ease-out;
+  background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
 }
 
-@keyframes animated-gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.text-liquid-ink {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(110deg, var(--secondary) 15%, var(--accent) 35%, var(--primary) 65%, var(--secondary) 85%);
+  background-size: 300% 100%;
+  animation: liquid-flow 8s ease-in-out infinite;
+}
+@keyframes liquid-flow {
+  0% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
-.bg-animated-gradient {
-  background: linear-gradient(-45deg, var(--color-brand-tertiary), var(--color-brand-secondary), #101118, var(--color-brand-tertiary));
-  background-size: 400% 400%;
-  animation: animated-gradient 20s ease infinite;
-}
-
-.btn-shine {
+.btn-ink-fill {
   position: relative;
   overflow: hidden;
+  transition: color 0.5s ease-in-out;
 }
-.btn-shine::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0) 70%
-  );
-  transform: rotate(25deg);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.btn-shine:hover::after {
-  opacity: 1;
-  animation: shine 1.5s ease-in-out;
-}
-@keyframes shine {
-  0% {
-    top: 100%;
-    left: 100%;
-  }
-  100% {
-    top: -50%;
-    left: -50%;
-  }
-}
-
-.bg-dot-grid {
-  background-image: radial-gradient(
-    circle,
-    oklch(1 0 0 / 0.05) 1px,
-    transparent 1px
-  );
-  background-size: 2.5rem 2.5rem;
-}
-
-.link-underline {
-  position: relative;
-  padding-bottom: 4px;
-}
-.link-underline::after {
+.btn-ink-fill::before {
   content: '';
   position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
   width: 100%;
-  height: 2px;
+  height: 100%;
   background-color: var(--primary);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: inherit;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.87, 0, 0.13, 1);
+  z-index: -1;
 }
-.link-underline:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.btn-ink-fill:hover {
+  color: var(--primary-foreground);
 }
-
-@layer utilities {
-  .text-shadow {
-    text-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+.btn-ink-fill:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
 }
 
-@keyframes button-pulse {
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 12px rgba(var(--primary-rgb), 0);
-  }
+.has-ink-bloom {
+  position: relative;
+}
+.has-ink-bloom > * {
+  z-index: 2;
+}
+.has-ink-bloom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, var(--primary) 20%, transparent 80%);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s ease;
+  z-index: 1;
+  filter: blur(10px);
+}
+.has-ink-bloom:hover::after {
+  transform: translate(-50%, -50%) scale(1.5);
+  opacity: 0.15;
 }
 
-.animate-button-pulse {
-  animation: button-pulse 2.5s infinite;
+.border-draw::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid transparent;
+    transition: border-color 0.4s ease-out;
+}
+.border-draw:hover::after {
+    border-color: var(--primary);
 }
 
 # === app/layout.tsx ===
@@ -367,18 +298,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased bg-paper-texture",
           fontSans.variable,
           fontDisplay.variable
         )}
       >
         <CartProvider>
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="relative flex min-h-dvh flex-col">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <Toaster />
+          <Toaster theme="light" />
         </CartProvider>
       </body>
     </html>
@@ -389,309 +320,152 @@ export default function RootLayout({
 "use client";
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/BookCard";
-import { Book, dummyBooks, dummyCategories } from "@/lib/data";
-import { ArrowRight, BookOpen, ChevronLeft, ChevronRight, Lightbulb, TrendingUp } from "lucide-react";
-import Image from "next/image";
+import { Book, dummyBooks } from "@/lib/data";
+import { ArrowRight, BookOpen, Droplet, Edit } from "lucide-react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
-
-const getRandomUniqueBooks = (source: Book[], count: number, existingIds: Set<string>): Book[] => {
-  const shuffled = [...source].sort(() => 0.5 - Math.random());
-  const uniqueBooks: Book[] = [];
-  for (const book of shuffled) {
-    if (!existingIds.has(book.id) && uniqueBooks.length < count) {
-      uniqueBooks.push(book);
-    }
-  }
-  return uniqueBooks;
-};
-
-// Kept for Desktop view
-const HeroBookCoverflow = ({ books, onPrev, onNext }: { books: Book[]; onPrev: () => void; onNext: () => void; }) => {
-  const activeIndex = books.length > 0 ? Math.floor(books.length / 2) : 0;
-  if (!books.length) return null;
-  const activeBook = books[activeIndex];
-
-  return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-4 sm:gap-8">
-      <div className="relative w-full h-64 sm:h-80" style={{ perspective: "1200px" }}>
-        {books.map((book, i) => {
-          const offset = i - activeIndex;
-          const isVisible = Math.abs(offset) <= 2;
-
-          return (
-            <motion.div
-              key={`${book.id}-${i}`}
-              className="absolute w-40 h-full top-0 left-1/2 -ml-20 sm:w-52 sm:-ml-28"
-              initial={false}
-              animate={{
-                x: `${offset * 35}%`,
-                scale: offset === 0 ? 1 : 0.75,
-                rotateY: offset * -25,
-                zIndex: books.length - Math.abs(offset),
-                opacity: isVisible ? 1 : 0,
-              }}
-              transition={{ type: "tween", ease: [0.25, 0.1, 0.25, 1], duration: 0.6 }}
-            >
-              <Link href={`/books/${book.id}`} className="cursor-pointer" tabIndex={-1}>
-                <Image
-                  src={book.imageUrl}
-                  alt={book.title}
-                  width={400}
-                  height={600}
-                  className="object-cover w-full h-full rounded-lg shadow-2xl shadow-black/50 pointer-events-none"
-                />
-              </Link>
-            </motion.div>
-          );
-        })}
-      </div>
-      <div className="flex items-center gap-4">
-        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm shrink-0" onClick={onPrev}>
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
-        <div className="text-center w-56 sm:w-64">
-          <Link href={`/books/${activeBook?.id}`}>
-            <motion.h3 key={activeBook?.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-lg text-white/90 truncate">
-              {activeBook?.title}
-            </motion.h3>
-          </Link>
-          <p className="text-sm text-muted-foreground">{activeBook?.author}</p>
-        </div>
-        <Button size="icon" variant="outline" className="rounded-full bg-background/50 backdrop-blur-sm shrink-0" onClick={onNext}>
-          <ChevronRight className="h-6 w-6" />
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-// New Component for Mobile Hero
-const MobileBookScroller = ({ books }: { books: Book[] }) => {
-  return (
-    <motion.div
-      className="mt-16 w-full"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <div className="w-full relative">
-        <div className="flex overflow-x-auto space-x-4 pb-4 -mx-4 px-4 scrollbar-hide">
-          {books.slice(0, 6).map((book, i) => (
-            <Link href={`/books/${book.id}`} key={book.id} className="shrink-0 block w-36 sm:w-40 group">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}
-                className="w-full aspect-[2/3] rounded-lg shadow-2xl shadow-black/50 overflow-hidden transform transition-transform duration-300 group-hover:-translate-y-2"
-              >
-                <Image
-                  src={book.imageUrl}
-                  alt={book.title}
-                  width={200}
-                  height={300}
-                  className="object-cover w-full h-full pointer-events-none"
-                />
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-        <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-        <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-      </div>
-    </motion.div>
-  );
-};
 
 export default function HomePage() {
-  const featuredBooks = dummyBooks.filter((book) => book.isFeatured);
-  const [heroBooks, setHeroBooks] = useState<Book[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
+  const allBooks = dummyBooks;
 
-  useEffect(() => {
-    setIsMounted(true);
-    setHeroBooks(getRandomUniqueBooks(dummyBooks, 10, new Set())); 
-  }, []);
+  const sentence = "Gateway to Educational Excellence.".split(" ");
 
-  const handleCoverflowNext = useCallback(() => {
-    setHeroBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const [first, ...rest] = currentBooks;
-      return [...rest, first];
-    });
-  }, []);
-
-  const handleCoverflowPrev = () => {
-    setHeroBooks((currentBooks) => {
-      if (currentBooks.length < 2) return currentBooks;
-      const last = currentBooks[currentBooks.length - 1];
-      const rest = currentBooks.slice(0, -1);
-      return [last, ...rest];
-    });
-  };
-  
-  useEffect(() => {
-    if (window.innerWidth < 1024) return; // Only run carousel on desktop
-    const interval = setInterval(handleCoverflowNext, 3000);
-    return () => clearInterval(interval);
-  }, [handleCoverflowNext]);
-
-  const containerVariants: Variants = {
+  const sentenceVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.5,
+        staggerChildren: 0.08,
+      },
+    },
   };
 
-  const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 15 } },
+  const letterVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+    },
   };
 
   return (
     <div className="flex flex-col">
-      <section id="interactive-hero" className="interactive-aurora w-full overflow-hidden relative">
-        <div className="absolute inset-0 opacity-20 bg-dot-grid -z-10"></div>
-        <div className="container relative z-10 mx-auto px-4">
-          
-          <div className="flex flex-col justify-center text-center min-h-[90vh] pt-24 pb-12 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12 lg:text-left lg:pt-0 lg:pb-0 lg:min-h-[90vh]">
-            <div className="lg:col-start-1">
-              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="text-4xl sm:text-5xl font-bold tracking-tighter text-white md:text-7xl">
-                Gateway to <span className="text-primary">Educational</span> Excellence.
-              </motion.h1>
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto lg:mx-0 font-sans">
-                Discover a curated collection of academic and professional publications designed to empower your learning journey.
-              </motion.p>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mt-10">
-                <Button size="lg" asChild className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine animate-button-pulse">
-                  <Link href="/books">
-                    Explore Collection <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </motion.div>
-            </div>
-            
-            <div className="lg:hidden">
-              <MobileBookScroller books={dummyBooks} />
-            </div>
-
-            <div className="hidden lg:flex w-full h-[30rem] items-center justify-center">
-              {isMounted && (
-                <HeroBookCoverflow 
-                  books={heroBooks.slice(0, 7)} 
-                  onPrev={handleCoverflowPrev} 
-                  onNext={handleCoverflowNext} 
-                />
-              )}
-            </div>
+      {/* CREATIVE: The Living Ink Hero */}
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+        {/* The spreading ink drop background */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        >
+          <div className="absolute top-1/2 left-1/2 w-[150vmax] h-[150vmax] -translate-x-1/2 -translate-y-1/2">
+            <motion.div 
+              className="w-full h-full rounded-full"
+              style={{ background: 'radial-gradient(circle at center, rgba(56, 113, 193, 0.1), rgba(0, 170, 235, 0.05), transparent 70%)' }}
+              animate={{ scale: [1, 1.2, 1], rotate: [0, 10, 0] }}
+              transition={{ duration: 40, repeat: Infinity, ease: "easeInOut" }}
+            />
           </div>
+        </motion.div>
+        
+        <div className="container relative z-10 mx-auto px-4 text-center">
+            <div className="max-w-4xl mx-auto">
+                <motion.h1
+                    className="text-5xl sm:text-7xl font-bold tracking-tighter md:text-8xl"
+                    variants={sentenceVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    {sentence.map((word, index) => (
+                        <motion.span key={word + "-" + index} className="inline-block mr-[0.25em]">
+                            {word.split("").map((char, charIndex) => (
+                                <motion.span key={char + "-" + charIndex} variants={letterVariants} className={index === 2 || index === 3 ? "text-liquid-ink" : ""}>
+                                    {char}
+                                </motion.span>
+                            ))}
+                        </motion.span>
+                    ))}
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 2, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-6 text-lg text-foreground/60 md:text-xl max-w-2xl mx-auto font-sans"
+                >
+                    A curated collection where every page is a new discovery. Your journey into knowledge begins with a single drop of ink.
+                </motion.p>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 2.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-10"
+                >
+                    <Button size="lg" asChild className="border border-primary text-primary font-bold text-base h-16 px-10 rounded-full shadow-lg shadow-primary/20 btn-ink-fill z-10">
+                        <Link href="/books">
+                            Explore The Collection <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
+                    </Button>
+                </motion.div>
+            </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 relative bg-background z-10">
-        <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
+      <section className="py-24 md:py-32 relative z-10 bg-background/80 backdrop-blur-sm border-t border-b">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-baseline mb-4">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tighter text-foreground">
-              Featured Publications
-            </h2>
-            <Link href="/books" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-              View All <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <p className="text-muted-foreground text-base mb-12 max-w-3xl font-sans">
-            Handpicked selections from our experts to kickstart your intellectual adventure.
-          </p>
-          <motion.div
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-          >
-            {featuredBooks.map((book) => (
-              <motion.div key={book.id} variants={itemVariants}>
-                <BookCard book={book} />
-              </motion.div>
-            ))}
-          </motion.div>
-          <div className="mt-12 text-center sm:hidden">
-            <Button variant="outline" size="lg" asChild className="rounded-full px-8 h-12">
-                <Link href="/books">View All Publications</Link>
-            </Button>
-          </div>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }} className="text-center max-w-3xl mx-auto">
+                <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter">
+                    Our Publications
+                </h2>
+                <p className="text-muted-foreground text-lg mt-4 mb-16 font-sans">
+                    Each book is a vessel of knowledge, meticulously crafted from ink and inspiration.
+                </p>
+            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+                {allBooks.map((book, i) => (
+                <motion.div key={book.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.1 }} transition={{ duration: 0.6, delay: i * 0.05 }}>
+                    <BookCard book={book} />
+                </motion.div>
+                ))}
+            </div>
         </div>
       </section>
 
-      <section id="categories" className="py-24 md:py-32 bg-secondary/5 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-dot-grid"></div>
-        <div className="container mx-auto px-4 relative">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-center mb-20 text-foreground">
-            Browse By Category
-          </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-            {dummyCategories.map((category, i) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.05, ease: "easeOut" }}
-                viewport={{ once: true }}
-              >
-                <Link href="#" className="block group relative overflow-hidden rounded-2xl shadow-lg">
-                  <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                    <Image
-                      src={category.imageUrl}
-                      alt={category.name}
-                      width={600}
-                      height={400}
-                      className="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent group-hover:from-black/90 transition-all duration-500"></div>
-                  <div className="relative h-60 sm:h-80 p-4 sm:p-6 flex flex-col justify-end">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-md transition-transform duration-500 group-hover:-translate-y-2">
-                      {category.name}
-                    </h3>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="about" className="py-24 md:py-32 text-white overflow-hidden relative bg-animated-gradient">
-        <div className="absolute inset-0 opacity-5" style={{ backgroundImage: `url('https://www.transparenttextures.com/patterns/subtle-prism.png')` }}></div>
+      {/* CREATIVE: "The Publisher's Mark" About Section */}
+      <section id="about" className="py-24 md:py-32 overflow-hidden relative">
         <div className="container mx-auto text-center px-4 relative">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
-            Our Mission: Empowering Minds
-          </h2>
-          <p className="max-w-3xl mx-auto text-lg text-white/70 leading-relaxed mb-20 font-sans">
-            At Doritex, we believe in the transformative power of knowledge. Our mission is to provide high-quality, accessible educational resources that inspire curiosity and empower individuals to achieve their goals.
-          </p>
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }}>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
+                The Publisher's Mark
+            </h2>
+            <p className="max-w-3xl mx-auto text-lg text-foreground/60 leading-relaxed mb-20 font-sans">
+                Our philosophy is built on three foundational marks, each representing our commitment to quality, creativity, and growth.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
-              { icon: BookOpen, title: "Vast Collection", desc: "Explore a diverse range of subjects and authors." },
-              { icon: Lightbulb, title: "Quality Content", desc: "Carefully curated and peer-reviewed publications." },
-              { icon: TrendingUp, title: "Continuous Growth", desc: "Supporting your lifelong learning journey." },
-            ].map((item) => (
+              { icon: BookOpen, title: "Curated Canon", desc: "A focused curriculum, a universe of knowledge." },
+              { icon: Droplet, title: "Purity of Ink", desc: "Peer-reviewed publications that are clear and potent." },
+              { icon: Edit, title: "The Written Future", desc: "Supporting your lifelong journey of learning." },
+            ].map((item, i) => (
               <motion.div
                 key={item.title}
-                variants={itemVariants}
-                className="bg-white/10 p-6 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:border-primary hover:-translate-y-1"
+                className="group has-ink-bloom p-8 rounded-2xl transition-all duration-300"
+                initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.1}}
               >
-                <div className="flex flex-row items-center gap-5">
-                  <div className="flex-shrink-0 rounded-full bg-primary/20 p-3 border border-primary/30">
-                    <item.icon className="h-8 w-8 text-primary" />
+                <div className="flex flex-col items-center gap-5">
+                  <div className="flex-shrink-0 rounded-full bg-primary/10 p-4 border border-primary/20 transition-all duration-300 group-hover:bg-primary group-hover:scale-110">
+                    <item.icon className="h-10 w-10 text-primary transition-all duration-300 group-hover:text-white" />
                   </div>
-                  <div className="flex-grow">
-                    <h3 className="text-xl font-bold mb-1 text-white">{item.title}</h3>
-                    <p className="text-sm text-white/70 font-sans leading-relaxed">{item.desc}</p>
+                  <div>
+                    <h3 className="text-xl font-bold mb-2 text-accent">{item.title}</h3>
+                    <p className="text-sm text-foreground/60 font-sans leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
@@ -732,10 +506,10 @@ export default function CartPage() {
         <div className="text-center py-20 bg-muted/30 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-  Looks like you haven&apos;t added any books yet.
+  Looks like you haven't added any books yet.
 </p>
 
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-white/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>
         </div>
@@ -747,7 +521,6 @@ export default function CartPage() {
                 <Image src={item.imageUrl} alt={item.title} width={100} height={150} className="rounded-md object-cover self-center sm:self-start shrink-0" />
                 <div className="flex-grow w-full">
                     <h3 className="text-lg font-bold">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">by {item.author}</p>
                     <p className="text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-4 self-stretch sm:self-center justify-end w-full sm:w-auto">
@@ -780,7 +553,7 @@ export default function CartPage() {
                 <div className="flex justify-between font-bold text-xl"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>
               <CardFooter>
-                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-white/20 btn-shine">
                     <Link href="/checkout">
                         Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
@@ -860,8 +633,7 @@ export default function BooksPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredBooks = dummyBooks.filter(book => 
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const containerVariants = {
@@ -896,7 +668,7 @@ export default function BooksPage() {
             <div className="max-w-xl mx-auto mb-20 relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
-                placeholder="Search by title or author..."
+                placeholder="Search by title..."
                 className="pl-12 h-14 text-lg"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -975,14 +747,10 @@ export default function BookDetailPage() {
                 />
             </div>
             <div className="flex flex-col">
-                <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-2 font-sans">
-                  {book.category}
-                </p>
                 <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-3">
                     {book.title}
                 </h1>
-                <p className="text-xl text-muted-foreground mb-6 font-sans">by {book.author}</p>
-                <p className="text-4xl font-bold text-foreground mb-8 font-sans">
+                <p className="text-4xl font-bold text-foreground my-6 font-sans">
                     Kshs {book.price.toFixed(2)}
                 </p>
                 <p className="text-foreground/80 leading-relaxed font-sans mb-10">
@@ -999,7 +767,7 @@ export default function BookDetailPage() {
                             <Plus className="h-4 w-4" />
                         </Button>
                     </div>
-                    <Button size="lg" className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" onClick={handleAddToCart}>
+                    <Button size="lg" className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-white/20 btn-shine" onClick={handleAddToCart}>
                         <ShoppingCart className="mr-2 h-5 w-5" />
                         Add to Cart
                     </Button>
@@ -1270,8 +1038,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 export const useCart = () => useContext(CartContext);
 
 # === components/shared/BookCard.tsx ===
-// === components/shared/BookCard.tsx ===
-import React, { useRef } from 'react';
+import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -1279,7 +1046,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Book } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart } from "lucide-react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from '@/lib/utils';
 
@@ -1288,7 +1055,6 @@ interface BookCardProps {
 }
 
 export function BookCard({ book }: BookCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
   const { dispatch } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -1297,81 +1063,73 @@ export function BookCard({ book }: BookCardProps) {
     toast.success(`${book.title} added to cart!`);
   };
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!cardRef.current) return;
-    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - left - width / 2;
-    const y = e.clientY - top - height / 2;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-  
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
-  const springConfig = { stiffness: 150, damping: 20 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
-
-  const rotateX = useTransform(springY, [-200, 200], [-12, 12]);
-  const rotateY = useTransform(springX, [-200, 200], [12, -12]);
-  
   return (
     <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: '1000px' }}
+      whileHover="hover"
       className="relative h-full"
     >
       <Link href={`/books/${book.id}`} className="block h-full group" tabIndex={0}>
         <Card className={cn(
-          "flex h-full flex-col overflow-hidden rounded-xl border-none relative preserve-3d",
-          "bg-card/80 backdrop-blur-sm border border-white/10",
-          "transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20"
+          "flex h-full flex-col overflow-hidden rounded-xl relative",
+          "bg-card backdrop-blur-lg border shadow-lg shadow-black/5",
+          "transition-all duration-300"
         )}>
-          <div 
-            className="absolute inset-0 bg-card/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{ transform: "translateZ(20px)" }}
+          <motion.div
+            className="absolute -inset-px rounded-xl z-0"
+            variants={{
+              hover: {
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                opacity: 1,
+              },
+              initial: { opacity: 0 }
+            }}
+            transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear",
+            }}
+            style={{
+              background: 'linear-gradient(120deg, var(--secondary), var(--primary), var(--secondary))',
+              backgroundSize: '200% 200%',
+            }}
           />
 
-          <CardHeader className="p-0 relative" style={{ transform: "translateZ(60px)" }}>
-            <div className="aspect-[3/2] w-full overflow-hidden rounded-t-xl">
-              <Image
-                src={book.imageUrl}
-                alt={book.title}
-                width={400}
-                height={600}
-                className="object-cover w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-              />
-            </div>
-          </CardHeader>
-          <CardContent 
-            className="flex-grow p-4 flex flex-col relative z-10 bg-transparent"
-            style={{ transform: "translateZ(40px)" }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-1 font-sans">{book.category}</p>
-            <CardTitle className="text-base font-bold leading-snug mb-2 text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
-            <p className="text-sm text-muted-foreground font-sans">by {book.author}</p>
-          </CardContent>
-          <CardFooter 
-            className="flex justify-between items-center p-4 pt-2 bg-transparent z-10"
-            style={{ transform: "translateZ(50px)" }}
-          >
-            <p className="text-base font-bold text-foreground font-sans">Kshs {book.price.toFixed(2)}</p>
-            <Button
-              size="icon"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-9 w-9 shrink-0 sm:h-10 sm:w-10"
-              onClick={handleAddToCart}
+          <div className="relative z-10 flex flex-col h-full bg-card rounded-[11px] overflow-hidden">
+            <CardHeader className="p-0 relative">
+              <div className="aspect-[2/3] w-full overflow-hidden">
+                  <motion.div
+                    className="w-full h-full"
+                    variants={{ hover: { scale: 1.08 } }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  >
+                    <Image
+                      src={book.imageUrl}
+                      alt={book.title}
+                      width={400}
+                      height={600}
+                      className="object-cover w-full h-full"
+                    />
+                  </motion.div>
+              </div>
+            </CardHeader>
+            <CardContent 
+              className="flex-grow p-4 flex flex-col bg-transparent"
             >
-              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-          </CardFooter>
+              <CardTitle className="text-base font-bold leading-snug text-foreground/90 flex-grow group-hover:text-accent transition-colors">{book.title}</CardTitle>
+            </CardContent>
+            <CardFooter 
+              className="flex justify-between items-center p-4 pt-2 bg-transparent"
+            >
+              <p className="text-base font-bold text-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
+              <Button
+                size="icon"
+                className="bg-accent hover:bg-secondary text-primary-foreground rounded-full h-10 w-10 shrink-0 transition-colors"
+                onClick={handleAddToCart}
+              >
+                <ShoppingCart className="h-5 w-5" />
+              </Button>
+            </CardFooter>
+          </div>
         </Card>
       </Link>
     </motion.div>
@@ -1384,7 +1142,7 @@ import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-[#0D0E13] text-muted-foreground relative overflow-hidden border-t border-white/5">
+    <footer className="bg-accent text-white/80 relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
       <div className="container mx-auto relative py-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left max-w-5xl mx-auto">
@@ -1397,7 +1155,7 @@ export function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Links
             </h4>
             <ul className="space-y-3 text-sm font-sans">
@@ -1407,7 +1165,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Contact
             </h4>
             <ul className="space-y-3 text-sm font-sans">
@@ -1416,7 +1174,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-base mb-4 text-foreground/80 font-display uppercase tracking-wider">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Connect
             </h4>
             <div className="flex space-x-4 justify-center md:justify-start">
@@ -1426,7 +1184,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-muted-foreground/60 font-sans">
+        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
           <p className="mt-2">Created by <Link href="https://.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"></Link></p>
         </div>
@@ -1434,6 +1192,43 @@ export function Footer() {
     </footer>
   );
 }
+
+# === components/layout/CursorGlow.tsx ===
+"use client";
+
+import { useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
+
+export const CursorGlow = () => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+    const springX = useSpring(mouseX, springConfig);
+    const springY = useSpring(mouseY, springConfig);
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [mouseX, mouseY]);
+
+    return (
+        <motion.div
+            id="cursor-glow"
+            style={{
+                x: springX,
+                y: springY,
+            }}
+        />
+    );
+};
 
 # === components/layout/Header.tsx ===
 "use client";
@@ -1490,8 +1285,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         hasScrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg"
-          : "border-b border-transparent bg-gradient-to-b from-black/30 to-transparent"
+          ? "border-b border-border/20 bg-background/50 backdrop-blur-xl shadow-lg"
+          : "border-b border-transparent"
       )}
     >
       <div className="container mx-auto px-4">

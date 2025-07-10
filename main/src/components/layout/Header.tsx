@@ -52,8 +52,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         hasScrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-lg shadow-lg"
-          : "border-b border-transparent bg-gradient-to-b from-black/30 to-transparent"
+          ? "border-b bg-background/80 backdrop-blur-xl shadow-md"
+          : "border-b border-transparent"
       )}
     >
       <div className="container mx-auto px-4">
@@ -67,7 +67,7 @@ export function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground link-underline"
+                className="text-base font-medium text-brand-text/70 transition-colors hover:text-brand-text link-underline"
               >
                 {link.label}
               </Link>
@@ -78,13 +78,13 @@ export function Header() {
             <div className="hidden lg:flex items-center gap-4">
               <Button
                 variant="ghost"
-                className="text-foreground font-medium rounded-full"
+                className="font-medium rounded-full"
                 asChild
               >
                 <Link href="/login">Login</Link>
               </Button>
               <Button
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine shadow-lg shadow-primary/20"
                 asChild
               >
                 <Link href="/register">Sign Up</Link>
@@ -94,7 +94,7 @@ export function Header() {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full relative flex-shrink-0"
+              className="rounded-full relative flex-shrink-0 bg-white/50"
               asChild
             >
               <Link href="/cart">
@@ -111,16 +111,16 @@ export function Header() {
             <div className="lg:hidden">
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" className="rounded-full">
+                  <Button variant="outline" size="icon" className="rounded-full bg-white/50">
                     <Menu className="h-6 w-6" />
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0 border-l border-border"
+                  className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0"
                 >
-                  <SheetHeader className="p-6 border-b border-border">
+                  <SheetHeader className="p-6 border-b">
                     <SheetTitle asChild>
                       <Link href="/" onClick={() => setIsOpen(false)}>
                         <span className="text-2xl font-bold font-display text-primary">
@@ -137,14 +137,14 @@ export function Header() {
                       <Link
                         key={link.label}
                         href={link.href}
-                        className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
+                        className="font-semibold text-brand-text/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
                         onClick={() => setIsOpen(false)}
                       >
                         {link.label}
                       </Link>
                     ))}
                   </nav>
-                  <div className="mt-auto flex flex-col gap-3 p-6 border-t border-border bg-muted/30">
+                  <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
                     <Button
                       variant="outline"
                       size="lg"

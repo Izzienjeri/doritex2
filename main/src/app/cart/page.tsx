@@ -24,16 +24,15 @@ export default function CartPage() {
   const total = subtotal + shipping;
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12">Shopping Cart</h1>
+    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Shopping Cart</h1>
       
       {items.length === 0 ? (
-        <div className="text-center py-20 bg-muted/30 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Your cart is empty.</h2>
+        <div className="text-center py-20 bg-muted rounded-lg border">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-  Looks like you haven&apos;t added any books yet.
-</p>
-
+            Looks like you haven't added any books yet.
+          </p>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>
@@ -42,15 +41,14 @@ export default function CartPage() {
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2 space-y-6">
             {items.map(item => (
-              <Card key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center p-4 gap-4 bg-card/80 border-white/10">
+              <Card key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center p-4 gap-4 bg-card/80 border">
                 <Image src={item.imageUrl} alt={item.title} width={100} height={150} className="rounded-md object-cover self-center sm:self-start shrink-0" />
                 <div className="flex-grow w-full">
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">by {item.author}</p>
+                    <h3 className="text-lg font-bold text-foreground">{item.title}</h3>
                     <p className="text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-4 self-stretch sm:self-center justify-end w-full sm:w-auto">
-                    <div className="flex items-center border border-input rounded-full p-1">
+                    <div className="flex items-center border rounded-full p-1 bg-white/50">
                         <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
                             <Minus className="h-4 w-4" />
                         </Button>
@@ -68,15 +66,15 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <Card className="bg-card/80 backdrop-blur-sm border-white/10 shadow-xl shadow-black/20 sticky top-28">
+            <Card className="bg-card/80 backdrop-blur-sm border shadow-lg sticky top-28">
               <CardHeader>
-                <CardTitle className="text-2xl">Order Summary</CardTitle>
+                <CardTitle className="text-2xl text-foreground">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-lg">
-                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className='text-brand-text'>Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className='text-brand-text'>Kshs {shipping.toFixed(2)}</span></div>
                 <hr className="border-border" />
-                <div className="flex justify-between font-bold text-xl"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>
               <CardFooter>
                  <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
