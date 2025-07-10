@@ -1,3 +1,4 @@
+/* === app/globals.css === */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -46,47 +47,44 @@
 :root {
   --radius: 0.75rem;
 
-  --background: #fdfcff;
-  --foreground: #2e3192; 
+  /* A fresh, modern take on the blue and white palette */
+  --background: #f7f9ff; /* A slightly cooler, airy white */
+  --foreground: #1e2a78; /* A deeper, richer navy for text */
 
-  --card: #ffffffeb;
+  --card: #ffffff; /* Pure white for the base of our glass effect */
   --card-foreground: #2b2b2b;
 
   --popover: #ffffff;
-  --popover-foreground: #2e3192;
+  --popover-foreground: #1e2a78;
 
-  --primary: #00aaeb;
-  --primary-rgb: 0, 170, 235;
+  --primary: #00a9e8; /* A vibrant, sky blue */
+  --primary-rgb: 0, 169, 232;
   --primary-foreground: #ffffff;
 
-  --secondary: #3871c1;
+  --secondary: #4a7de0; /* A brighter, more energetic blue */
   --secondary-foreground: #ffffff;
 
-  --accent: #2e3192;
+  --accent: #2e3192; /* The classic, deep blue for strong accents */
   --accent-foreground: #ffffff;
 
-  --muted: #f4f6fc;
-  --muted-foreground: #3871c199;
+  --muted: #edf2f7;
+  --muted-foreground: #5a67a0;
 
   --destructive: hsl(0 84.2% 60.2%); 
 
-  --border: #e2e8f0; 
+  --border: rgba(46, 49, 146, 0.15); /* A subtle, color-matched border */
   --input: #ffffff;
-  --ring: #00aaeb;
+  --ring: #00a9e8;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  /* --- NEW: Dynamic Aurora Background --- */
   body {
-    @apply text-card-foreground antialiased cursor-default;
+    @apply text-card-foreground antialiased cursor-default overflow-x-hidden;
     background-color: var(--background);
-    background-image: 
-      linear-gradient(135deg, rgba(0, 170, 235, 0.05), transparent 40%),
-      linear-gradient(225deg, rgba(56, 113, 193, 0.05), transparent 40%);
-    background-size: 200% 200%;
-    animation: bg-pan 30s ease infinite;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -94,16 +92,26 @@
   }
   
   h1 {
-    text-shadow: 0 0 40px rgba(0, 170, 235, 0.2);
+    text-shadow: 0 0 60px rgba(var(--primary-rgb), 0.2);
   }
 }
 
-@keyframes bg-pan {
-  0% { background-position: 0% 0%; }
-  25% { background-position: 100% 0%; }
-  50% { background-position: 100% 100%; }
-  75% { background-position: 0% 100%; }
-  100% { background-position: 0% 0%; }
+/* --- NEW: Replaced 'bg-pan' with a more modern, fluid animation --- */
+body::before {
+  content: '';
+  position: fixed; /* Changed from absolute to fixed for viewport coverage */
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(circle at 15% 20%, rgba(var(--primary-rgb), 0.15), transparent 40%),
+                    radial-gradient(circle at 85% 75%, rgba(74, 125, 224, 0.15), transparent 40%);
+  z-index: -1;
+  animation: float-glow 25s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes float-glow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+  100% { transform: translateY(0px); }
 }
 
 #cursor-glow {
@@ -112,7 +120,7 @@
   left: 0;
   width: 500px;
   height: 500px;
-  border-radius: 9999px;
+  border-radius: 50%;
   background: radial-gradient(circle, rgba(0, 170, 235, 0.15), transparent 60%);
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -124,6 +132,11 @@
 body:hover #cursor-glow {
   opacity: 1;
 }
+
+.glass-card {
+  @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl shadow-black/5;
+}
+
 
 .perspective-container {
   perspective: 1000px;
