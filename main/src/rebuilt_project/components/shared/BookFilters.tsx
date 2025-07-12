@@ -56,7 +56,7 @@ export function BookFilters() {
             onClick={() => handleCategoryChange(category)}
             className={cn(
               "rounded-full px-6 h-11 text-base font-semibold",
-              activeCategory === category && "bg-primary text-primary-foreground btn-shine"
+              activeCategory === category && "bg-primary text-primary-foreground"
             )}
           >
             {category}

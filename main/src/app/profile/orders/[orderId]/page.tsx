@@ -1,4 +1,3 @@
-// === app/profile/orders/[orderId]/page.tsx (NEW FILE) ===
 "use client";
 import { useParams } from "next/navigation";
 import { dummyOrders } from "@/lib/data";
@@ -82,6 +81,3 @@ export default function OrderDetailsPage() {
     </div>
   );
 }
-
-// NOTE: You'll also need to install the separator component from shadcn/ui:
-// npx shadcn-ui@latest add separator

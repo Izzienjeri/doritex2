@@ -1,4 +1,3 @@
-// === app/admin/page.tsx (NEW FILE) ===
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, ShoppingBag, Users } from "lucide-react";
 

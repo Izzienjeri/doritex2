@@ -116,7 +116,7 @@ export function Header() {
                   <Button variant="ghost" className="font-medium rounded-full" asChild>
                     <Link href="/login">Login</Link>
                   </Button>
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine shadow-lg shadow-primary/20" asChild>
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full shadow-lg shadow-primary/20" asChild>
                     <Link href="/register">Sign Up</Link>
                   </Button>
                 </>
@@ -168,7 +168,7 @@ export function Header() {
                     ) : (
                         <>
                             <SheetClose asChild><Button asChild variant="outline" size="lg" className="h-12 text-base"><Link href="/login">Login</Link></Button></SheetClose>
-                            <SheetClose asChild><Button asChild size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"><Link href="/register">Sign Up</Link></Button></SheetClose>
+                            <SheetClose asChild><Button asChild size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold"><Link href="/register">Sign Up</Link></Button></SheetClose>
                         </>
                     )}
                   </div>

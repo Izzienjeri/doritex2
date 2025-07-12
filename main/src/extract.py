@@ -3,7 +3,7 @@ from datetime import datetime
 
 def extract_code(base_dir='.'):
     output = []
-    script_name = os.path.basename(__file__)  # current script name
+    script_name = os.path.basename(__file__)
     excluded_path = os.path.normpath(os.path.join(base_dir, 'components', 'ui'))
     file_count = 0
 
@@ -23,7 +23,8 @@ def extract_code(base_dir='.'):
                         code = f.read().strip()
                     if code:
                         rel_path = os.path.relpath(file_path, base_dir)
-                        output.append(f"# === {rel_path} ===\n{code}\n")
+                        ext = os.path.splitext(file)[1][1:]
+                        output.append(f"# === {rel_path} ===\n```{ext}\n{code}\n```\n")
                         file_count += 1
                 except Exception as e:
                     print(f"Failed to read {file_path}: {e}")

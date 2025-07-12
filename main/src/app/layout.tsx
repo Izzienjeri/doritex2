@@ -46,10 +46,6 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
-            {/* 
-              FIX: Enabled `richColors` for automatically styled toasts (success, error, info, etc.)
-              and added a close button for better usability.
-            */}
             <Toaster richColors closeButton />
           </CartProvider>
         </AuthProvider>

@@ -1,4 +1,3 @@
-// === lib/data.ts (MODIFIED) ===
 export interface Book {
   id: string;
   title: string;
@@ -123,8 +122,6 @@ export const dummyOrders: Order[] = [
         ]
     }
 ];
-
-// --- NEW MOCK USER DATA ---
 
 export interface MockUser {
   id: string;

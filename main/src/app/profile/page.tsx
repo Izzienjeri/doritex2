@@ -11,7 +11,6 @@ export default function ProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // FIX: Changed from toast.success to toast.info for a more appropriate notification type.
     toast.info("Profile updated successfully!");
   }
 

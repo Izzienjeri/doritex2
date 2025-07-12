@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dummyBooks } from "@/lib/data";
-import Image from "next/image"; // FIX: Import the Next.js Image component
+import Image from "next/image";
 
 export default function AdminBooksPage() {
     return (
@@ -32,7 +32,6 @@ export default function AdminBooksPage() {
                         {dummyBooks.map(book => (
                             <TableRow key={book.id}>
                                 <TableCell className="hidden sm:table-cell">
-                                    {/* FIX: Replaced the standard <img> tag with the optimized next/image component */}
                                     <Image 
                                         alt={book.title} 
                                         className="aspect-square rounded-md object-cover" 

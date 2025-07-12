@@ -1,4 +1,3 @@
-// === app/admin/layout.tsx (NEW FILE) ===
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

@@ -1,4 +1,3 @@
-// === app/admin/orders/page.tsx (NEW FILE) ===
 "use client"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -51,4 +50,3 @@ export default function AdminOrdersPage() {
         </Card>
     )
 }
-

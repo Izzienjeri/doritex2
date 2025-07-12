@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 
 interface BookCardProps {
   book: Book;
-  // FIX: Add an optional priority prop
   priority?: boolean;
 }
 
@@ -40,7 +39,6 @@ export function BookCard({ book, priority = false }: BookCardProps) {
                 width={300}
                 height={450}
                 className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                // FIX: Pass the priority prop to the Image component
                 priority={priority}
               />
           </div>

@@ -4,7 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-// FIX: Removed 'Home' from the import list as it's not used.
 import { User, FileText } from "lucide-react"; 
 
 const sidebarNavItems = [
