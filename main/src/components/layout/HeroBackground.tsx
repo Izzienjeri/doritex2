@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useMotionValue, animate } from "framer-motion";
+import { useEffect } from "react";
+import * as flubber from "flubber";
 
 export function HeroBackground() {
   const wave1Paths = [
@@ -15,9 +17,50 @@ export function HeroBackground() {
     "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
   ];
 
+  const wave1 = useMotionValue(wave1Paths[0]);
+  const wave2 = useMotionValue(wave2Paths[0]);
+
+  useEffect(() => {
+    const wave1Interpolators = wave1Paths.map((_, i) =>
+      flubber.interpolate(wave1Paths[i], wave1Paths[(i + 1) % wave1Paths.length])
+    );
+
+    const wave2Interpolators = wave2Paths.map((_, i) =>
+      flubber.interpolate(wave2Paths[i], wave2Paths[(i + 1) % wave2Paths.length])
+    );
+
+    let wave1Index = 0;
+    let wave2Index = 0;
+
+    const loopWave = (
+      interpolators: ((t: number) => string)[],
+      motionValue: typeof wave1,
+      indexSetter: (val: number) => void,
+      indexGetter: () => number,
+      duration = 4000
+    ) => {
+      const current = indexGetter();
+      const next = (current + 1) % interpolators.length;
+
+      animate(0, 1, {
+        duration: duration / 1000,
+        onUpdate: (t) => {
+          motionValue.set(interpolators[current](t));
+        },
+        onComplete: () => {
+          indexSetter(next);
+          loopWave(interpolators, motionValue, indexSetter, indexGetter, duration);
+        },
+      });
+    };
+
+    loopWave(wave1Interpolators, wave1, (v) => (wave1Index = v), () => wave1Index);
+    loopWave(wave2Interpolators, wave2, (v) => (wave2Index = v), () => wave2Index);
+  }, []);
+
   return (
     <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-accent">
-      <motion.svg
+      <svg
         className="w-full h-full"
         viewBox="0 0 1000 600"
         preserveAspectRatio="xMidYMid slice"
@@ -33,35 +76,9 @@ export function HeroBackground() {
           </linearGradient>
         </defs>
 
-        {/* Wave 1 */}
-        <motion.path
-          fill="url(#waveGradient1)"
-          // FIX: Provide a default 'd' attribute to prevent it from being undefined on initial render.
-          d={wave1Paths[0]}
-          animate={{ d: wave1Paths }}
-          transition={{
-            duration: 12,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "mirror",
-          }}
-        />
-
-        {/* Wave 2 */}
-        <motion.path
-          fill="url(#waveGradient2)"
-          // FIX: Provide a default 'd' attribute here as well.
-          d={wave2Paths[0]}
-          animate={{ d: wave2Paths }}
-          transition={{
-            duration: 15,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "mirror",
-            delay: 1,
-          }}
-        />
-      </motion.svg>
+        <motion.path fill="url(#waveGradient1)" d={wave1} />
+        <motion.path fill="url(#waveGradient2)" d={wave2} />
+      </svg>
     </div>
   );
 }

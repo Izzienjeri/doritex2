@@ -1,5 +1,5 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-12 11:34:59
+# Date and Time: 2025-07-12 11:50:38
 # Files Included: 31
 
 # === lib/utils.ts ===
@@ -1084,16 +1084,15 @@ import { dummyBooks } from '@/lib/data';
 import { BookFilters } from '@/components/shared/BookFilters';
 import { BookGrid } from '@/components/shared/BookGrid';
 
-export default function BooksPage({
-  searchParams,
-}: {
-  searchParams: {
+type Props = {
+  searchParams: Promise<{
     query?: string;
     category?: string;
-  };
-}) {
-  const query = searchParams.query || '';
-  const category = searchParams.category || 'All';
+  }>;
+};
+
+export default async function BooksPage({ searchParams }: Props) {
+  const { query = '', category = 'All' } = await searchParams;
 
   const filteredBooks = dummyBooks.filter(book => {
     const matchesCategory = category === 'All' || book.category === category;
@@ -1145,12 +1144,12 @@ function getBook(id: string): Book | undefined {
   return dummyBooks.find(b => b.id === id);
 }
 
-export default async function BookDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function BookDetailPage({ params }: Props) {
+  const { id } = await params;
 
   const book = getBook(id);
 
