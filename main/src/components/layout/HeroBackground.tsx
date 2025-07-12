@@ -3,6 +3,18 @@
 import { motion } from "framer-motion";
 
 export function HeroBackground() {
+  const wave1Paths = [
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+    "M -10,150 C 200,100 450,200 600,150 S 850,100 1010,150 V 610 H -10 Z",
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+  ];
+
+  const wave2Paths = [
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+    "M -10,180 C 250,150 400,230 550,180 S 800,150 1010,160 V 610 H -10 Z",
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+  ];
+
   return (
     <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-accent">
       <motion.svg
@@ -24,14 +36,9 @@ export function HeroBackground() {
         {/* Wave 1 */}
         <motion.path
           fill="url(#waveGradient1)"
-          d="M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z"
-          animate={{
-            d: [
-              "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
-              "M -10,150 C 200,100 450,200 600,150 S 850,100 1010,150 V 610 H -10 Z",
-              "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
-            ],
-          }}
+          // FIX: Provide a default 'd' attribute to prevent it from being undefined on initial render.
+          d={wave1Paths[0]}
+          animate={{ d: wave1Paths }}
           transition={{
             duration: 12,
             ease: "easeInOut",
@@ -43,14 +50,9 @@ export function HeroBackground() {
         {/* Wave 2 */}
         <motion.path
           fill="url(#waveGradient2)"
-          d="M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z"
-          animate={{
-            d: [
-              "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
-              "M -10,180 C 250,150 400,230 550,180 S 800,150 1010,160 V 610 H -10 Z",
-              "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
-            ],
-          }}
+          // FIX: Provide a default 'd' attribute here as well.
+          d={wave2Paths[0]}
+          animate={{ d: wave2Paths }}
           transition={{
             duration: 15,
             ease: "easeInOut",

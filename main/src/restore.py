@@ -10,35 +10,40 @@ def rebuild_files_from_data(data_file='data.txt', base_dir='.'):
         content = f.read()
 
     created_files = 0
+    all_blocks = []
 
-    # Try to match both formats:
-    # 1. Markdown-style fenced code blocks
-    pattern_fenced = re.findall(
-        r"# === (.+?) ===\s+```[\w]+\s+([\s\S]+?)```",
-        content
-    )
+    def clean_filename(fname):
+        return re.sub(r"\s*\([^)]+\)$", "", fname.strip()).strip()
 
-    # 2. Plain format: # === filename ===\ncode\n... until next # === or end of file
-    pattern_plain = re.split(r"# === (.+?) ===", content)[1:]  # skip initial non-matching content
-    pattern_plain_pairs = [
-        (pattern_plain[i], pattern_plain[i+1].split("# ===")[0].strip())
-        for i in range(0, len(pattern_plain)-1, 2)
-    ]
+    pattern_internal_header = r"```[\w]*\n\s*(?://|#) === (.+?) ===\n([\s\S]*?)```"
+    for fname, code in re.findall(pattern_internal_header, content):
+        all_blocks.append((clean_filename(fname), code))
 
-    # Combine both
-    all_blocks = pattern_fenced + pattern_plain_pairs
+    pattern_external_header = r"(?://|#) === (.+?) ===\s*```[\w]*\n([\s\S]*?)```"
+    for fname, code in re.findall(pattern_external_header, content):
+        all_blocks.append((clean_filename(fname), code))
 
     if not all_blocks:
-        print("⚠️ No valid code blocks found in the data file.")
+        print("⚠️ No valid code blocks found.")
         return
 
+    seen = set()
     for rel_path, code in all_blocks:
-        file_path = os.path.join(base_dir, rel_path.strip())
+        rel_path = rel_path.strip()
+        if not rel_path or rel_path in seen:
+            continue
+        seen.add(rel_path)
+
+        file_path = os.path.join(base_dir, rel_path)
+        if not os.path.abspath(file_path).startswith(os.path.abspath(base_dir)):
+            print(f"❌ Skipped potentially unsafe path: {rel_path}")
+            continue
+
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(code.strip() + '\n')
         created_files += 1
-        print(f"✅ Wrote to: {rel_path.strip()}")
+        print(f"✅ Wrote to: {rel_path}")
 
     print(f"\n🎉 Done! {created_files} file(s) reconstructed from '{data_file}'.")
 

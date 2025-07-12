@@ -1,15 +1,19 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { BookCard } from "@/components/shared/BookCard";
-import { dummyBooks } from "@/lib/data";
 import { ArrowRight, BookOpen, Droplet, Edit } from "lucide-react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { HeroBackground } from "@/components/layout/HeroBackground";
+import dynamic from 'next/dynamic';
+
+const FeaturedBooks = dynamic(() => import('@/components/shared/FeaturedBooks').then(mod => mod.FeaturedBooks), {
+  ssr: false,
+  loading: () => <div className="h-96 w-full flex items-center justify-center"><p>Loading publications...</p></div>
+});
+
 
 export default function HomePage() {
-  const allBooks = dummyBooks;
-
   const sentence = "Gateway to Educational Excellence.".split(" ");
 
   const sentenceVariants: Variants = {
@@ -93,30 +97,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 md:py-32 relative z-10 bg-background/80 backdrop-blur-sm border-t border-b">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter">
-              Featured Publications
-            </h2>
-            <p className="text-muted-foreground text-lg mt-4 mb-16 font-sans">
-              Each book is a vessel of knowledge, meticulously crafted from ink
-              and inspiration.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
-            {allBooks.slice(0, 5).map((book) => (
-              <BookCard book={book} key={book.id} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <FeaturedBooks />
 
       <section id="about" className="py-24 md:py-32 overflow-hidden relative">
         <div className="container mx-auto text-center px-4 relative">
@@ -127,7 +108,7 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
-              The Publisher&rsquo;s Mark
+              The Publisher’s Mark
             </h2>
             <p className="max-w-3xl mx-auto text-lg text-card-foreground/70 leading-relaxed mb-20 font-sans">
               Our philosophy is built on three foundational marks, each

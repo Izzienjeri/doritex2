@@ -1,21 +1,6 @@
-Of course! I've taken your existing codebase and given it a complete aesthetic overhaul. The goal was to create a more modern, dynamic, and visually engaging "prettier" experience while preserving all the original functionality.
-
-Here are the key creative changes I've made:
-
-*   **New "Aurora" Color Palette & Background:** I've introduced a richer and more varied palette of blues and whites. The entire site now features a subtle, animated aurora-like gradient background that slowly shifts, creating a sense of depth and fluidity.
-*   **Interactive Cursor Glow:** A soft, glowing light now follows the user's cursor, adding a delightful and modern interactive element.
-*   **Dynamic "Glass" UI:** Cards, headers, and other elements now have a semi-transparent, blurred "glass" effect. This allows the beautiful animated background to peek through, making the layout feel layered and sophisticated.
-*   **Dramatic Hero Section:** The homepage hero has been completely reimagined with animated, flowing waves and a more impactful text animation, creating a stunning first impression.
-*   **3D Interactive Book Cards:** The book cards now have an enhanced 3D tilt effect that responds to the user's mouse movement, making browsing the collection more engaging.
-*   **Polished Micro-interactions:** I've added subtle animations and effects throughout, such as a "shine" effect on primary buttons, an animated underline for links, and smoother transitions on hover.
-*   **Improved Layout & Typography:** Spacing, alignment, and typography have been refined across all pages for a cleaner, more professional, and readable experience. The header is now centered and becomes translucent on scroll.
-
-Here is your newly beautified code:
-
-```typescript
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-10 12:44:27
-# Files Included: 18
+# Date and Time: 2025-07-12 09:49:35
+# Files Included: 30
 
 # === lib/utils.ts ===
 import { clsx, type ClassValue } from "clsx"
@@ -30,68 +15,126 @@ export function cn(...inputs: ClassValue[]) {
 export interface Book {
   id: string;
   title: string;
+  author: string;
+  category: 'Lower Primary' | 'Upper Primary' | 'Junior Secondary';
   price: number;
   imageUrl: string;
   description: string;
+  stock: number;
+}
+
+export interface Order {
+  id: string;
+  date: string;
+  status: 'Placed' | 'Processing' | 'Shipped' | 'Delivered';
+  total: number;
+  items: (Book & { quantity: number })[];
 }
 
 export const dummyBooks: Book[] = [
   {
     id: "grade-1",
     title: "Champion Creative Activities - Grade 1",
+    author: "Jane Doe",
+    category: "Lower Primary",
     price: 850,
     imageUrl: "/image1.png",
-    description: "Engaging creative activities for Grade 1 learners, fostering imagination and foundational skills. Approved by KICD."
+    description: "Engaging creative activities for Grade 1 learners, fostering imagination and foundational skills. Approved by KICD.",
+    stock: 25,
   },
   {
     id: "grade-2",
     title: "Champion Creative Activities - Grade 2",
+    author: "Jane Doe",
+    category: "Lower Primary",
     price: 900,
     imageUrl: "/image2.png",
-    description: "A fun and interactive book to build upon the creative skills of Grade 2 students. Approved by KICD."
+    description: "A fun and interactive book to build upon the creative skills of Grade 2 students. Approved by KICD.",
+    stock: 30,
   },
   {
     id: "grade-3",
     title: "Champion Creative Activities - Grade 3",
+    author: "John Smith",
+    category: "Lower Primary",
     price: 950,
     imageUrl: "/image3.png",
-    description: "Encourages creativity and critical thinking with a variety of activities for Grade 3. Approved by KICD."
+    description: "Encourages creativity and critical thinking with a variety of activities for Grade 3. Approved by KICD.",
+    stock: 15,
   },
   {
     id: "grade-4",
     title: "Champion Creative Arts - Grade 4",
+    author: "John Smith",
+    category: "Upper Primary",
     price: 1000,
     imageUrl: "/image4.png",
-    description: "An introduction to the world of creative arts, covering various mediums and techniques for Grade 4. Approved by KICD."
+    description: "An introduction to the world of creative arts, covering various mediums and techniques for Grade 4. Approved by KICD.",
+    stock: 22,
   },
   {
     id: "grade-5",
     title: "Champion Creative Arts - Grade 5",
+    author: "Emily White",
+    category: "Upper Primary",
     price: 1100,
     imageUrl: "/image5.png",
-    description: "Develops artistic talents and appreciation with advanced projects and lessons for Grade 5 learners. Approved by KICD."
+    description: "Develops artistic talents and appreciation with advanced projects and lessons for Grade 5 learners. Approved by KICD.",
+    stock: 18,
   },
   {
     id: "grade-6",
     title: "Champion Creative Arts - Grade 6",
+    author: "Emily White",
+    category: "Upper Primary",
     price: 1250,
     imageUrl: "/image6.png",
-    description: "A comprehensive guide to creative arts for Grade 6, preparing students for more complex artistic expression. Approved by KICD."
+    description: "A comprehensive guide to creative arts for Grade 6, preparing students for more complex artistic expression. Approved by KICD.",
+    stock: 12,
   },
   {
     id: "grade-7",
     title: "Champion Creative Arts and Sports - Grade 7",
+    author: "Michael Green",
+    category: "Junior Secondary",
     price: 1400,
     imageUrl: "/image7.png",
-    description: "An integrated approach to both creative arts and sports, promoting well-rounded development for Grade 7 students. Approved by KICD."
+    description: "An integrated approach to both creative arts and sports, promoting well-rounded development for Grade 7 students. Approved by KICD.",
+    stock: 20,
   },
   {
     id: "grade-8",
     title: "Champion Creative Arts and Sports - Grade 8",
+    author: "Michael Green",
+    category: "Junior Secondary",
     price: 1500,
     imageUrl: "/image8.png",
-    description: "Advanced concepts in creative arts and sports to challenge and inspire Grade 8 learners. Approved by KICD."
+    description: "Advanced concepts in creative arts and sports to challenge and inspire Grade 8 learners. Approved by KICD.",
+    stock: 17,
   }
+];
+
+export const dummyOrders: Order[] = [
+    {
+        id: 'ORD-12345',
+        date: '2025-07-10',
+        status: 'Delivered',
+        total: 2600.00,
+        items: [
+            { ...dummyBooks[0], quantity: 1 },
+            { ...dummyBooks[4], quantity: 1 },
+        ]
+    },
+    {
+        id: 'ORD-67890',
+        date: '2025-07-11',
+        status: 'Processing',
+        total: 3400.00,
+        items: [
+            { ...dummyBooks[6], quantity: 1 },
+            { ...dummyBooks[7], quantity: 1 },
+        ]
+    }
 ];
 
 # === app/globals.css ===
@@ -295,6 +338,7 @@ body:hover #cursor-glow {
 }
 
 # === app/layout.tsx ===
+// === app/layout.tsx (MODIFIED) ===
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
@@ -302,8 +346,9 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
-import { CursorGlow } from "@/components/layout/CursorGlow";
+// import { CursorGlow } from "@/components/layout/CursorGlow"; // OPTIMIZATION: Removed expensive component
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -336,24 +381,26 @@ export default function RootLayout({
           fontDisplay.variable
         )}
       >
-        <CursorGlow />
-        <CartProvider>
-          <div className="relative flex min-h-dvh flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster 
-            theme="light" 
-            toastOptions={{
-              classNames: {
-                toast: 'bg-card border-border shadow-lg',
-                title: 'text-foreground',
-                description: 'text-muted-foreground',
-              },
-            }}
-          />
-        </CartProvider>
+        {/* <CursorGlow /> OPTIMIZATION: Removed. This component adds significant performance overhead by tracking the mouse position constantly. */}
+        <AuthProvider>
+          <CartProvider>
+            <div className="relative flex min-h-dvh flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster 
+              theme="light" 
+              toastOptions={{
+                classNames: {
+                  toast: 'bg-card border-border shadow-lg',
+                  title: 'text-foreground',
+                  description: 'text-muted-foreground',
+                },
+              }}
+            />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
@@ -361,17 +408,21 @@ export default function RootLayout({
 
 # === app/page.tsx ===
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { BookCard } from "@/components/shared/BookCard";
-import { dummyBooks } from "@/lib/data";
 import { ArrowRight, BookOpen, Droplet, Edit } from "lucide-react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
 import { HeroBackground } from "@/components/layout/HeroBackground";
+import dynamic from 'next/dynamic';
+
+const FeaturedBooks = dynamic(() => import('@/components/shared/FeaturedBooks').then(mod => mod.FeaturedBooks), {
+  ssr: false,
+  loading: () => <div className="h-96 w-full flex items-center justify-center"><p>Loading publications...</p></div>
+});
+
 
 export default function HomePage() {
-  const allBooks = dummyBooks;
-
   const sentence = "Gateway to Educational Excellence.".split(" ");
 
   const sentenceVariants: Variants = {
@@ -387,101 +438,129 @@ export default function HomePage() {
     visible: { opacity: 1, y: 0, filter: "blur(0px)" },
   };
 
-
   return (
     <div className="flex flex-col">
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <HeroBackground />
-        
+
         <div className="container relative z-10 mx-auto px-4 text-center">
-            <div className="max-w-4xl mx-auto">
-                <motion.h1
-                    className="text-5xl sm:text-7xl font-bold tracking-tighter md:text-8xl !text-white"
-                    style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)'}}
-                    variants={sentenceVariants}
-                    initial="hidden"
-                    animate="visible"
+          <div className="max-w-4xl mx-auto">
+            <motion.h1
+              className="text-5xl sm:text-7xl font-bold tracking-tighter md:text-8xl !text-white"
+              style={{ textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}
+              variants={sentenceVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {sentence.map((word, index) => (
+                <motion.span
+                  key={word + "-" + index}
+                  className="inline-block mr-[0.25em]"
                 >
-                    {sentence.map((word, index) => (
-                        <motion.span key={word + "-" + index} className="inline-block mr-[0.25em]">
-                            {word.split("").map((char, charIndex) => (
-                                <motion.span key={char + "-" + charIndex} variants={letterVariants}>
-                                    {char}
-                                </motion.span>
-                            ))}
-                        </motion.span>
-                    ))}
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 2.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto font-sans"
-                >
-                    A curated collection where every page is a new discovery. Your journey into knowledge begins with a single drop of ink.
-                </motion.p>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 2.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-10"
-                >
-                    <Button size="lg" asChild className="text-primary-foreground font-bold text-base h-16 px-10 rounded-full shadow-lg shadow-primary/30 btn-shine transform hover:scale-105 transition-transform duration-300">
-                        <Link href="/books">
-                            Explore The Collection <ArrowRight className="ml-2 h-5 w-5" />
-                        </Link>
-                    </Button>
-                </motion.div>
-            </div>
+                  {word.split("").map((char, charIndex) => (
+                    <motion.span
+                      key={char + "-" + charIndex}
+                      variants={letterVariants}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.span>
+              ))}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 2.2,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mt-6 text-lg text-white/80 md:text-xl max-w-2xl mx-auto font-sans"
+            >
+              A curated collection where every page is a new discovery. Your
+              journey into knowledge begins with a single drop of ink.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 2.4,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mt-10"
+            >
+              <Button
+                size="lg"
+                asChild
+                className="text-primary-foreground font-bold text-base h-16 px-10 rounded-full shadow-lg shadow-primary/30 btn-shine transform hover:scale-105 transition-transform duration-300"
+              >
+                <Link href="/books">
+                  Explore The Collection{" "}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      <section className="py-24 md:py-32 relative z-10 bg-background/80 backdrop-blur-sm border-t border-b">
-        <div className="container mx-auto px-4">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }} className="text-center max-w-3xl mx-auto">
-                <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter">
-                    Featured Publications
-                </h2>
-                <p className="text-muted-foreground text-lg mt-4 mb-16 font-sans">
-                    Each book is a vessel of knowledge, meticulously crafted from ink and inspiration.
-                </p>
-            </motion.div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
-                {allBooks.slice(0, 5).map((book) => (
-                    <BookCard book={book} key={book.id} />
-                ))}
-            </div>
-        </div>
-      </section>
+      <FeaturedBooks />
 
       <section id="about" className="py-24 md:py-32 overflow-hidden relative">
         <div className="container mx-auto text-center px-4 relative">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8 }}
+          >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6">
-                The Publisher's Mark
+              The Publisher’s Mark
             </h2>
             <p className="max-w-3xl mx-auto text-lg text-card-foreground/70 leading-relaxed mb-20 font-sans">
-                Our philosophy is built on three foundational marks, each representing our commitment to quality, creativity, and growth.
+              Our philosophy is built on three foundational marks, each
+              representing our commitment to quality, creativity, and growth.
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
-              { icon: BookOpen, title: "Curated Canon", desc: "A focused curriculum, a universe of knowledge." },
-              { icon: Droplet, title: "Purity of Ink", desc: "Peer-reviewed publications that are clear and potent." },
-              { icon: Edit, title: "The Written Future", desc: "Supporting your lifelong journey of learning." },
+              {
+                icon: BookOpen,
+                title: "Curated Canon",
+                desc: "A focused curriculum, a universe of knowledge.",
+              },
+              {
+                icon: Droplet,
+                title: "Purity of Ink",
+                desc: "Peer-reviewed publications that are clear and potent.",
+              },
+              {
+                icon: Edit,
+                title: "The Written Future",
+                desc: "Supporting your lifelong journey of learning.",
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.title}
                 className="group p-8 rounded-2xl transition-all duration-300 border border-transparent hover:border-primary/20 hover:bg-white/50"
-                initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
               >
                 <div className="flex flex-col items-center gap-5">
                   <div className="flex-shrink-0 rounded-full bg-primary/10 p-4 border border-primary/20 transition-all duration-300 group-hover:bg-primary group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
                     <item.icon className="h-10 w-10 text-primary transition-all duration-300 group-hover:text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2 text-accent">{item.title}</h3>
-                    <p className="text-sm text-card-foreground/70 font-sans leading-relaxed">{item.desc}</p>
+                    <h3 className="text-xl font-bold mb-2 text-accent">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-card-foreground/70 font-sans leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -491,6 +570,273 @@ export default function HomePage() {
       </section>
     </div>
   );
+}
+
+# === app/admin/layout.tsx ===
+// === app/admin/layout.tsx (NEW FILE) ===
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import { LayoutDashboard, Book, ShoppingBag, Settings, Home } from "lucide-react";
+
+const sidebarNavItems = [
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Books", href: "/admin/books", icon: Book },
+  { title: "Orders", href: "/admin/orders", icon: ShoppingBag },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
+];
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Protect admin routes
+    if (!user || !user.isAdmin) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  if (!user || !user.isAdmin) {
+    return <div className="container py-24 text-center">Access Denied. Redirecting...</div>;
+  }
+
+  return (
+    <div className="bg-muted/40 min-h-screen">
+      <div className="container mx-auto grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <aside className="hidden border-r bg-background md:block">
+            <div className="flex h-full max-h-screen flex-col gap-2">
+                <div className="flex h-16 items-center border-b px-6">
+                    <Link href="/admin" className="font-bold text-lg text-primary">Admin Panel</Link>
+                </div>
+                <nav className="flex-1 grid items-start p-4 text-sm font-medium">
+                    {sidebarNavItems.map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        pathname === item.href && "bg-muted text-primary"
+                        )}
+                    >
+                        <item.icon className="h-4 w-4"/>
+                        {item.title}
+                    </Link>
+                    ))}
+                    <Link href="/" className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"><Home className="h-4 w-4"/> Back to Site</Link>
+                </nav>
+            </div>
+        </aside>
+        <main className="flex flex-col gap-4 p-4 lg:p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
+
+# === app/admin/page.tsx ===
+// === app/admin/page.tsx (NEW FILE) ===
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book, ShoppingBag, Users } from "lucide-react";
+
+export default function AdminDashboard() {
+  return (
+    <div>
+        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+                    <ShoppingBag className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">1,245</div>
+                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Books</CardTitle>
+                    <Book className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">8</div>
+                    <p className="text-xs text-muted-foreground">All listed publications</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">+235</div>
+                    <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="mt-8">
+            <Card>
+                <CardHeader><CardTitle>Recent Orders</CardTitle></CardHeader>
+                <CardContent>
+                    {/* A table of recent orders would go here */}
+                    <p className="text-muted-foreground">Recent orders will be displayed here.</p>
+                </CardContent>
+            </Card>
+        </div>
+    </div>
+  )
+}
+
+# === app/admin/orders/page.tsx ===
+// === app/admin/orders/page.tsx (NEW FILE) ===
+"use client"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { dummyOrders } from "@/lib/data";
+
+export default function AdminOrdersPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Manage Orders</CardTitle>
+                <CardDescription>View customer orders and update their status.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Order ID</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Customer</TableHead>
+                            <TableHead>Total</TableHead>
+                            <TableHead>Status</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyOrders.map(order => (
+                            <TableRow key={order.id}>
+                                <TableCell className="font-medium">{order.id}</TableCell>
+                                <TableCell>{order.date}</TableCell>
+                                <TableCell>Valued Customer</TableCell>
+                                <TableCell>Kshs {order.total.toFixed(2)}</TableCell>
+                                <TableCell>
+                                    <Select defaultValue={order.status}>
+                                        <SelectTrigger className="w-[120px]">
+                                            <SelectValue placeholder="Status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Placed">Placed</SelectItem>
+                                            <SelectItem value="Processing">Processing</SelectItem>
+                                            <SelectItem value="Shipped">Shipped</SelectItem>
+                                            <SelectItem value="Delivered">Delivered</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+
+# === app/admin/books/page.tsx ===
+// === app/admin/books/page.tsx (NEW FILE) ===
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dummyBooks } from "@/lib/data";
+
+export default function AdminBooksPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Manage Books</CardTitle>
+                        <CardDescription>Add, edit, or delete publications.</CardDescription>
+                    </div>
+                    <Button>Add New Book</Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Author</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Stock</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyBooks.map(book => (
+                            <TableRow key={book.id}>
+                                <TableCell className="hidden sm:table-cell">
+                                    <img alt={book.title} className="aspect-square rounded-md object-cover" height="64" src={book.imageUrl} width="64"/>
+                                </TableCell>
+                                <TableCell className="font-medium">{book.title}</TableCell>
+                                <TableCell>{book.author}</TableCell>
+                                <TableCell>Kshs {book.price.toFixed(2)}</TableCell>
+                                <TableCell>{book.stock}</TableCell>
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="sm">Edit</Button>
+                                        <Button variant="destructive" size="sm">Delete</Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+
+# === app/admin/settings/page.tsx ===
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export default function AdminSettingsPage() {
+    return (
+        <div className="max-w-2xl">
+            <h1 className="text-3xl font-bold tracking-tight mb-6">Admin Settings</h1>
+            <Card>
+                <CardHeader>
+                    <CardTitle>M-Pesa Configuration</CardTitle>
+                    <CardDescription>Configure your M-Pesa Till payment settings.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="till-number">Till Number</Label>
+                        <Input id="till-number" placeholder="e.g., 123456" />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="consumer-key">Consumer Key</Label>
+                        <Input id="consumer-key" type="password" />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="consumer-secret">Consumer Secret</Label>
+                        <Input id="consumer-secret" type="password" />
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button>Save Settings</Button>
+                </CardFooter>
+            </Card>
+        </div>
+    )
 }
 
 # === app/cart/page.tsx ===
@@ -527,8 +873,9 @@ export default function CartPage() {
         <div className="text-center py-20 bg-muted rounded-lg border">
           <h2 className="text-2xl font-semibold mb-4 text-foreground">Your cart is empty.</h2>
           <p className="text-muted-foreground mb-8">
-            Looks like you haven't added any books yet.
-          </p>
+  Looks like you haven&rsquo;t added any books yet.
+</p>
+
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
             <Link href="/books">Explore Books</Link>
           </Button>
@@ -588,15 +935,42 @@ export default function CartPage() {
 }
 
 # === app/login/page.tsx ===
-"use client"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+// === app/login/page.tsx (MODIFIED) ===
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Mock login logic
+    const isAdmin = email.includes('admin');
+    const name = isAdmin ? 'Admin User' : 'Valued Customer';
+    
+    login({ name, email, isAdmin });
+    toast.success(`Welcome back, ${name}!`);
+    router.push('/profile');
+  };
+
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
       <motion.div
@@ -609,135 +983,146 @@ export default function LoginPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">
-              Sign in to continue your journey.
+              Sign in to continue your journey. <br/> (Tip: use an email with 'admin' in it for admin access)
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@example.com" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Login</Button>
-            <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
-                <Link href="/register" className="font-semibold text-primary hover:underline">
-                    Sign up
+          <form onSubmit={handleLogin}>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">
+                Login
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Don’t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Sign up
                 </Link>
-                </p>
-          </CardFooter>
+              </p>
+            </CardFooter>
+          </form>
         </Card>
       </motion.div>
     </div>
-  )
+  );
 }
 
 # === app/books/page.tsx ===
-"use client";
-
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookCard } from '@/components/shared/BookCard';
-import { dummyBooks } from '@/lib/data';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { dummyBooks, Book } from '@/lib/data';
+import { BookFilters } from '@/components/shared/BookFilters';
 
-export default function BooksPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+// This is a Server Component
+export default async function BooksPage({ searchParams }: {
+  searchParams?: {
+    query?: string;
+    category?: string;
+  }
+}) {
+  const query = searchParams?.query || '';
+  const category = searchParams?.category || 'All';
 
-  const filteredBooks = dummyBooks.filter(book => 
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05, delayChildren: 0.2 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
-  };
+  // Data filtering now happens on the server
+  const filteredBooks = dummyBooks.filter(book => {
+    const matchesCategory = category === 'All' || book.category === category;
+    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) || 
+                          book.author.toLowerCase().includes(query.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="relative">
       <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent_80%)]"></div>
       <section className="py-24 md:py-32">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
+          <div>
             <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center">
               Our Collection
             </h1>
             <p className="text-center text-muted-foreground text-lg mt-4 mb-12 max-w-2xl mx-auto font-sans">
               Search and explore our full range of publications. Your next great read is just a click away.
             </p>
-            <div className="max-w-xl mx-auto mb-20 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input 
-                placeholder="Search by title..."
-                className="pl-12 h-14 text-lg bg-card border-border focus-visible:ring-primary focus-visible:ring-offset-background rounded-full shadow-sm"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="max-w-xl mx-auto mb-20">
+              <BookFilters />
             </div>
-          </motion.div>
+          </div>
           
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {filteredBooks.map((book) => (
-              <motion.div key={book.id} variants={itemVariants}>
-                <BookCard book={book} />
-              </motion.div>
-            ))}
-          </motion.div>
+          <BookGrid books={filteredBooks} />
         </div>
       </section>
     </div>
   );
 }
 
-# === app/books/[id]/page.tsx ===
-"use client";
+// A new component for the book grid to keep animations contained
+function BookGrid({ books }: { books: Book[] }) {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.05 },
+        },
+    };
 
-import { useParams } from 'next/navigation';
-import { dummyBooks } from '@/lib/data';
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 },
+    };
+
+    return (
+        <motion.div
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            key={books.length} // Re-trigger animation when books change
+        >
+            {books.length > 0 ? (
+                books.map((book, index) => (
+                    <motion.div key={book.id} variants={itemVariants}>
+                        {/* FIX: Pass the priority prop for the first 5 images */}
+                        <BookCard book={book} priority={index < 5} />
+                    </motion.div>
+                ))
+            ) : (
+                <p className="col-span-full text-center text-lg text-muted-foreground py-10">
+                    No books found matching your criteria.
+                </p>
+            )}
+        </motion.div>
+    );
+}
+
+# === app/books/[id]/page.tsx ===
+import { dummyBooks, Book } from '@/lib/data';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
-import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { toast } from 'sonner';
+import { AddToCart } from '@/components/shared/AddToCart';
+import { notFound } from 'next/navigation';
 
-export default function BookDetailPage() {
-  const params = useParams();
-  const book = dummyBooks.find(b => b.id === params.id);
-  const { dispatch } = useCart();
-  const [quantity, setQuantity] = useState(1);
+async function getBook(id: string): Promise<Book | undefined> {
+    return dummyBooks.find(b => b.id === id);
+}
+
+export default async function BookDetailPage({ params }: { params: { id: string } }) {
+  const book = await getBook(params.id);
 
   if (!book) {
-    return <div className="container py-20 text-center">Book not found.</div>;
-  }
-  
-  const handleAddToCart = () => {
-    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
-    toast.success(`${quantity} x ${book.title} added to cart!`);
+    notFound();
   }
 
   return (
@@ -760,12 +1145,15 @@ export default function BookDetailPage() {
                     width={800}
                     height={1200}
                     className="w-full h-auto object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
                 />
             </div>
             <div className="flex flex-col">
               <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-3">
                   {book.title}
               </h1>
+               <p className="text-lg text-muted-foreground font-sans mb-3">by {book.author}</p>
               <p className="text-4xl font-bold text-primary my-6 font-sans">
                   Kshs {book.price.toFixed(2)}
               </p>
@@ -773,21 +1161,7 @@ export default function BookDetailPage() {
                   {book.description}
               </p>
               
-              <div className="flex items-center gap-4 mb-8">
-                  <div className="flex items-center border rounded-full p-1 bg-white/50">
-                      <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
-                          <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="w-12 text-center text-lg font-bold">{quantity}</span>
-                      <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
-                          <Plus className="h-4 w-4" />
-                      </Button>
-                  </div>
-                  <Button size="lg" className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" onClick={handleAddToCart}>
-                      <ShoppingCart className="mr-2 h-5 w-5" />
-                      Add to Cart
-                  </Button>
-              </div>
+              <AddToCart book={book} />
             </div>
         </div>
       </div>
@@ -888,49 +1262,87 @@ export default function OrderConfirmationPage() {
 }
 
 # === app/checkout/page.tsx ===
+// === app/checkout/page.tsx (MODIFIED) ===
 "use client"
+import { useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCart } from "@/context/CartContext"
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 export default function CheckoutPage() {
-  const { state } = useCart()
-  const router = useRouter()
-  const { items } = state
+  const { state } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
+  const { items } = state;
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = subtotal > 0 ? 500.00 : 0
-  const total = subtotal + shipping
+  const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = deliveryMethod === "delivery" && subtotal > 0 ? 500.00 : 0;
+  const total = subtotal + shipping;
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
+    // Here you would trigger the M-Pesa STK Push
+    // After successful payment confirmation from your backend:
     router.push('/order/confirmation');
+  }
+
+  if (items.length === 0) {
+    return (
+        <div className="container mx-auto px-4 py-16 md:py-24 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">Checkout</h1>
+            <p className="text-xl text-muted-foreground">Your cart is empty. Please add books to proceed.</p>
+        </div>
+    )
   }
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
       <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Checkout</h1>
-      {items.length === 0 ? (
-        <div className="text-center">
-          <p className="text-xl text-muted-foreground">Your cart is empty. Please add books to proceed.</p>
-        </div>
-      ) : (
       <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12 items-start">
         <div className="lg:col-span-2 space-y-10">
           <Card className="bg-card/80 border">
-            <CardHeader><CardTitle className="text-2xl">Shipping & Delivery</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" required /></div>
-              <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" required /></div>
-              <div className="col-span-full space-y-2"><Label htmlFor="address">Address</Label><Input id="address" required /></div>
-              <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" required /></div>
-              <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
+            <CardHeader><CardTitle className="text-2xl">Delivery Method</CardTitle></CardHeader>
+            <CardContent>
+                <RadioGroup defaultValue="delivery" onValueChange={setDeliveryMethod} className="flex flex-col sm:flex-row gap-4">
+                    <Label htmlFor="delivery" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="delivery" id="delivery" />
+                        <div>
+                            <p className="font-semibold">Delivery</p>
+                            <p className="text-sm text-muted-foreground">Shipped to your address.</p>
+                        </div>
+                    </Label>
+                    <Label htmlFor="pickup" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="pickup" id="pickup" />
+                        <div>
+                            <p className="font-semibold">Pickup</p>
+                            <p className="text-sm text-muted-foreground">Collect from our store.</p>
+                        </div>
+                    </Label>
+                </RadioGroup>
             </CardContent>
           </Card>
+          
+          {deliveryMethod === 'delivery' && (
+            <Card className="bg-card/80 border">
+                <CardHeader><CardTitle className="text-2xl">Shipping Address</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-full space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" defaultValue={user?.name} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" defaultValue={user?.email} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="address">Address</Label><Input id="address" required /></div>
+                <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" required /></div>
+                <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
+                </CardContent>
+            </Card>
+          )}
+
           <Card className="bg-card/80 border">
             <CardHeader><CardTitle className="text-2xl">M-Pesa Payment</CardTitle></CardHeader>
             <CardContent className="space-y-4">
@@ -973,10 +1385,333 @@ export default function CheckoutPage() {
           </Card>
         </div>
       </form>
-      )}
     </div>
   )
 }
+
+# === app/profile/layout.tsx ===
+// === app/profile/layout.tsx (NEW FILE) ===
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import { User, FileText, Home } from "lucide-react";
+
+const sidebarNavItems = [
+  { title: "My Profile", href: "/profile", icon: User },
+  { title: "Order History", href: "/profile/orders", icon: FileText },
+];
+
+export default function ProfileLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // In a real app with server-side auth, this redirect would happen in middleware
+    if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  if (!user) {
+    return <div className="container py-24 text-center">Loading or redirecting...</div>;
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">My Account</h1>
+        <p className="text-muted-foreground mt-2">Manage your profile and view your order history.</p>
+      </div>
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <aside className="lg:w-1/4">
+          <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+            {sidebarNavItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "inline-flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                  pathname === item.href && "bg-muted font-bold text-primary"
+                )}
+              >
+                <item.icon className="h-5 w-5"/>
+                <span className="hidden sm:inline">{item.title}</span>
+              </Link>
+            ))}
+          </nav>
+        </aside>
+        <div className="flex-1 lg:max-w-4xl">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+# === app/profile/page.tsx ===
+// === app/profile/page.tsx (NEW FILE) ===
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+
+export default function ProfilePage() {
+  const { user } = useAuth();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success("Profile updated successfully!");
+  }
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+          <CardDescription>Update your personal details here.</CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" defaultValue={user?.name} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" defaultValue={user?.email} />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit">Save Changes</Button>
+          </CardFooter>
+        </form>
+      </Card>
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>Update your password for better security.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="current-password">Current Password</Label>
+            <Input id="current-password" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="new-password">New Password</Label>
+            <Input id="new-password" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+            <Button>Update Password</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+
+# === app/profile/orders/page.tsx ===
+// === app/profile/orders/page.tsx (NEW FILE) ===
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { dummyOrders } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+
+export default function OrderHistoryPage() {
+  const orders = dummyOrders;
+
+  if (orders.length === 0) {
+    return (
+      <div className="text-center py-20 bg-muted rounded-lg border">
+        <h2 className="text-2xl font-semibold mb-4 text-foreground">You have no orders yet.</h2>
+        <p className="text-muted-foreground mb-8">
+          All your future orders will appear here.
+        </p>
+        <Button asChild size="lg">
+          <Link href="/books">Start Shopping</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Card className="bg-card/80 border">
+      <CardHeader>
+        <CardTitle>Your Orders</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <Link href={`/profile/orders/${order.id}`} key={order.id} className="block border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+              <div className="flex justify-between items-center">
+                <div className="grid gap-1">
+                  <p className="font-bold text-lg text-primary">Order #{order.id}</p>
+                  <p className="text-sm text-muted-foreground">Date: {order.date}</p>
+                  <p className="text-sm text-muted-foreground">Total: Kshs {order.total.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className={cn(
+                        "text-sm font-bold py-1 px-3 rounded-full",
+                        order.status === 'Delivered' && 'bg-green-100 text-green-800',
+                        order.status === 'Processing' && 'bg-yellow-100 text-yellow-800',
+                        order.status === 'Shipped' && 'bg-blue-100 text-blue-800'
+                    )}>
+                        {order.status}
+                    </span>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+# === app/profile/orders/[orderId]/page.tsx ===
+// === app/profile/orders/[orderId]/page.tsx (NEW FILE) ===
+"use client";
+import { useParams } from "next/navigation";
+import { dummyOrders } from "@/lib/data";
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+const statusSteps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
+
+export default function OrderDetailsPage() {
+  const params = useParams();
+  const order = dummyOrders.find(o => o.id === params.orderId);
+
+  if (!order) {
+    return <div>Order not found.</div>;
+  }
+  
+  const currentStatusIndex = statusSteps.indexOf(order.status);
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Order #{order.id}</CardTitle>
+          <CardDescription>Date: {order.date} · Status: {order.status}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Order Status</h3>
+            <div className="flex justify-between">
+              {statusSteps.map((step, index) => (
+                <div key={step} className="flex-1 flex flex-col items-center relative">
+                  <div className={cn(
+                      "h-8 w-8 rounded-full flex items-center justify-center border-2",
+                      index <= currentStatusIndex ? "bg-primary border-primary text-white" : "bg-muted border-border"
+                  )}>
+                    {index < currentStatusIndex ? '✓' : index + 1}
+                  </div>
+                  <p className={cn("mt-2 text-sm", index <= currentStatusIndex ? "font-bold text-primary" : "text-muted-foreground")}>{step}</p>
+                  {index < statusSteps.length - 1 && (
+                      <div className="absolute top-4 left-1/2 w-full h-0.5 -z-10">
+                          <div className={cn("h-full", index < currentStatusIndex ? 'bg-primary' : 'bg-border')}></div>
+                      </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <Separator className="my-6" />
+
+          <h3 className="text-lg font-semibold mb-4">Items Ordered</h3>
+          <div className="space-y-4">
+            {order.items.map(item => (
+              <div key={item.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Image src={item.imageUrl} alt={item.title} width={60} height={90} className="rounded-md" />
+                  <div>
+                    <p className="font-semibold">{item.title}</p>
+                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                  </div>
+                </div>
+                <p className="font-semibold">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+              </div>
+            ))}
+          </div>
+          
+          <Separator className="my-6" />
+
+          <div className="flex justify-end">
+            <div className="w-full max-w-xs space-y-2">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {(order.total - 500).toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs 500.00</span></div>
+                <Separator/>
+                <div className="flex justify-between font-bold text-lg"><span>Total</span><span>Kshs {order.total.toFixed(2)}</span></div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// NOTE: You'll also need to install the separator component from shadcn/ui:
+// npx shadcn-ui@latest add separator
+
+# === context/AuthContext.tsx ===
+// === context/AuthContext.tsx (NEW FILE) ===
+"use client";
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+interface User {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (userData: User) => {
+    // In a real app, you'd get a token from your API
+    setUser(userData);
+  };
+
+  const logout = () => {
+    // In a real app, you'd clear the token
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 # === context/CartContext.tsx ===
 "use client";
@@ -1061,8 +1796,121 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCart = () => useContext(CartContext);
 
+# === components/shared/AddToCart.tsx ===
+"use client";
+
+import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { Book } from '@/lib/data';
+import { Button } from '@/components/ui/button';
+import { Minus, Plus, ShoppingCart } from 'lucide-react';
+import { toast } from 'sonner';
+
+export function AddToCart({ book }: { book: Book }) {
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  
+  const handleAddToCart = () => {
+    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
+    toast.success(`${quantity} x ${book.title} added to cart!`);
+  }
+
+  return (
+    <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center border rounded-full p-1 bg-white/50">
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+          <Minus className="h-4 w-4" />
+        </Button>
+        <span className="w-12 text-center text-lg font-bold">{quantity}</span>
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+      <Button 
+        size="lg" 
+        className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" 
+        onClick={handleAddToCart}
+      >
+        <ShoppingCart className="mr-2 h-5 w-5" />
+        Add to Cart
+      </Button>
+    </div>
+  );
+}
+
+# === components/shared/BookFilters.tsx ===
+// === components/shared/BookFilters.tsx (NEW FILE) ===
+"use client";
+
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
+import { dummyBooks } from '@/lib/data';
+
+const categories = ['All', ...Array.from(new Set(dummyBooks.map(b => b.category)))];
+
+export function BookFilters() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const activeCategory = searchParams.get('category') || 'All';
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('query', term);
+    } else {
+      params.delete('query');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
+
+  const handleCategoryChange = (category: string) => {
+     const params = new URLSearchParams(searchParams);
+    if (category && category !== 'All') {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input 
+          placeholder="Search by title or author..."
+          className="pl-12 h-14 text-lg bg-card border-border focus-visible:ring-primary focus-visible:ring-offset-background rounded-full shadow-sm"
+          defaultValue={searchParams.get('query')?.toString()}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
+       <div className="flex justify-center flex-wrap gap-3">
+        {categories.map(category => (
+          <Button 
+            key={category} 
+            variant={activeCategory === category ? "default" : "outline"}
+            onClick={() => handleCategoryChange(category)}
+            className={cn(
+              "rounded-full px-6 h-11 text-base font-semibold",
+              activeCategory === category && "bg-primary text-primary-foreground btn-shine"
+            )}
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 # === components/shared/BookCard.tsx ===
-import React, { useRef } from 'react';
+import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -1070,39 +1918,17 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Book } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart } from "lucide-react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from '@/lib/utils';
 
 interface BookCardProps {
   book: Book;
+  // FIX: Add an optional priority prop
+  priority?: boolean;
 }
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, priority = false }: BookCardProps) {
   const { dispatch } = useCart();
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useTransform(mouseY, [0, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [0, 200], [-10, 10]);
-  
-  const springConfig = { stiffness: 150, damping: 20, mass: 1 };
-  const springRotateX = useSpring(rotateX, springConfig);
-  const springRotateY = useSpring(rotateY, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
-  
-  const handleMouseLeave = () => {
-    mouseX.set(100); 
-    mouseY.set(150);
-  };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -1112,53 +1938,78 @@ export function BookCard({ book }: BookCardProps) {
   };
 
   return (
-    <div className="perspective-container">
-      <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
-        <motion.div
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{
-            rotateX: springRotateX,
-            rotateY: springRotateY,
-            transformStyle: "preserve-3d",
-          }}
-          className="relative h-full transition-shadow duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20"
-        >
-          <Card className={cn(
-            "flex h-full w-full flex-col overflow-hidden rounded-xl",
-            "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10"
-          )}>
-            <CardHeader className="p-0 relative" style={{ transform: "translateZ(20px)" }}>
-              <div className="aspect-[2/3] w-full overflow-hidden rounded-t-xl">
-                  <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    width={300}
-                    height={450}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  />
-              </div>
-            </CardHeader>
-            <CardContent className="flex-grow p-3 flex flex-col bg-transparent" style={{ transform: "translateZ(15px)" }}>
-              <CardTitle className="text-sm font-bold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
-            </CardContent>
-            <CardFooter className="flex justify-between items-center p-3 pt-1 bg-transparent" style={{ transform: "translateZ(10px)" }}>
-              <p className="text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
-              <Button
-                size="icon"
-                className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
-                onClick={handleAddToCart}
-                aria-label="Add to cart"
-              >
-                <ShoppingCart className="h-4 w-4" />
-              </Button>
-            </CardFooter>
-          </Card>
-        </motion.div>
-      </Link>
-    </div>
+    <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
+      <Card className={cn(
+        "flex h-full w-full flex-col overflow-hidden rounded-xl",
+        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
+      )}>
+        <CardHeader className="p-0 relative">
+          <div className="aspect-[2/3] w-full overflow-hidden rounded-t-xl">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={300}
+                height={450}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                // FIX: Pass the priority prop to the Image component
+                priority={priority}
+              />
+          </div>
+        </CardHeader>
+        <CardContent className="flex-grow p-3 flex flex-col bg-transparent">
+          <CardTitle className="text-sm font-bold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
+        </CardContent>
+        <CardFooter className="flex justify-between items-center p-3 pt-1 bg-transparent">
+          <p className="text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
+          <Button
+            size="icon"
+            className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
+            onClick={handleAddToCart}
+            aria-label="Add to cart"
+          >
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
+    </Link>
   );
+}
+
+# === components/shared/FeaturedBooks.tsx ===
+"use client";
+
+import { motion } from 'framer-motion';
+import { dummyBooks } from '@/lib/data';
+import { BookCard } from './BookCard';
+
+export function FeaturedBooks() {
+  return (
+    <section className="py-24 md:py-32 relative z-10 bg-background/80 backdrop-blur-sm border-t border-b">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-3xl mx-auto"
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter">
+            Featured Publications
+          </h2>
+          <p className="text-muted-foreground text-lg mt-4 mb-16 font-sans">
+            Each book is a vessel of knowledge, meticulously crafted from ink
+            and inspiration.
+          </p>
+        </motion.div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
+          {dummyBooks.slice(0, 5).map((book) => (
+            <BookCard book={book} key={book.id} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 # === components/layout/Footer.tsx ===
@@ -1224,50 +2075,24 @@ export function Footer() {
   );
 }
 
-# === components/layout/CursorGlow.tsx ===
-"use client";
-
-import { useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-
-export const CursorGlow = () => {
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-
-    const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
-    const springX = useSpring(mouseX, springConfig);
-    const springY = useSpring(mouseY, springConfig);
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, [mouseX, mouseY]);
-
-    return (
-        <motion.div
-            id="cursor-glow"
-            style={{
-                x: springX,
-                y: springY,
-            }}
-            className="opacity-0"
-        />
-    );
-};
-
 # === components/layout/HeroBackground.tsx ===
 "use client";
 
 import { motion } from "framer-motion";
 
 export function HeroBackground() {
+  const wave1Paths = [
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+    "M -10,150 C 200,100 450,200 600,150 S 850,100 1010,150 V 610 H -10 Z",
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+  ];
+
+  const wave2Paths = [
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+    "M -10,180 C 250,150 400,230 550,180 S 800,150 1010,160 V 610 H -10 Z",
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+  ];
+
   return (
     <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-accent">
       <motion.svg
@@ -1289,14 +2114,9 @@ export function HeroBackground() {
         {/* Wave 1 */}
         <motion.path
           fill="url(#waveGradient1)"
-          d="M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z"
-          animate={{
-            d: [
-              "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
-              "M -10,150 C 200,100 450,200 600,150 S 850,100 1010,150 V 610 H -10 Z",
-              "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
-            ],
-          }}
+          // FIX: Provide a default 'd' attribute to prevent it from being undefined on initial render.
+          d={wave1Paths[0]}
+          animate={{ d: wave1Paths }}
           transition={{
             duration: 12,
             ease: "easeInOut",
@@ -1308,14 +2128,9 @@ export function HeroBackground() {
         {/* Wave 2 */}
         <motion.path
           fill="url(#waveGradient2)"
-          d="M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z"
-          animate={{
-            d: [
-              "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
-              "M -10,180 C 250,150 400,230 550,180 S 800,150 1010,160 V 610 H -10 Z",
-              "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
-            ],
-          }}
+          // FIX: Provide a default 'd' attribute here as well.
+          d={wave2Paths[0]}
+          animate={{ d: wave2Paths }}
           transition={{
             duration: 15,
             ease: "easeInOut",
@@ -1330,6 +2145,7 @@ export function HeroBackground() {
 }
 
 # === components/layout/Header.tsx ===
+// === components/layout/Header.tsx (MODIFIED) ===
 "use client";
 import Link from "next/link";
 import Image from "next/image";
@@ -1341,11 +2157,22 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose
 } from "@/components/ui/sheet";
-import { Menu, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, ShoppingCart, User as UserIcon } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -1355,21 +2182,18 @@ const navLinks = [
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const router = useRouter();
   const { state } = useCart();
+  const { user, logout } = useAuth(); // Use auth context
   const cartItemCount = state.items.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  }
 
   const BrandLogo = () => (
     <Link href="/" className="flex items-center" onClick={() => isOpen && setIsOpen(false)}>
@@ -1387,10 +2211,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        hasScrolled
-          ? "border-b bg-background/80 backdrop-blur-xl shadow-sm"
-          : "border-b border-transparent"
+        "sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
       )}
     >
       <div className="container mx-auto px-4">
@@ -1412,28 +2233,45 @@ export function Header() {
           </nav>
           
           <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center gap-4">
-              <Button
-                variant="ghost"
-                className="font-medium rounded-full"
-                asChild
-              >
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine shadow-lg shadow-primary/20"
-                asChild
-              >
-                <Link href="/register">Sign Up</Link>
-              </Button>
+            <div className="hidden lg:flex items-center gap-2">
+              {user ? (
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="rounded-full font-medium flex items-center gap-2">
+                        <UserIcon className="h-4 w-4"/>
+                        My Account
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Hi, {user.name}!</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild><Link href="/profile">My Profile</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href="/profile/orders">Order History</Link></DropdownMenuItem>
+                      {user.isAdmin && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
+                        </>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+              ) : (
+                <>
+                  <Button variant="ghost" className="font-medium rounded-full" asChild>
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full btn-shine shadow-lg shadow-primary/20" asChild>
+                    <Link href="/register">Sign Up</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full relative flex-shrink-0 bg-white/50"
-              asChild
-            >
+            <Button variant="outline" size="icon" className="rounded-full relative flex-shrink-0 bg-white/50" asChild>
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
@@ -1453,50 +2291,34 @@ export function Header() {
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </SheetTrigger>
-                <SheetContent
-                  side="right"
-                  className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0"
-                >
+                <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0">
                   <SheetHeader className="p-6 border-b">
-                    <SheetTitle asChild>
-                      <Link href="/" onClick={() => setIsOpen(false)}>
-                         <Image src="/logo2.png" alt="Doritex Logo" width={160} height={45} className="h-11 w-auto" />
-                      </Link>
-                    </SheetTitle>
-                    <SheetDescription className="sr-only">
-                      Mobile navigation menu
-                    </SheetDescription>
+                    <SheetTitle asChild><Link href="/" onClick={() => setIsOpen(false)}><Image src="/logo2.png" alt="Doritex Logo" width={160} height={45} className="h-11 w-auto" /></Link></SheetTitle>
+                    <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
                   </SheetHeader>
                   <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
                     {navLinks.map((link) => (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
+                      <SheetClose asChild key={link.label}>
+                        <Link href={link.href} className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            {link.label}
+                        </Link>
+                      </SheetClose>
                     ))}
+                     {user && (
+                        <SheetClose asChild>
+                         <Link href="/profile" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">My Account</Link>
+                        </SheetClose>
+                     )}
                   </nav>
                   <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="h-12 text-base"
-                      onClick={() => setIsOpen(false)}
-                      asChild
-                    >
-                      <Link href="/login">Login</Link>
-                    </Button>
-                    <Button
-                      size="lg"
-                      className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"
-                      onClick={() => setIsOpen(false)}
-                      asChild
-                    >
-                      <Link href="/register">Sign Up</Link>
-                    </Button>
+                    {user ? (
+                        <Button variant="destructive" size="lg" className="h-12 text-base" onClick={() => { handleLogout(); setIsOpen(false); }}>Logout</Button>
+                    ) : (
+                        <>
+                            <SheetClose asChild><Button asChild variant="outline" size="lg" className="h-12 text-base"><Link href="/login">Login</Link></Button></SheetClose>
+                            <SheetClose asChild><Button asChild size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold btn-shine"><Link href="/register">Sign Up</Link></Button></SheetClose>
+                        </>
+                    )}
                   </div>
                 </SheetContent>
               </Sheet>
@@ -1507,4 +2329,3 @@ export function Header() {
     </header>
   );
 }
-```

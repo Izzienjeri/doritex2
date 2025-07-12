@@ -1,3 +1,4 @@
+// === app/layout.tsx (MODIFIED) ===
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
@@ -5,8 +6,9 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
-import { CursorGlow } from "@/components/layout/CursorGlow";
+// import { CursorGlow } from "@/components/layout/CursorGlow"; // OPTIMIZATION: Removed expensive component
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -39,24 +41,26 @@ export default function RootLayout({
           fontDisplay.variable
         )}
       >
-        <CursorGlow />
-        <CartProvider>
-          <div className="relative flex min-h-dvh flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster 
-            theme="light" 
-            toastOptions={{
-              classNames: {
-                toast: 'bg-card border-border shadow-lg',
-                title: 'text-foreground',
-                description: 'text-muted-foreground',
-              },
-            }}
-          />
-        </CartProvider>
+        {/* <CursorGlow /> OPTIMIZATION: Removed. This component adds significant performance overhead by tracking the mouse position constantly. */}
+        <AuthProvider>
+          <CartProvider>
+            <div className="relative flex min-h-dvh flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster 
+              theme="light" 
+              toastOptions={{
+                classNames: {
+                  toast: 'bg-card border-border shadow-lg',
+                  title: 'text-foreground',
+                  description: 'text-muted-foreground',
+                },
+              }}
+            />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

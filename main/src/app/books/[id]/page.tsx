@@ -1,28 +1,20 @@
-"use client";
-
-import { useParams } from 'next/navigation';
-import { dummyBooks } from '@/lib/data';
+import { dummyBooks, Book } from '@/lib/data';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
-import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { toast } from 'sonner';
+import { AddToCart } from '@/components/shared/AddToCart';
+import { notFound } from 'next/navigation';
 
-export default function BookDetailPage() {
-  const params = useParams();
-  const book = dummyBooks.find(b => b.id === params.id);
-  const { dispatch } = useCart();
-  const [quantity, setQuantity] = useState(1);
+async function getBook(id: string): Promise<Book | undefined> {
+    return dummyBooks.find(b => b.id === id);
+}
+
+export default async function BookDetailPage({ params }: { params: { id: string } }) {
+  const book = await getBook(params.id);
 
   if (!book) {
-    return <div className="container py-20 text-center">Book not found.</div>;
-  }
-  
-  const handleAddToCart = () => {
-    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
-    toast.success(`${quantity} x ${book.title} added to cart!`);
+    notFound();
   }
 
   return (
@@ -45,12 +37,15 @@ export default function BookDetailPage() {
                     width={800}
                     height={1200}
                     className="w-full h-auto object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
                 />
             </div>
             <div className="flex flex-col">
               <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-3">
                   {book.title}
               </h1>
+               <p className="text-lg text-muted-foreground font-sans mb-3">by {book.author}</p>
               <p className="text-4xl font-bold text-primary my-6 font-sans">
                   Kshs {book.price.toFixed(2)}
               </p>
@@ -58,21 +53,7 @@ export default function BookDetailPage() {
                   {book.description}
               </p>
               
-              <div className="flex items-center gap-4 mb-8">
-                  <div className="flex items-center border rounded-full p-1 bg-white/50">
-                      <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
-                          <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="w-12 text-center text-lg font-bold">{quantity}</span>
-                      <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
-                          <Plus className="h-4 w-4" />
-                      </Button>
-                  </div>
-                  <Button size="lg" className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" onClick={handleAddToCart}>
-                      <ShoppingCart className="mr-2 h-5 w-5" />
-                      Add to Cart
-                  </Button>
-              </div>
+              <AddToCart book={book} />
             </div>
         </div>
       </div>
