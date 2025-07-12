@@ -37,7 +37,7 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">Create Account</Button>
+            <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Create Account</Button>
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link href="/login" className="font-semibold text-primary hover:underline">

@@ -29,7 +29,7 @@ export function AddToCart({ book }: { book: Book }) {
       </div>
       <Button 
         size="lg" 
-        className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine" 
+        className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20" 
         onClick={handleAddToCart}
       >
         <ShoppingCart className="mr-2 h-5 w-5" />

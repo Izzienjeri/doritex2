@@ -113,7 +113,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className="font-semibold text-foreground">Kshs {shipping.toFixed(2)}</span></div>
                 <div className="flex justify-between font-bold text-xl mt-2 text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </div>
-               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20">
                   Place Order
                 </Button>
             </CardContent>

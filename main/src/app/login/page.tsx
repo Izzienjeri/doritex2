@@ -86,7 +86,7 @@ export default function LoginPage() {
                   <p>{error}</p>
                 </div>
               )}
-              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
                 Login
               </Button>
               <p className="text-sm text-muted-foreground">
