@@ -1,8 +1,8 @@
-// === app/admin/books/page.tsx (NEW FILE) ===
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dummyBooks } from "@/lib/data";
+import Image from "next/image"; // FIX: Import the Next.js Image component
 
 export default function AdminBooksPage() {
     return (
@@ -32,7 +32,14 @@ export default function AdminBooksPage() {
                         {dummyBooks.map(book => (
                             <TableRow key={book.id}>
                                 <TableCell className="hidden sm:table-cell">
-                                    <img alt={book.title} className="aspect-square rounded-md object-cover" height="64" src={book.imageUrl} width="64"/>
+                                    {/* FIX: Replaced the standard <img> tag with the optimized next/image component */}
+                                    <Image 
+                                        alt={book.title} 
+                                        className="aspect-square rounded-md object-cover" 
+                                        height="64" 
+                                        src={book.imageUrl} 
+                                        width="64"
+                                    />
                                 </TableCell>
                                 <TableCell className="font-medium">{book.title}</TableCell>
                                 <TableCell>{book.author}</TableCell>
@@ -52,4 +59,3 @@ export default function AdminBooksPage() {
         </Card>
     )
 }
-

@@ -1,4 +1,3 @@
-// === app/login/page.tsx (MODIFIED) ===
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -17,36 +16,38 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
-import { mockUsers } from "@/lib/data"; // Import the mock user data
+import { mockUsers } from "@/lib/data";
+import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // State for inline error message
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Find the user in our mock data array
+    setError(''); // Clear previous errors on a new attempt
+
     const foundUser = mockUsers.find(
       (user) => user.email === email && user.password === password
     );
 
     if (foundUser) {
-      // If user is found and password matches, log them in
+      // Success: Log user in and show a success toast
       login({ name: foundUser.name, email: foundUser.email, isAdmin: foundUser.isAdmin });
       toast.success(`Welcome back, ${foundUser.name}!`);
       
-      // Redirect to admin dashboard or profile page based on role
       if (foundUser.isAdmin) {
         router.push('/admin');
       } else {
         router.push('/profile');
       }
     } else {
-      // If no user is found, show an error message
-      toast.error("Invalid email or password.");
+      // Failure: Set the inline error message instead of showing a toast
+      setError("Invalid email or password. Please try again.");
+      setPassword(''); // Clear password field for security
     }
   };
 
@@ -71,19 +72,26 @@ export default function LoginPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => { setEmail(e.target.value); setError(''); }} required/>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <Input id="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }} required />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
+              {/* FIX: Conditionally render the inline error message here */}
+              {error && (
+                <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )}
               <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">
                 Login
               </Button>
               <p className="text-sm text-muted-foreground">
-                Don’t have an account?{" "}
+                Don&rsquo;t have an account?{" "}
                 <Link
                   href="/register"
                   className="font-semibold text-primary hover:underline"

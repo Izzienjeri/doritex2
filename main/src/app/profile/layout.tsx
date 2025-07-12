@@ -1,11 +1,11 @@
-// === app/profile/layout.tsx (NEW FILE) ===
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { User, FileText, Home } from "lucide-react";
+// FIX: Removed 'Home' from the import list as it's not used.
+import { User, FileText } from "lucide-react"; 
 
 const sidebarNavItems = [
   { title: "My Profile", href: "/profile", icon: User },

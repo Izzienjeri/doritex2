@@ -1,4 +1,3 @@
-// === app/layout.tsx (MODIFIED) ===
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
@@ -8,7 +7,6 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
-// import { CursorGlow } from "@/components/layout/CursorGlow"; // OPTIMIZATION: Removed expensive component
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -41,7 +39,6 @@ export default function RootLayout({
           fontDisplay.variable
         )}
       >
-        {/* <CursorGlow /> OPTIMIZATION: Removed. This component adds significant performance overhead by tracking the mouse position constantly. */}
         <AuthProvider>
           <CartProvider>
             <div className="relative flex min-h-dvh flex-col">
@@ -49,16 +46,11 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
-            <Toaster 
-              theme="light" 
-              toastOptions={{
-                classNames: {
-                  toast: 'bg-card border-border shadow-lg',
-                  title: 'text-foreground',
-                  description: 'text-muted-foreground',
-                },
-              }}
-            />
+            {/* 
+              FIX: Enabled `richColors` for automatically styled toasts (success, error, info, etc.)
+              and added a close button for better usability.
+            */}
+            <Toaster richColors closeButton />
           </CartProvider>
         </AuthProvider>
       </body>

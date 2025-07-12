@@ -1,6 +1,6 @@
 # Extracted Code (.ts, .tsx, .css)
-# Date and Time: 2025-07-12 09:49:35
-# Files Included: 30
+# Date and Time: 2025-07-12 11:34:59
+# Files Included: 31
 
 # === lib/utils.ts ===
 import { clsx, type ClassValue } from "clsx"
@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 # === lib/data.ts ===
-// === lib/data.ts ===
+// === lib/data.ts (MODIFIED) ===
 export interface Book {
   id: string;
   title: string;
@@ -135,6 +135,33 @@ export const dummyOrders: Order[] = [
             { ...dummyBooks[7], quantity: 1 },
         ]
     }
+];
+
+// --- NEW MOCK USER DATA ---
+
+export interface MockUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string; // NOTE: In a real application, NEVER store plain text passwords. This should be a hash.
+  isAdmin: boolean;
+}
+
+export const mockUsers: MockUser[] = [
+  {
+    id: 'user-1',
+    name: 'Valued Customer',
+    email: 'user@example.com',
+    password: 'pass123',
+    isAdmin: false,
+  },
+  {
+    id: 'admin-1',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: 'pass123',
+    isAdmin: true,
+  }
 ];
 
 # === app/globals.css ===
@@ -338,7 +365,6 @@ body:hover #cursor-glow {
 }
 
 # === app/layout.tsx ===
-// === app/layout.tsx (MODIFIED) ===
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
@@ -348,7 +374,6 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
-// import { CursorGlow } from "@/components/layout/CursorGlow"; // OPTIMIZATION: Removed expensive component
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -381,7 +406,6 @@ export default function RootLayout({
           fontDisplay.variable
         )}
       >
-        {/* <CursorGlow /> OPTIMIZATION: Removed. This component adds significant performance overhead by tracking the mouse position constantly. */}
         <AuthProvider>
           <CartProvider>
             <div className="relative flex min-h-dvh flex-col">
@@ -389,16 +413,11 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
-            <Toaster 
-              theme="light" 
-              toastOptions={{
-                classNames: {
-                  toast: 'bg-card border-border shadow-lg',
-                  title: 'text-foreground',
-                  description: 'text-muted-foreground',
-                },
-              }}
-            />
+            {/* 
+              FIX: Enabled `richColors` for automatically styled toasts (success, error, info, etc.)
+              and added a close button for better usability.
+            */}
+            <Toaster richColors closeButton />
           </CartProvider>
         </AuthProvider>
       </body>
@@ -747,11 +766,11 @@ export default function AdminOrdersPage() {
 }
 
 # === app/admin/books/page.tsx ===
-// === app/admin/books/page.tsx (NEW FILE) ===
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { dummyBooks } from "@/lib/data";
+import Image from "next/image"; // FIX: Import the Next.js Image component
 
 export default function AdminBooksPage() {
     return (
@@ -781,7 +800,14 @@ export default function AdminBooksPage() {
                         {dummyBooks.map(book => (
                             <TableRow key={book.id}>
                                 <TableCell className="hidden sm:table-cell">
-                                    <img alt={book.title} className="aspect-square rounded-md object-cover" height="64" src={book.imageUrl} width="64"/>
+                                    {/* FIX: Replaced the standard <img> tag with the optimized next/image component */}
+                                    <Image 
+                                        alt={book.title} 
+                                        className="aspect-square rounded-md object-cover" 
+                                        height="64" 
+                                        src={book.imageUrl} 
+                                        width="64"
+                                    />
                                 </TableCell>
                                 <TableCell className="font-medium">{book.title}</TableCell>
                                 <TableCell>{book.author}</TableCell>
@@ -804,39 +830,48 @@ export default function AdminBooksPage() {
 
 # === app/admin/settings/page.tsx ===
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function AdminSettingsPage() {
-    return (
-        <div className="max-w-2xl">
-            <h1 className="text-3xl font-bold tracking-tight mb-6">Admin Settings</h1>
-            <Card>
-                <CardHeader>
-                    <CardTitle>M-Pesa Configuration</CardTitle>
-                    <CardDescription>Configure your M-Pesa Till payment settings.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="till-number">Till Number</Label>
-                        <Input id="till-number" placeholder="e.g., 123456" />
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="consumer-key">Consumer Key</Label>
-                        <Input id="consumer-key" type="password" />
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="consumer-secret">Consumer Secret</Label>
-                        <Input id="consumer-secret" type="password" />
-                    </div>
-                </CardContent>
-                <CardFooter>
-                    <Button>Save Settings</Button>
-                </CardFooter>
-            </Card>
-        </div>
-    )
+  return (
+    <div className="max-w-2xl">
+      <h1 className="text-3xl font-bold tracking-tight mb-6">Admin Settings</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>M-Pesa Configuration</CardTitle>
+          <CardDescription>
+            Configure your M-Pesa Till payment settings.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="till-number">Till Number</Label>
+            <Input id="till-number" placeholder="e.g., 123456" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-key">Consumer Key</Label>
+            <Input id="consumer-key" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-secret">Consumer Secret</Label>
+            <Input id="consumer-secret" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>Save Settings</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
 }
 
 # === app/cart/page.tsx ===
@@ -935,7 +970,6 @@ export default function CartPage() {
 }
 
 # === app/login/page.tsx ===
-// === app/login/page.tsx (MODIFIED) ===
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -954,21 +988,39 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
+import { mockUsers } from "@/lib/data";
+import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // State for inline error message
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login logic
-    const isAdmin = email.includes('admin');
-    const name = isAdmin ? 'Admin User' : 'Valued Customer';
-    
-    login({ name, email, isAdmin });
-    toast.success(`Welcome back, ${name}!`);
-    router.push('/profile');
+    setError(''); // Clear previous errors on a new attempt
+
+    const foundUser = mockUsers.find(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (foundUser) {
+      // Success: Log user in and show a success toast
+      login({ name: foundUser.name, email: foundUser.email, isAdmin: foundUser.isAdmin });
+      toast.success(`Welcome back, ${foundUser.name}!`);
+      
+      if (foundUser.isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/profile');
+      }
+    } else {
+      // Failure: Set the inline error message instead of showing a toast
+      setError("Invalid email or password. Please try again.");
+      setPassword(''); // Clear password field for security
+    }
   };
 
   return (
@@ -983,26 +1035,35 @@ export default function LoginPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <CardDescription className="text-muted-foreground pt-2">
-              Sign in to continue your journey. <br/> (Tip: use an email with 'admin' in it for admin access)
+              Sign in to continue your journey.
+              <br />
+              (user: user@example.com, admin: admin@example.com. pw: pass123)
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => { setEmail(e.target.value); setError(''); }} required/>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }} required />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
+              {/* FIX: Conditionally render the inline error message here */}
+              {error && (
+                <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )}
               <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold btn-shine">
                 Login
               </Button>
               <p className="text-sm text-muted-foreground">
-                Don’t have an account?{" "}
+                Don&rsquo;t have an account?{" "}
                 <Link
                   href="/register"
                   className="font-semibold text-primary hover:underline"
@@ -1019,25 +1080,24 @@ export default function LoginPage() {
 }
 
 # === app/books/page.tsx ===
-import { motion } from 'framer-motion';
-import { BookCard } from '@/components/shared/BookCard';
-import { dummyBooks, Book } from '@/lib/data';
+import { dummyBooks } from '@/lib/data';
 import { BookFilters } from '@/components/shared/BookFilters';
+import { BookGrid } from '@/components/shared/BookGrid';
 
-// This is a Server Component
-export default async function BooksPage({ searchParams }: {
-  searchParams?: {
+export default function BooksPage({
+  searchParams,
+}: {
+  searchParams: {
     query?: string;
     category?: string;
-  }
+  };
 }) {
-  const query = searchParams?.query || '';
-  const category = searchParams?.category || 'All';
+  const query = searchParams.query || '';
+  const category = searchParams.category || 'All';
 
-  // Data filtering now happens on the server
   const filteredBooks = dummyBooks.filter(book => {
     const matchesCategory = category === 'All' || book.category === category;
-    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) || 
+    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) ||
                           book.author.toLowerCase().includes(query.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -1058,51 +1118,12 @@ export default async function BooksPage({ searchParams }: {
               <BookFilters />
             </div>
           </div>
-          
+
           <BookGrid books={filteredBooks} />
         </div>
       </section>
     </div>
   );
-}
-
-// A new component for the book grid to keep animations contained
-function BookGrid({ books }: { books: Book[] }) {
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.05 },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1 },
-    };
-
-    return (
-        <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            key={books.length} // Re-trigger animation when books change
-        >
-            {books.length > 0 ? (
-                books.map((book, index) => (
-                    <motion.div key={book.id} variants={itemVariants}>
-                        {/* FIX: Pass the priority prop for the first 5 images */}
-                        <BookCard book={book} priority={index < 5} />
-                    </motion.div>
-                ))
-            ) : (
-                <p className="col-span-full text-center text-lg text-muted-foreground py-10">
-                    No books found matching your criteria.
-                </p>
-            )}
-        </motion.div>
-    );
 }
 
 # === app/books/[id]/page.tsx ===
@@ -1114,12 +1135,24 @@ import Link from 'next/link';
 import { AddToCart } from '@/components/shared/AddToCart';
 import { notFound } from 'next/navigation';
 
-async function getBook(id: string): Promise<Book | undefined> {
-    return dummyBooks.find(b => b.id === id);
+export async function generateStaticParams() {
+  return dummyBooks.map(book => ({
+    id: book.id,
+  }));
 }
 
-export default async function BookDetailPage({ params }: { params: { id: string } }) {
-  const book = await getBook(params.id);
+function getBook(id: string): Book | undefined {
+  return dummyBooks.find(b => b.id === id);
+}
+
+export default async function BookDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = params;
+
+  const book = getBook(id);
 
   if (!book) {
     notFound();
@@ -1130,39 +1163,39 @@ export default async function BookDetailPage({ params }: { params: { id: string 
       <div className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_70%)] opacity-30"></div>
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="mb-12">
-            <Button variant="ghost" asChild>
-                <Link href="/books">
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Collection
-                </Link>
-            </Button>
+          <Button variant="ghost" asChild>
+            <Link href="/books">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Collection
+            </Link>
+          </Button>
         </div>
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <div className="relative shadow-2xl shadow-primary/20 rounded-lg overflow-hidden">
-                <Image
-                    src={book.imageUrl}
-                    alt={book.title}
-                    width={800}
-                    height={1200}
-                    className="w-full h-auto object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority
-                />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-3">
-                  {book.title}
-              </h1>
-               <p className="text-lg text-muted-foreground font-sans mb-3">by {book.author}</p>
-              <p className="text-4xl font-bold text-primary my-6 font-sans">
-                  Kshs {book.price.toFixed(2)}
-              </p>
-              <p className="text-foreground/80 leading-relaxed font-sans mb-10">
-                  {book.description}
-              </p>
-              
-              <AddToCart book={book} />
-            </div>
+          <div className="relative shadow-2xl shadow-primary/20 rounded-lg overflow-hidden">
+            <Image
+              src={book.imageUrl}
+              alt={book.title}
+              width={800}
+              height={1200}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-3">
+              {book.title}
+            </h1>
+            <p className="text-lg text-muted-foreground font-sans mb-3">by {book.author}</p>
+            <p className="text-4xl font-bold text-primary my-6 font-sans">
+              Kshs {book.price.toFixed(2)}
+            </p>
+            <p className="text-foreground/80 leading-relaxed font-sans mb-10">
+              {book.description}
+            </p>
+
+            <AddToCart book={book} />
+          </div>
         </div>
       </div>
     </div>
@@ -1390,14 +1423,14 @@ export default function CheckoutPage() {
 }
 
 # === app/profile/layout.tsx ===
-// === app/profile/layout.tsx (NEW FILE) ===
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { User, FileText, Home } from "lucide-react";
+// FIX: Removed 'Home' from the import list as it's not used.
+import { User, FileText } from "lucide-react"; 
 
 const sidebarNavItems = [
   { title: "My Profile", href: "/profile", icon: User },
@@ -1451,7 +1484,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 }
 
 # === app/profile/page.tsx ===
-// === app/profile/page.tsx (NEW FILE) ===
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1465,7 +1497,8 @@ export default function ProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Profile updated successfully!");
+    // FIX: Changed from toast.success to toast.info for a more appropriate notification type.
+    toast.info("Profile updated successfully!");
   }
 
   return (
@@ -1909,6 +1942,50 @@ export function BookFilters() {
   )
 }
 
+# === components/shared/BookGrid.tsx ===
+"use client";
+
+import { motion } from 'framer-motion';
+import { BookCard } from './BookCard';
+import { Book } from '@/lib/data';
+
+export function BookGrid({ books }: { books: Book[] }) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
+  return (
+    <motion.div
+      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      key={books.length} // Re-trigger animation when books change
+    >
+      {books.length > 0 ? (
+        books.map((book, index) => (
+          <motion.div key={book.id} variants={itemVariants}>
+            <BookCard book={book} priority={index < 5} />
+          </motion.div>
+        ))
+      ) : (
+        <p className="col-span-full text-center text-lg text-muted-foreground py-10">
+          No books found matching your criteria.
+        </p>
+      )}
+    </motion.div>
+  );
+}
+
 # === components/shared/BookCard.tsx ===
 import React from 'react';
 import Image from "next/image";
@@ -2022,22 +2099,24 @@ export function Footer() {
     <footer className="bg-accent text-white/80 relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
       <div className="container mx-auto relative py-16 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left max-w-5xl mx-auto">
-          <div className="md:col-span-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 max-w-7xl mx-auto">
+          
+          <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
             <Link href="/" className="inline-block">
               <Image
                 src="/logo2.png"
                 alt="Doritex Logo"
                 width={160}
                 height={45}
-                className="h-11 w-auto filter brightness-0 invert mx-auto md:mx-0"
+                className="h-11 w-auto filter brightness-0 invert mx-auto sm:mx-0"
               />
             </Link>
-            <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto md:mx-0">
+            <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto sm:mx-0">
               Your Gateway to Educational Excellence.
             </p>
           </div>
-          <div>
+
+          <div className="text-center sm:text-left">
             <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Links
             </h4>
@@ -2047,26 +2126,38 @@ export function Footer() {
               <li><Link href="/#about" className="hover:text-primary transition-colors">About Us</Link></li>
             </ul>
           </div>
-          <div>
+
+          <div className="text-center sm:text-left">
             <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Contact
             </h4>
-            <ul className="space-y-3 text-sm font-sans">
-              <li><a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">investments.doritex@gmail.com</a></li>
-              <li><a href="tel: +254 722 316 210" className="hover:text-primary transition-colors">+254 722 316 210</a></li>
+            <ul className="space-y-3 text-sm font-sans break-words">
+              <li>
+                <a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">
+                  investments.doritex@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+254722316210" className="hover:text-primary transition-colors">
+                  +254 722 316 210
+                </a>
+              </li>
             </ul>
           </div>
-          <div>
+          
+          <div className="text-center sm:text-left">
             <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
               Connect
             </h4>
-            <div className="flex space-x-4 justify-center md:justify-start">
+            <div className="flex justify-center sm:justify-start gap-4">
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Twitter size={22} /></Link>
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Facebook size={22} /></Link>
               <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Linkedin size={22} /></Link>
             </div>
           </div>
+
         </div>
+        
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
           <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
         </div>

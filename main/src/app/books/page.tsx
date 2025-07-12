@@ -1,22 +1,20 @@
-import { motion } from 'framer-motion';
-import { BookCard } from '@/components/shared/BookCard';
-import { dummyBooks, Book } from '@/lib/data';
+import { dummyBooks } from '@/lib/data';
 import { BookFilters } from '@/components/shared/BookFilters';
+import { BookGrid } from '@/components/shared/BookGrid';
 
-// This is a Server Component
-export default async function BooksPage({ searchParams }: {
-  searchParams?: {
+type Props = {
+  searchParams: Promise<{
     query?: string;
     category?: string;
-  }
-}) {
-  const query = searchParams?.query || '';
-  const category = searchParams?.category || 'All';
+  }>;
+};
 
-  // Data filtering now happens on the server
+export default async function BooksPage({ searchParams }: Props) {
+  const { query = '', category = 'All' } = await searchParams;
+
   const filteredBooks = dummyBooks.filter(book => {
     const matchesCategory = category === 'All' || book.category === category;
-    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) || 
+    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) ||
                           book.author.toLowerCase().includes(query.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -37,49 +35,10 @@ export default async function BooksPage({ searchParams }: {
               <BookFilters />
             </div>
           </div>
-          
+
           <BookGrid books={filteredBooks} />
         </div>
       </section>
     </div>
   );
-}
-
-// A new component for the book grid to keep animations contained
-function BookGrid({ books }: { books: Book[] }) {
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.05 },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1 },
-    };
-
-    return (
-        <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            key={books.length} // Re-trigger animation when books change
-        >
-            {books.length > 0 ? (
-                books.map((book, index) => (
-                    <motion.div key={book.id} variants={itemVariants}>
-                        {/* FIX: Pass the priority prop for the first 5 images */}
-                        <BookCard book={book} priority={index < 5} />
-                    </motion.div>
-                ))
-            ) : (
-                <p className="col-span-full text-center text-lg text-muted-foreground py-10">
-                    No books found matching your criteria.
-                </p>
-            )}
-        </motion.div>
-    );
 }

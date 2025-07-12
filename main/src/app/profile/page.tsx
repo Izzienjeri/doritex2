@@ -1,4 +1,3 @@
-// === app/profile/page.tsx (NEW FILE) ===
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +11,8 @@ export default function ProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Profile updated successfully!");
+    // FIX: Changed from toast.success to toast.info for a more appropriate notification type.
+    toast.info("Profile updated successfully!");
   }
 
   return (
