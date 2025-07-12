@@ -156,23 +156,6 @@ body:hover #cursor-glow {
   100% { background-position: 100% 50%; }
 }
 
-.btn-shine {
-  position: relative;
-  overflow: hidden;
-  --shine-color: rgba(255, 255, 255, 0.4);
-}
-.btn-shine::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: conic-gradient(transparent, var(--shine-color), transparent 30%);
-  animation: shine-rotate 4s linear infinite;
-}
-@keyframes shine-rotate { to { transform: rotate(360deg); } }
-
 .link-underline {
   position: relative;
   display: inline-block;

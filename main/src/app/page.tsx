@@ -85,7 +85,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 asChild
-                className="text-primary-foreground font-bold text-base h-16 px-10 rounded-full shadow-lg shadow-primary/30 btn-shine transform hover:scale-105 transition-transform duration-300"
+                className="text-primary-foreground font-bold text-base h-16 px-10 rounded-full shadow-lg shadow-primary/30"
               >
                 <Link href="/books">
                   Explore The Collection{" "}

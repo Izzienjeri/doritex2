@@ -33,7 +33,7 @@ export default function CartPage() {
           <p className="text-muted-foreground mb-8">
             Looks like you haven&rsquo;t added any books yet.
           </p>
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20">
             <Link href="/books">Explore Books</Link>
           </Button>
         </div>
@@ -77,7 +77,7 @@ export default function CartPage() {
                 <div className="flex justify-between font-bold text-xl text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>
               <CardFooter>
-                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20 btn-shine">
+                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20">
                     <Link href="/checkout">
                         Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>

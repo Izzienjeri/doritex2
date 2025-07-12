@@ -23,7 +23,7 @@ export default function OrderConfirmationPage() {
           Your order has been placed successfully. You will receive a confirmation email shortly with the order details.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20 btn-shine">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20">
                 <Link href="/books">Continue Shopping</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-full text-base font-bold">
