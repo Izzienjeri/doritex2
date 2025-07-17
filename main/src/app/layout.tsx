@@ -21,8 +21,9 @@ const fontDisplay = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "Doritex Publishing Investments",
-  description: "Your Gateway to Educational Excellence",
+  title: "Champion Creative Series | CBC Books for Kenya",
+  description:
+    "Kenya’s trusted, KICD-approved CBC Creative Arts & Sports books for Grades 1–8. Boost your child's creativity with engaging, practical activities. Order now for fast delivery nationwide.",
 };
 
 export default function RootLayout({

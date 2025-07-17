@@ -23,10 +23,12 @@ export function FeaturedBooks() {
             and inspiration.
           </p>
         </motion.div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
-          {dummyBooks.slice(0, 5).map((book) => (
-            <BookCard book={book} key={book.id} />
-          ))}
+        <div className="flex justify-center">
+            <div className="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-12">
+              {dummyBooks.slice(0, 3).map((book) => (
+                <BookCard book={book} key={book.id} />
+              ))}
+            </div>
         </div>
       </div>
     </section>

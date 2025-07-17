@@ -19,18 +19,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, ShoppingCart, User as UserIcon, Home } from "lucide-react";
+import { Menu, ShoppingCart, User as UserIcon, Home, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/books", label: "Books" },
-  { href: "/#about", label: "About" },
-];
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,24 +69,63 @@ export function Header() {
 
           <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex items-center gap-1 rounded-full bg-primary p-1.5 backdrop-blur-sm border border-white/10 shadow-md">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.label}
-                    href={link.href}
+              <Link
+                  href="/"
+                  className={cn(
+                    "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                    pathname === "/"
+                      ? "bg-white text-primary shadow"
+                      : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                  )}
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
+              </Link>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
                     className={cn(
-                      "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
-                      isActive
+                        "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                        pathname.startsWith("/books")
                         ? "bg-white text-primary shadow"
                         : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
                     )}
                   >
-                    {link.label === "Home" && <Home className="mr-2 h-4 w-4" />}
-                    {link.label}
-                  </Link>
-                );
-              })}
+                    Books
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild><Link href="/books">All Books</Link></DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild><Link href="/books?category=Lower+Primary">Lower Primary</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/books?category=Upper+Primary">Upper Primary</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/books?category=Junior+Secondary">Junior Secondary</Link></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Link
+                href="/parents"
+                className={cn(
+                  "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                  pathname === "/parents"
+                    ? "bg-white text-primary shadow"
+                    : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                )}
+              >
+                Parents Hub
+              </Link>
+              <Link
+                href="/#about"
+                className={cn(
+                  "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                  "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                )}
+              >
+                About
+              </Link>
             </div>
           </nav>
           
@@ -161,13 +194,26 @@ export function Header() {
                     <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
                   </SheetHeader>
                   <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
-                    {navLinks.map((link) => (
-                      <SheetClose asChild key={link.label}>
-                        <Link href={link.href} className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
-                            {link.label}
+                      <SheetClose asChild>
+                        <Link href="/" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            Home
                         </Link>
                       </SheetClose>
-                    ))}
+                      <SheetClose asChild>
+                        <Link href="/books" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            Books
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/parents" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            Parents Hub
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/#about" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            About
+                        </Link>
+                      </SheetClose>
                      {user && (
                         <SheetClose asChild>
                          <Link href="/profile" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">My Account</Link>
