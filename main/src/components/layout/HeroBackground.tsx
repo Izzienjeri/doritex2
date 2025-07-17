@@ -1,21 +1,22 @@
 "use client";
 
 import { motion, useMotionValue, animate } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import * as flubber from "flubber";
 
 export function HeroBackground() {
-  const wave1Paths = [
+  // Move the paths outside of the component or use useMemo to prevent recreation
+  const wave1Paths = useMemo(() => [
     "M -10,300 C 250,200 350,400 600,300 S 900,400 1010,300 V 610 H -10 Z",
     "M -10,300 C 200,250 450,350 600,300 S 850,250 1010,300 V 610 H -10 Z",
     "M -10,300 C 250,200 350,400 600,300 S 900,400 1010,300 V 610 H -10 Z",
-  ];
+  ], []);
 
-  const wave2Paths = [
+  const wave2Paths = useMemo(() => [
     "M -10,330 C 200,250 300,430 550,330 S 850,250 1010,310 V 610 H -10 Z",
     "M -10,330 C 250,300 400,380 550,330 S 800,300 1010,310 V 610 H -10 Z",
     "M -10,330 C 200,250 300,430 550,330 S 850,250 1010,310 V 610 H -10 Z",
-  ];
+  ], []);
 
   const wave1 = useMotionValue(wave1Paths[0]);
   const wave2 = useMotionValue(wave2Paths[0]);
@@ -56,7 +57,7 @@ export function HeroBackground() {
 
     loopWave(wave1Interpolators, wave1, (v) => (wave1Index = v), () => wave1Index);
     loopWave(wave2Interpolators, wave2, (v) => (wave2Index = v), () => wave2Index);
-  }, []);
+  }, [wave1Paths, wave2Paths, wave1, wave2]);
 
   return (
     <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-primary">
