@@ -28,44 +28,39 @@ export function BookCard({ book, priority = false }: BookCardProps) {
   return (
     <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
       <Card className={cn(
-        "flex flex-col overflow-hidden rounded-xl bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
-        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2",
-        "h-full w-full"
+        "flex h-full w-full flex-col overflow-hidden rounded-xl",
+        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
       )}>
         <CardHeader className="p-0 relative">
-          <div className="aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden rounded-t-xl">
-            <Image
-              src={book.imageUrl}
-              alt={book.title}
-              width={250}
-              height={320}
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-              priority={priority}
-            />
+          <div className="aspect-[4/5] w-full overflow-hidden rounded-t-xl">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={300}
+                height={375}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                priority={priority}
+              />
           </div>
-
-          {/* Badges */}
+           {/* Badges Overlay */}
           <div className="absolute top-2 left-2 flex flex-col gap-1.5">
-            <Badge className="bg-green-100/90 hover:bg-green-100 text-green-800 border border-green-200/50 text-[10px] sm:text-xs font-bold shadow">
-              <ShieldCheck className="mr-1 h-3 w-3" /> KICD Approved
-            </Badge>
-            <Badge className="bg-yellow-100/90 hover:bg-yellow-100 text-yellow-800 border border-yellow-200/50 text-[10px] sm:text-xs font-bold shadow">
-              <Star className="mr-1 h-3 w-3" /> Top Seller
-            </Badge>
+              <Badge className="bg-green-100/90 hover:bg-green-100 text-green-800 border border-green-200/50 text-xs font-bold shadow">
+                  <ShieldCheck className="mr-1 h-3 w-3" /> KICD Approved
+              </Badge>
+              <Badge className="bg-yellow-100/90 hover:bg-yellow-100 text-yellow-800 border border-yellow-200/50 text-xs font-bold shadow">
+                  <Star className="mr-1 h-3 w-3" /> Top Seller
+              </Badge>
           </div>
         </CardHeader>
-
-        <CardContent className="p-2 sm:p-3 flex flex-col bg-transparent">
-          <CardTitle className="text-xs sm:text-sm font-semibold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">
-            {book.title}
-          </CardTitle>
+        <CardContent className="flex-grow p-3 flex flex-col bg-transparent">
+          <CardTitle className="text-sm font-bold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
         </CardContent>
-
-        <CardFooter className="flex justify-between items-center px-2 pt-1 pb-2 sm:p-3 bg-transparent">
-          <p className="text-xs sm:text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
+        <CardFooter className="flex justify-between items-center p-3 pt-1 bg-transparent">
+          <p className="text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
           <Button
             size="icon"
-            className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-8 w-8 sm:h-9 sm:w-9 shrink-0"
+            className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
             onClick={handleAddToCart}
             aria-label="Add to cart"
           >

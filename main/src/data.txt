@@ -1,11 +1,31 @@
-Of course! I understand. Large cards can definitely feel overwhelming on a smaller screen.
+You've hit on a key layout issue. The single column on mobile for the featured books was indeed incorrect, and the previous size adjustments weren't quite right. My apologies for that!
 
-I've made some adjustments to reduce the size of the book cards, particularly their height, to create a more compact and scannable layout on mobile. Here’s what I did:
+I've made two targeted changes to fix this:
 
-1.  **Adjusted Image Aspect Ratio:** I changed the aspect ratio of the book cover images from a tall `2:3` to a slightly wider `4:5`. This makes the cards shorter and feel less "big" without shrinking the text or making them too narrow.
-2.  **Reduced Vertical Gaps:** I've decreased the vertical spacing between the rows of books in the grid. This tightens up the layout, making it more compact and allowing users to see more books without excessive scrolling.
+1.  **Corrected the Grid Layout:** I've updated the `FeaturedBooks` component to use a **two-column grid** on mobile and tablet, which then expands to three columns on larger screens. This fixes the single-column problem.
+2.  **Standardized Card Size:** I've adjusted the `BookCard` component to use a consistent and more compact aspect ratio (`4:5`) across all screen sizes. This prevents the cards from being overly tall on mobile and simplifies the responsive styling for a cleaner look.
 
-Here is the complete updated code for the affected files:
+These changes ensure the featured books are displayed in a neat, responsive grid that looks great on any device.
+
+Here is the complete updated code for the two files I modified:
+
+### `components/shared/FeaturedBooks.tsx`
+```tsx
+"use client";
+
+import { dummyBooks } from '@/lib/data';
+import { BookCard } from './BookCard';
+
+export function FeaturedBooks() {
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+      {dummyBooks.slice(0, 3).map((book) => (
+        <BookCard book={book} key={book.id} />
+      ))}
+    </div>
+  );
+}
+```
 
 ### `components/shared/BookCard.tsx`
 ```tsx
@@ -84,50 +104,4 @@ export function BookCard({ book, priority = false }: BookCardProps) {
 }
 ```
 
-### `components/shared/BookGrid.tsx`
-```tsx
-"use client";
-
-import { motion } from 'framer-motion';
-import { BookCard } from './BookCard';
-import { Book } from '@/lib/data';
-
-export function BookGrid({ books }: { books: Book[] }) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 },
-  };
-
-  return (
-    <motion.div
-      className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      key={books.length} // Re-trigger animation when books change
-    >
-      {books.length > 0 ? (
-        books.map((book, index) => (
-          <motion.div key={book.id} variants={itemVariants}>
-            <BookCard book={book} priority={index < 5} />
-          </motion.div>
-        ))
-      ) : (
-        <p className="col-span-full text-center text-lg text-muted-foreground py-10">
-          No books found matching your criteria.
-        </p>
-      )}
-    </motion.div>
-  );
-}
-```
-
-These changes should give you the more compact and manageable card size you're looking for, especially on mobile devices. Let me know if you have any other questions
+This should resolve both the column layout and the sizing issue for the featured books. Let me know if you have any other questions
