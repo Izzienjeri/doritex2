@@ -19,12 +19,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, ShoppingCart, User as UserIcon } from "lucide-react";
+import { Menu, ShoppingCart, User as UserIcon, Home } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -35,6 +35,7 @@ const navLinks = [
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const { state } = useCart();
   const { user, logout } = useAuth(); // Use auth context
   const cartItemCount = state.items.reduce(
@@ -72,16 +73,27 @@ export function Header() {
             <BrandLogo />
           </div>
 
-          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="text-base font-medium text-foreground/70 transition-colors hover:text-foreground link-underline"
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="flex items-center gap-1 rounded-full bg-primary p-1.5 backdrop-blur-sm border border-white/10 shadow-md">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={cn(
+                      "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                      isActive
+                        ? "bg-white text-primary shadow"
+                        : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                    )}
+                  >
+                    {link.label === "Home" && <Home className="mr-2 h-4 w-4" />}
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
           </nav>
           
           <div className="flex items-center gap-4">

@@ -1,33 +1,96 @@
-npm run build
+✅ SECTION 1: 📍 Homepage Hero Section
+Position: Top of homepage
 
-> main@0.1.0 build
-> next build
+Purpose: Grab attention + trust + show value immediately.
 
-   ▲ Next.js 15.3.5
+plaintext
+Copy
+Edit
+📘 Champion Creative Series  
+Kenya’s Trusted CBC Creative Arts Books for Grades 1–8  
+✅ KICD-approved | 🎨 CBC-aligned | 🚀 Boosts creativity  
+📦 Fast delivery across Kenya | 📞 Call/WhatsApp to order  
+🟢 Add a “Shop Now” CTA below
 
-   Creating an optimized production build ...
- ✓ Compiled successfully in 7.0s
 
-Failed to compile.
+✅ SECTION 2: 📍 Book Card or Detail Page (Below the Description)
+Purpose: Show clearly who the book is for and why it matters.
 
-./src/app/cart/page.tsx
-5:10  Error: 'Input' is defined but never used.  @typescript-eslint/no-unused-vars
-34:73  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+Add these bullets on each book page (or card preview if space allows):
 
-./src/app/checkout/page.tsx
-2:8  Error: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+plaintext
+Copy
+Edit
+🎯 Perfect for:  
+- Parents supporting home learning  
+- Teachers using CBC creative arts  
+- Schools ordering for term 1–3
 
-./src/app/login/page.tsx
-37:18  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+✅ Why choose this book:  
+- CBC-aligned and approved by KICD  
+- Builds creativity, critical thinking, and expression  
+- Includes engaging, practical activities  
+- Easy to use at home or in class
+🔵 Show KICD badge
+🔵 Add a small tag like 📘 Used in 120+ Kenyan schools
 
-./src/app/page.tsx
-4:28  Error: 'dummyCategories' is defined but never used.  @typescript-eslint/no-unused-vars
-5:22  Error: 'BookOpen' is defined but never used.  @typescript-eslint/no-unused-vars
-5:59  Error: 'Lightbulb' is defined but never used.  @typescript-eslint/no-unused-vars
-5:70  Error: 'TrendingUp' is defined but never used.  @typescript-eslint/no-unused-vars
-69:6  Warning: React Hook useEffect has a missing dependency: 'paginate'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
 
-./src/components/ui/input.tsx
-4:18  Error: An interface declaring no members is equivalent to its supertype.  @typescript-eslint/no-empty-object-type
+✅ SECTION 3: 📍 Testimonials Strip (Homepage or Footer)
+Purpose: Build social proof from teachers and parents.
 
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+Design: 3 short quotes with name & role (real or placeholder)
+
+plaintext
+Copy
+Edit
+🗣️ What Our Customers Say
+
+❝ These books are a must-have. We order every term. ❞  
+– Mr. Otieno, Headteacher, Kisumu
+
+❝ My daughter loves the Grade 4 activities — she's learning and having fun. ❞  
+– Sarah, Parent, Nairobi
+
+❝ CBC made easy. Champion Books are the real deal. ❞  
+– Mrs. Kamau, Teacher, Kiambu
+
+
+✅ SECTION 4: 📍 About the Publisher Section
+Position: Mid-page or separate /about page
+
+plaintext
+Copy
+Edit
+🎓 About Champion Publishers  
+
+We are a Kenyan-owned publishing company with over 10 years of experience creating quality, engaging, CBC-aligned content.  
+Our Champion Creative Series is fully approved by KICD and trusted by hundreds of schools across Kenya.
+
+🏆 CBC-aligned | ✅ KICD Approved | 🚚 Delivered Nationwide  
+🔵 Include:
+
+Year founded
+
+Image of office or team
+
+✅ SECTION 6: 📍 Blog / Articles Section (Name it: "CBC Parent Tips" or “Parent Hub”)
+URL: /cbc-parent-tips
+
+Each article title should solve real parent pain points:
+
+📝 Example Articles:
+What is CBC? A Simple Guide for Kenyan Parents
+
+How to Support Your Child’s Creative Learning at Home
+
+What to Expect in Creative Arts from Grade 1–8
+
+Top 5 Creative Activities to Try at Home
+
+How to Know if a Book Is KICD Approved
+
+Each article should be:
+
+300–500 words max
+
+End with a CTA: “📘 Looking for the right book? [Shop Champion Series]”

@@ -31,11 +31,13 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <HeroBackground />
-
-        <div className="container relative z-10 mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
+      <section className="container mx-auto px-4 py-16 md:py-24">
+        <div
+          className="relative flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-primary text-center shadow-2xl shadow-primary/20 md:rounded-3xl border border-white/10"
+          style={{ backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px)', backgroundSize: '1.5rem 1.5rem' }}
+        >
+          <HeroBackground />
+          <div className="relative z-10 mx-auto max-w-4xl px-4 py-20 sm:py-28 md:py-36">
             <motion.h1
               className="text-5xl sm:text-7xl font-bold tracking-tighter md:text-8xl !text-white"
               style={{ textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}
