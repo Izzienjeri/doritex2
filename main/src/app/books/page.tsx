@@ -36,7 +36,7 @@ export default async function BooksPage({ searchParams }: Props) {
             </div>
           </div>
 
-          <div className="flex justify-center">
+          <div className="grid justify-items-center">
             <BookGrid books={filteredBooks} />
           </div>
         </div>

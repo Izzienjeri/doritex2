@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { BookOpenCheck, BrainCircuit, Home, Smile } from "lucide-react";
 
 const features = [
@@ -52,7 +52,7 @@ export default function ParentsHubPage() {
                 <div className="container mx-auto px-4">
                     <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-primary">Parents Hub</h1>
                     <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-                        Your partner in nurturing a creative and confident learner. Discover resources, tips, and answers to help you support your child's educational journey with the Champion Creative Series.
+                        Your partner in nurturing a creative and confident learner. Discover resources, tips, and answers to help you support your child&apos;s educational journey with the Champion Creative Series.
                     </p>
                 </div>
             </section>
@@ -63,7 +63,7 @@ export default function ParentsHubPage() {
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Why Parents & Teachers Trust Our Books</h2>
                         <p className="mt-4 text-lg text-muted-foreground">
-                            We're committed to providing educational materials that are not only effective but also inspiring and easy to use.
+                            We&apos;re committed to providing educational materials that are not only effective but also inspiring and easy to use.
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -88,7 +88,7 @@ export default function ParentsHubPage() {
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Frequently Asked Questions</h2>
                         <p className="mt-4 text-lg text-muted-foreground">
-                            Have questions? We've got answers. Here are some of the most common things parents ask us.
+                            Have questions? We&apos;ve got answers. Here are some of the most common things parents ask us.
                         </p>
                     </div>
                     <div className="max-w-3xl mx-auto">
