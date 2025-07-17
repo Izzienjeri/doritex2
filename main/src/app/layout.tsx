@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
+import { MobileFAB } from "@/components/layout/MobileFAB";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
+            <MobileFAB />
             <Toaster richColors closeButton />
           </CartProvider>
         </AuthProvider>

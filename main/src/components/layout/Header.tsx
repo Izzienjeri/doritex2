@@ -3,15 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-  SheetClose
-} from "@/components/ui/sheet";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -19,19 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, ShoppingCart, User as UserIcon, Home, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ShoppingCart, User as UserIcon, Home, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const { state } = useCart();
-  const { user, logout } = useAuth(); // Use auth context
+  const { user, logout } = useAuth();
   const cartItemCount = state.items.reduce(
     (sum, item) => sum + item.quantity,
     0
@@ -43,7 +32,7 @@ export function Header() {
   }
 
   const BrandLogo = () => (
-    <Link href="/" className="flex items-center" onClick={() => isOpen && setIsOpen(false)}>
+    <Link href="/" className="flex items-center">
       <Image
         src="/logo2.png"
         alt="Doritex Logo"
@@ -58,7 +47,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
+        "sticky top-0 z-30 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
       )}
     >
       <div className="container mx-auto px-4">
@@ -67,6 +56,7 @@ export function Header() {
             <BrandLogo />
           </div>
 
+          {/* --- DESKTOP NAVIGATION --- */}
           <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex items-center gap-1 rounded-full bg-primary p-1.5 backdrop-blur-sm border border-white/10 shadow-md">
               <Link
@@ -129,8 +119,8 @@ export function Header() {
             </div>
           </nav>
           
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center gap-2">
+          {/* --- DESKTOP ACTIONS (Hidden on Mobile) --- */}
+          <div className="hidden lg:flex items-center gap-4">
               {user ? (
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -166,7 +156,6 @@ export function Header() {
                   </Button>
                 </>
               )}
-            </div>
 
             <Button variant="outline" size="icon" className="rounded-full relative flex-shrink-0 bg-white/50" asChild>
               <Link href="/cart">
@@ -179,60 +168,6 @@ export function Header() {
                 <span className="sr-only">Shopping Cart</span>
               </Link>
             </Button>
-            
-            <div className="lg:hidden">
-              <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" className="rounded-full bg-white/50">
-                    <Menu className="h-6 w-6" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0">
-                  <SheetHeader className="p-6 border-b">
-                    <SheetTitle asChild><Link href="/" onClick={() => setIsOpen(false)}><Image src="/logo2.png" alt="Doritex Logo" width={200} height={56} className="h-14 w-auto" /></Link></SheetTitle>
-                    <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
-                  </SheetHeader>
-                  <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
-                      <SheetClose asChild>
-                        <Link href="/" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
-                            Home
-                        </Link>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <Link href="/books" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
-                            Books
-                        </Link>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <Link href="/parents" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
-                            Parents Hub
-                        </Link>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <Link href="/#about" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
-                            About
-                        </Link>
-                      </SheetClose>
-                     {user && (
-                        <SheetClose asChild>
-                         <Link href="/profile" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">My Account</Link>
-                        </SheetClose>
-                     )}
-                  </nav>
-                  <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
-                    {user ? (
-                        <Button variant="destructive" size="lg" className="h-12 text-base" onClick={() => { handleLogout(); setIsOpen(false); }}>Logout</Button>
-                    ) : (
-                        <>
-                            <SheetClose asChild><Button asChild variant="outline" size="lg" className="h-12 text-base"><Link href="/login">Login</Link></Button></SheetClose>
-                            <SheetClose asChild><Button asChild size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold"><Link href="/register">Sign Up</Link></Button></SheetClose>
-                        </>
-                    )}
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
           </div>
         </div>
       </div>

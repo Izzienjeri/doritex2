@@ -20,7 +20,7 @@ export function BookGrid({ books }: { books: Book[] }) {
 
   return (
     <motion.div
-      className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
+      className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

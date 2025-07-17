@@ -12,40 +12,42 @@ export default function AdminOrdersPage() {
                 <CardDescription>View customer orders and update their status.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Order ID</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Customer</TableHead>
-                            <TableHead>Total</TableHead>
-                            <TableHead>Status</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {dummyOrders.map(order => (
-                            <TableRow key={order.id}>
-                                <TableCell className="font-medium">{order.id}</TableCell>
-                                <TableCell>{order.date}</TableCell>
-                                <TableCell>Valued Customer</TableCell>
-                                <TableCell>Kshs {order.total.toFixed(2)}</TableCell>
-                                <TableCell>
-                                    <Select defaultValue={order.status}>
-                                        <SelectTrigger className="w-[120px]">
-                                            <SelectValue placeholder="Status" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Placed">Placed</SelectItem>
-                                            <SelectItem value="Processing">Processing</SelectItem>
-                                            <SelectItem value="Shipped">Shipped</SelectItem>
-                                            <SelectItem value="Delivered">Delivered</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </TableCell>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Order ID</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Customer</TableHead>
+                                <TableHead>Total</TableHead>
+                                <TableHead>Status</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {dummyOrders.map(order => (
+                                <TableRow key={order.id}>
+                                    <TableCell className="font-medium">{order.id}</TableCell>
+                                    <TableCell>{order.date}</TableCell>
+                                    <TableCell>Valued Customer</TableCell>
+                                    <TableCell>Kshs {order.total.toFixed(2)}</TableCell>
+                                    <TableCell>
+                                        <Select defaultValue={order.status}>
+                                            <SelectTrigger className="w-[120px]">
+                                                <SelectValue placeholder="Status" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Placed">Placed</SelectItem>
+                                                <SelectItem value="Processing">Processing</SelectItem>
+                                                <SelectItem value="Shipped">Shipped</SelectItem>
+                                                <SelectItem value="Delivered">Delivered</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </CardContent>
         </Card>
     )

@@ -63,6 +63,7 @@
   --secondary-foreground: #ffffff;
 
   --accent: #0099FF;
+  --accent-rgb: 0, 153, 255;
   --accent-foreground: #ffffff;
 
   --muted: #F0F4FF;
@@ -193,4 +194,18 @@ body:hover #cursor-glow {
   100% {
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   }
+}
+
+/* --- ADDED FOR FAB PULSE ANIMATION --- */
+@keyframes pulse-fab {
+  0%, 100% {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 0 rgba(var(--accent-rgb), 0.5);
+  }
+  50% {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 1rem rgba(var(--accent-rgb), 0);
+  }
+}
+
+.animate-pulse-fab {
+  animation: pulse-fab 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }

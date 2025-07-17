@@ -1,380 +1,133 @@
-Of course. You're right, consistency is key. I've adjusted the "Featured Publications" section to align its width with the other content blocks on the page, creating a more harmonious and professional layout.
+Of course! I understand. Large cards can definitely feel overwhelming on a smaller screen.
 
-Here are the specific changes:
+I've made some adjustments to reduce the size of the book cards, particularly their height, to create a more compact and scannable layout on mobile. Here’s what I did:
 
-1.  **Width Alignment**: In `app/page.tsx`, I've changed the section's grid from a simple 2-column layout to a 12-column system (on medium screens and up). The content now resides in a container that spans 7 of these 12 columns, which precisely matches the width of content blocks in the "Why Choose Us" and "About Us" sections.
-2.  **Responsive Book Grid**: In `components/shared/FeaturedBooks.tsx`, I've made the 3-column book layout appear on large screens (`lg`) instead of just extra-large screens (`xl`). This ensures the featured books look well-proportioned and balanced within their new, correctly-sized container.
+1.  **Adjusted Image Aspect Ratio:** I changed the aspect ratio of the book cover images from a tall `2:3` to a slightly wider `4:5`. This makes the cards shorter and feel less "big" without shrinking the text or making them too narrow.
+2.  **Reduced Vertical Gaps:** I've decreased the vertical spacing between the rows of books in the grid. This tightens up the layout, making it more compact and allowing users to see more books without excessive scrolling.
 
-These adjustments ensure a cohesive visual flow down the entire page.
+Here is the complete updated code for the affected files:
 
-### `app/page.tsx`
-
+### `components/shared/BookCard.tsx`
 ```tsx
-"use client";
-
-import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  BookCheck,
-  CheckCircle,
-  Rocket,
-  Smartphone,
-  Truck,
-  Heart,
-  Target,
-  Lightbulb,
-} from "lucide-react";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { HeroBackground } from "@/components/layout/HeroBackground";
-import dynamic from "next/dynamic";
+import React from 'react';
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book } from "@/lib/data";
+import { useCart } from "@/context/CartContext";
+import { ShoppingCart, ShieldCheck, Star } from "lucide-react";
+import { toast } from "sonner";
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
-// Dynamically import the FeaturedBooks component for better performance
-const FeaturedBooks = dynamic(
-  () =>
-    import("@/components/shared/FeaturedBooks").then(
-      (mod) => mod.FeaturedBooks
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-96 w-full flex items-center justify-center bg-muted/30 rounded-xl">
-        <p className="text-muted-foreground">Loading publications...</p>
-      </div>
-    ),
-  }
-);
+interface BookCardProps {
+  book: Book;
+  priority?: boolean;
+}
 
-export default function HomePage() {
-  const whyChooseUsPoints = [
-    {
-      icon: CheckCircle,
-      title: "KICD Approved",
-      description: "Our content is 100% CBC-aligned and fully approved, ensuring quality and relevance for Kenyan learners.",
-    },
-    {
-      icon: Lightbulb,
-      title: "Fosters Real Creativity",
-      description: "We go beyond textbooks with practical, hands-on activities that build critical thinking and innovation.",
-    },
-    {
-      icon: Heart,
-      title: "Makes Learning Fun",
-      description: "With engaging illustrations and exciting tasks, we turn education into an adventure children love.",
-    },
-  ];
+export function BookCard({ book, priority = false }: BookCardProps) {
+  const { dispatch } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({ type: "ADD_ITEM", payload: { ...book, quantity: 1 } });
+    toast.success(`${book.title} added to cart!`);
+  };
 
   return (
-    <div className="flex flex-col overflow-x-hidden bg-background">
-      {/* HERO SECTION */}
-      <section className="container mx-auto px-4 pt-24 pb-16 md:pt-40 md:pb-32">
-        <div
-          className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-primary text-center shadow-xl shadow-primary/30 border border-white/10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
-            backgroundSize: "1.5rem 1.5rem",
-          }}
-        >
-          <HeroBackground />
-          <div className="relative z-10 max-w-4xl px-4 py-28 md:py-40">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="text-4xl sm:text-5xl font-bold tracking-tight md:text-6xl text-white drop-shadow-lg"
-            >
-              📘 Champion Creative Series
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="mt-6 text-xl md:text-2xl max-w-2xl mx-auto text-white/90 uppercase tracking-wider"
-            >
-              Kenya’s Trusted CBC Creative Arts Books for Grades 1–8
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-white/80 font-medium"
-            >
-              <span className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-accent" /> KICD-approved
-              </span>
-              <span className="hidden sm:inline">|</span>
-              <span className="flex items-center gap-2">
-                <BookCheck className="h-5 w-5 text-accent" /> CBC-aligned
-              </span>
-              <span className="hidden sm:inline">|</span>
-              <span className="flex items-center gap-2">
-                <Rocket className="h-5 w-5 text-accent" /> Boosts creativity
-              </span>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-10 flex flex-col items-center gap-6"
-            >
-              <Button
-                size="lg"
-                asChild
-                className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold h-16 px-10 text-lg rounded-full shadow-lg shadow-accent/30 transition-transform hover:scale-105"
-              >
-                <Link href="/books">
-                  Explore The Books <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <p className="text-sm text-white/70 flex items-center gap-4">
-                <span className="flex items-center gap-1.5">
-                  <Truck className="h-4 w-4" /> Fast delivery across Kenya
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Smartphone className="h-4 w-4" /> Call/WhatsApp to order
-                </span>
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* === START: NEW FEATURED PUBLICATIONS SECTION === */}
-      <section
-        id="publications"
-        className="relative py-24 md:py-32 bg-cover bg-no-repeat bg-left-top"
-        style={{ backgroundImage: "url('/original_image.jpg')" }}
-      >
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            {/* Spacer column, hidden on mobile to allow content to be full-width */}
-            <div className="hidden md:block md:col-span-5"></div>
-
-            {/* Content column, now aligned to other sections with md:col-span-7 */}
-            <div className="md:col-span-7">
-              <div className="bg-white/50 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30">
-                <motion.div
-                  className="max-w-3xl"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                >
-                  <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary mb-4">
-                    Our Featured Publications
-                  </h2>
-                  <p className="text-lg text-foreground/90 leading-relaxed">
-                    Explore our KICD-approved collection, designed to spark
-                    creativity and make learning an exciting adventure for every
-                    student in Kenya.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  className="mt-12"
-                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-                >
-                  <FeaturedBooks />
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* === END: NEW FEATURED PUBLICATIONS SECTION === */}
-
-      {/* WHY CHOOSE US Section */}
-      <section className="py-24 md:py-32">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            <motion.div
-              className="relative w-full h-[400px] md:h-[500px] lg:col-span-5"
-              initial={{ opacity: 0, x: -80, scale: 0.8 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
+    <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
+      <Card className={cn(
+        "flex h-full w-full flex-col overflow-hidden rounded-xl",
+        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
+      )}>
+        <CardHeader className="p-0 relative">
+          <div className="aspect-[4/5] w-full overflow-hidden rounded-t-xl">
               <Image
-                src="/1.jpg"
-                alt="A happy Kenyan student participating in creative activities"
-                fill
-                className="object-cover"
-                style={{ clipPath: "url(#shape-blob-left)" }}
-                sizes="(max-width: 1024px) 90vw, 40vw"
+                src={book.imageUrl}
+                alt={book.title}
+                width={300}
+                height={375}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                priority={priority}
               />
-            </motion.div>
-            <div className="text-center md:text-left lg:col-span-7 lg:-ml-12 relative z-10">
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold tracking-tight mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                Built for the Modern Learner
-              </motion.h2>
-              <ul className="space-y-8">
-                {whyChooseUsPoints.map((point, i) => (
-                  <motion.li
-                    key={i}
-                    className="flex flex-col sm:flex-row items-center sm:items-start gap-4"
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.15 }}
-                  >
-                    <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full">
-                      <point.icon className="h-6 w-6" />
-                    </div>
-                    <div className="flex-grow">
-                      <h3 className="text-xl font-bold">{point.title}</h3>
-                      <p className="text-muted-foreground mt-1">{point.description}</p>
-                    </div>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* ABOUT Section */}
-      <section id="about" className="py-24 md:py-32 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            <div className="lg:order-last text-center md:text-left lg:col-span-7 lg:-mr-12 relative z-10">
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold tracking-tight mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                Our Mission & Vision
-              </motion.h2>
-              <motion.p
-                className="text-lg text-muted-foreground leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                Doritex Publishers is a proudly Kenyan-owned company with over a decade of experience. Our mission is to create high-quality, affordable, and engaging educational materials that empower the next generation of creative thinkers and problem-solvers.
-              </motion.p>
-              <motion.div
-                className="mt-8 flex justify-center md:justify-start flex-wrap gap-4 font-semibold text-primary"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <span className="flex items-center gap-2"><BookCheck className="h-5 w-5" /> CBC-aligned</span>
-                <span className="flex items-center gap-2"><CheckCircle className="h-5 w-5" /> KICD Approved</span>
-                <span className="flex items-center gap-2"><Truck className="h-5 w-5" /> Nationwide Delivery</span>
-              </motion.div>
-            </div>
-            <motion.div
-              className="relative w-full h-[400px] md:h-[500px] lg:col-span-5"
-              initial={{ opacity: 0, x: 80, scale: 0.8 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <Image
-                src="/2.jpg"
-                alt="A teacher guiding students in a classroom"
-                fill
-                className="object-cover"
-                style={{ clipPath: "url(#shape-blob-right)" }}
-                sizes="(max-width: 1024px) 90vw, 40vw"
-              />
-            </motion.div>
+           {/* Badges Overlay */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1.5">
+              <Badge className="bg-green-100/90 hover:bg-green-100 text-green-800 border border-green-200/50 text-xs font-bold shadow">
+                  <ShieldCheck className="mr-1 h-3 w-3" /> KICD Approved
+              </Badge>
+              <Badge className="bg-yellow-100/90 hover:bg-yellow-100 text-yellow-800 border border-yellow-200/50 text-xs font-bold shadow">
+                  <Star className="mr-1 h-3 w-3" /> Top Seller
+              </Badge>
           </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-24 md:py-32 bg-dot-grid">
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+        </CardHeader>
+        <CardContent className="flex-grow p-3 flex flex-col bg-transparent">
+          <CardTitle className="text-sm font-bold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
+        </CardContent>
+        <CardFooter className="flex justify-between items-center p-3 pt-1 bg-transparent">
+          <p className="text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
+          <Button
+            size="icon"
+            className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
+            onClick={handleAddToCart}
+            aria-label="Add to cart"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-              Loved by Parents and Teachers
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Don't just take our word for it. Here's what people are saying.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
-            {[
-              { name: "Mrs. Kamau", role: "Parent, Grade 3", quote: "The Champion Creative book is fantastic! My son is always excited to do the activities, and it has really boosted his confidence in art." },
-              { name: "Mr. Otieno", role: "Teacher, Upper Primary", quote: "As an educator, I appreciate how well-structured and aligned with the CBC curriculum these books are. They are a valuable resource in my classroom." },
-              { name: "Sarah W.", role: "Parent, Grade 1 & 4", quote: "We have the books for both our children. The quality is excellent, and the delivery was so fast. Highly recommended for any parent." }
-            ].map((testimonial, i) => (
-              <motion.figure
-                key={i}
-                className="bg-white/80 backdrop-blur-sm border rounded-2xl p-8 shadow-lg transition-all duration-300 ease-out"
-                initial={{ opacity: 0, y: 40, scale: 0.9, rotate: i === 1 ? 0 : (i === 0 ? -5 : 5) }}
-                whileInView={{ opacity: 1, y: 0, scale: 1, rotate: i === 1 ? 2 : (i === 0 ? -2 : 3) }}
-                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 * i }}
-              >
-                <blockquote className="text-lg text-foreground/80 italic">
-                  <p>❝ {testimonial.quote} ❞</p>
-                </blockquote>
-                <figcaption className="mt-6">
-                  <p className="font-bold text-primary">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                </figcaption>
-              </motion.figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Hidden SVG definitions for blob clip-paths */}
-      <svg className="absolute w-0 h-0">
-        <defs>
-          <clipPath id="shape-blob-left" clipPathUnits="objectBoundingBox">
-            <path d="M0.81,0.11 C0.93,0.25,0.97,0.5,0.92,0.69 C0.87,0.88,0.72,1.01,0.54,1.02 C0.35,1.03,0.13,0.92,0.04,0.74 C-0.05,0.56,-0.02,0.3,0.11,0.16 C0.24,0.02,0.51,-0.06,0.68,0.03 C0.77,0.08,0.81,0.11,0.81,0.11 Z"></path>
-          </clipPath>
-          <clipPath id="shape-blob-right" clipPathUnits="objectBoundingBox">
-            <path d="M0.11,0.15 C0.25,0.03,0.48,-0.02,0.65,0.04 C0.82,0.1,0.93,0.27,0.95,0.46 C0.97,0.65,0.9,0.84,0.77,0.94 C0.64,1.04,0.44,1.05,0.27,0.97 C0.1,0.89,-0.04,0.72,0,0.52 C0.04,0.32,0.08,0.2,0.11,0.15 Z"></path>
-          </clipPath>
-        </defs>
-      </svg>
-    </div>
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }
 ```
 
-### `components/shared/FeaturedBooks.tsx`
-
+### `components/shared/BookGrid.tsx`
 ```tsx
 "use client";
 
-import { dummyBooks } from '@/lib/data';
+import { motion } from 'framer-motion';
 import { BookCard } from './BookCard';
+import { Book } from '@/lib/data';
 
-export function FeaturedBooks() {
+export function BookGrid({ books }: { books: Book[] }) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
   return (
-    // Changed xl:grid-cols-3 to lg:grid-cols-3 to make the 3-column layout appear sooner
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {dummyBooks.slice(0, 3).map((book) => (
-        <BookCard book={book} key={book.id} />
-      ))}
-    </div>
+    <motion.div
+      className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      key={books.length} // Re-trigger animation when books change
+    >
+      {books.length > 0 ? (
+        books.map((book, index) => (
+          <motion.div key={book.id} variants={itemVariants}>
+            <BookCard book={book} priority={index < 5} />
+          </motion.div>
+        ))
+      ) : (
+        <p className="col-span-full text-center text-lg text-muted-foreground py-10">
+          No books found matching your criteria.
+        </p>
+      )}
+    </motion.div>
   );
 }
 ```
+
+These changes should give you the more compact and manageable card size you're looking for, especially on mobile devices. Let me know if you have any other questions

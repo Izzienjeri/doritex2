@@ -6,7 +6,6 @@ import {
   BookCheck,
   CheckCircle,
   Rocket,
-  Smartphone,
   Truck,
   Heart,
   Lightbulb,
@@ -109,7 +108,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 asChild
-                className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold h-16 px-10 text-lg rounded-full shadow-lg shadow-accent/30 transition-transform hover:scale-105"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-16 px-10 text-lg rounded-full shadow-lg shadow-primary/30 transition-transform hover:scale-105"
               >
                 <Link href="/books">
                   Explore The Books <ArrowRight className="ml-2 h-5 w-5" />
@@ -118,9 +117,6 @@ export default function HomePage() {
               <p className="text-sm text-white/70 flex items-center gap-4">
                 <span className="flex items-center gap-1.5">
                   <Truck className="h-4 w-4" /> Fast delivery across Kenya
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Smartphone className="h-4 w-4" /> Call/WhatsApp to order
                 </span>
               </p>
             </motion.div>
@@ -310,9 +306,9 @@ export default function HomePage() {
               <motion.figure
                 key={i}
                 className="bg-white/80 backdrop-blur-sm border rounded-2xl p-8 shadow-lg transition-all duration-300 ease-out"
-                initial={{ opacity: 0, y: 40, scale: 0.9, rotate: i === 1 ? 0 : (i === 0 ? -5 : 5) }}
-                whileInView={{ opacity: 1, y: 0, scale: 1, rotate: i === 1 ? 2 : (i === 0 ? -2 : 3) }}
-                whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
+                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                whileHover={{ scale: 1.05, zIndex: 10 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 * i }}
               >
