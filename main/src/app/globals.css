@@ -46,34 +46,33 @@
 :root {
   --radius: 0.75rem;
 
-  /* A fresh, modern take on the blue and white palette */
-  --background: #f7f9ff; /* A slightly cooler, airy white */
-  --foreground: #1e2a78; /* A deeper, richer navy for text */
+  --background: #F5F8FF;
+  --foreground: #0F1F68;
 
-  --card: #ffffff; /* Pure white for the base of our glass effect */
+  --card: #ffffff;
   --card-foreground: #2b2b2b;
 
   --popover: #ffffff;
-  --popover-foreground: #1e2a78;
+  --popover-foreground: #0F1F68;
 
-  --primary: #0077B6; /* A darker, professional blue */
-  --primary-rgb: 0, 119, 182;
+  --primary: #0F1F68;
+  --primary-rgb: 15, 31, 104;
   --primary-foreground: #ffffff;
 
-  --secondary: #4a7de0; /* A brighter, more energetic blue */
+  --secondary: #0099FF; /* Using accent color */
   --secondary-foreground: #ffffff;
 
-  --accent: #2e3192; /* The classic, deep blue for strong accents */
+  --accent: #0099FF;
   --accent-foreground: #ffffff;
 
-  --muted: #edf2f7;
-  --muted-foreground: #5a67a0;
+  --muted: #F0F4FF;
+  --muted-foreground: #3B4B9A;
 
   --destructive: hsl(0 84.2% 60.2%); 
 
-  --border: rgba(46, 49, 146, 0.15); /* A subtle, color-matched border */
+  --border: rgba(15, 31, 104, 0.15); /* Based on new primary */
   --input: #ffffff;
-  --ring: #00a9e8;
+  --ring: #0099FF;
 }
 
 @layer base {
@@ -100,7 +99,7 @@ body::before {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background-image: radial-gradient(circle at 15% 20%, rgba(var(--primary-rgb), 0.15), transparent 40%),
-                    radial-gradient(circle at 85% 75%, rgba(74, 125, 224, 0.15), transparent 40%);
+                    radial-gradient(circle at 85% 75%, rgba(0, 153, 255, 0.15), transparent 40%);
   z-index: -1;
   animation: float-glow 25s ease-in-out infinite;
   transform-origin: center;
@@ -119,7 +118,7 @@ body::before {
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 170, 235, 0.15), transparent 60%);
+  background: radial-gradient(circle, rgba(0, 153, 255, 0.15), transparent 60%);
   pointer-events: none;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -140,7 +139,7 @@ body:hover #cursor-glow {
 }
 
 .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(46, 49, 146, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(15, 31, 104, 0.05) 1px, transparent 1px);
   background-size: 1.25rem 1.25rem;
 }
 

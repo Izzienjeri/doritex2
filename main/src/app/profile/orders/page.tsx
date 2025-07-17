@@ -43,7 +43,7 @@ export default function OrderHistoryPage() {
                         "text-sm font-bold py-1 px-3 rounded-full",
                         order.status === 'Delivered' && 'bg-green-100 text-green-800',
                         order.status === 'Processing' && 'bg-yellow-100 text-yellow-800',
-                        order.status === 'Shipped' && 'bg-blue-100 text-blue-800'
+                        order.status === 'Shipped' && 'bg-accent/10 text-primary'
                     )}>
                         {order.status}
                     </span>

@@ -59,7 +59,7 @@ export function HeroBackground() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-accent">
+    <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-primary">
       <svg
         className="w-full h-full"
         viewBox="0 0 1000 600"
@@ -67,12 +67,12 @@ export function HeroBackground() {
       >
         <defs>
           <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "rgba(0, 170, 235, 0.5)" }} />
-            <stop offset="100%" style={{ stopColor: "rgba(56, 113, 193, 0.3)" }} />
+            <stop offset="0%" style={{ stopColor: "rgba(0, 153, 255, 0.5)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(15, 31, 104, 0.3)" }} />
           </linearGradient>
           <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "rgba(0, 170, 235, 0.3)" }} />
-            <stop offset="100%" style={{ stopColor: "rgba(46, 49, 146, 0.4)" }} />
+            <stop offset="0%" style={{ stopColor: "rgba(0, 153, 255, 0.3)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(15, 31, 104, 0.4)" }} />
           </linearGradient>
         </defs>
 

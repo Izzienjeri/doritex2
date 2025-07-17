@@ -4,7 +4,7 @@ import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-accent text-white/80 relative overflow-hidden border-t border-white/5">
+    <footer className="bg-primary text-white/80 relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
       <div className="container mx-auto relative py-16 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 max-w-7xl mx-auto">
@@ -29,9 +29,9 @@ export function Footer() {
               Links
             </h4>
             <ul className="space-y-3 text-sm font-sans">
-              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="/books" className="hover:text-primary transition-colors">Books</Link></li>
-              <li><Link href="/#about" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
+              <li><Link href="/books" className="hover:text-accent transition-colors">Books</Link></li>
+              <li><Link href="/#about" className="hover:text-accent transition-colors">About Us</Link></li>
             </ul>
           </div>
 
@@ -41,12 +41,12 @@ export function Footer() {
             </h4>
             <ul className="space-y-3 text-sm font-sans break-words">
               <li>
-                <a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">
+                <a href="mailto:investments.doritex@gmail.com" className="hover:text-accent transition-colors">
                   investments.doritex@gmail.com
                 </a>
               </li>
               <li>
-                <a href="tel:+254722316210" className="hover:text-primary transition-colors">
+                <a href="tel:+254722316210" className="hover:text-accent transition-colors">
                   +254 722 316 210
                 </a>
               </li>
@@ -58,9 +58,9 @@ export function Footer() {
               Connect
             </h4>
             <div className="flex justify-center sm:justify-start gap-4">
-              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Twitter size={22} /></Link>
-              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Facebook size={22} /></Link>
-              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Linkedin size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Twitter size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Facebook size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Linkedin size={22} /></Link>
             </div>
           </div>
 
