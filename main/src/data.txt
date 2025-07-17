@@ -1,112 +1,171 @@
-Of course. Here is the complete, updated code for the files that were modified to implement the account creation and remove the button animations.
+# Extracted Code (.ts, .tsx, .css)
+# Date and Time: 2025-07-17 04:33:27
+# Files Included: 32
 
-### Modified Files
+# === lib/utils.ts ===
+```ts
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-#### `app/register/page.tsx`
-This file has been updated with form handling logic to allow new users to register. The new user is added to the `mockUsers` array, logged in, and then redirected.
-
-```tsx
-"use client"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { AlertCircle } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useAuth } from "@/context/AuthContext"
-import { mockUsers } from "@/lib/data"
-
-export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
-  const { login } = useAuth();
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (!name || !email || !password) {
-      setError("All fields are required.");
-      return;
-    }
-
-    if (mockUsers.some(user => user.email === email)) {
-      setError("An account with this email already exists.");
-      return;
-    }
-
-    const newUser = { id: `user-${Date.now()}`, name, email, password, isAdmin: false };
-    mockUsers.push(newUser);
-
-    login({ name: newUser.name, email: newUser.email, isAdmin: newUser.isAdmin });
-    toast.success(`Welcome, ${name}! Your account has been created.`);
-    router.push('/profile');
-  };
-
-  return (
-    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
-      <motion.div
-        className="w-full max-w-md"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
-            <CardDescription className="text-muted-foreground pt-2">
-              Begin your educational journey with us.
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleRegister}>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-4">
-              {error && (
-                  <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
-                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
-                    <p>{error}</p>
-                  </div>
-              )}
-              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Create Account</Button>
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Link href="/login" className="font-semibold text-primary hover:underline">
-                  Login
-                </Link>
-              </p>
-            </CardFooter>
-          </form>
-        </Card>
-      </motion.div>
-    </div>
-  )
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 ```
 
-#### `app/globals.css`
-The `.btn-shine` class and its corresponding `@keyframes` have been removed.
+# === lib/data.ts ===
+```ts
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  category: 'Lower Primary' | 'Upper Primary' | 'Junior Secondary';
+  price: number;
+  imageUrl: string;
+  description: string;
+  stock: number;
+}
 
+export interface Order {
+  id: string;
+  date: string;
+  status: 'Placed' | 'Processing' | 'Shipped' | 'Delivered';
+  total: number;
+  items: (Book & { quantity: number })[];
+}
+
+export const dummyBooks: Book[] = [
+  {
+    id: "grade-1",
+    title: "Champion Creative Activities - Grade 1",
+    author: "Jane Doe",
+    category: "Lower Primary",
+    price: 850,
+    imageUrl: "/image1.png",
+    description: "Engaging creative activities for Grade 1 learners, fostering imagination and foundational skills. Approved by KICD.",
+    stock: 25,
+  },
+  {
+    id: "grade-2",
+    title: "Champion Creative Activities - Grade 2",
+    author: "Jane Doe",
+    category: "Lower Primary",
+    price: 900,
+    imageUrl: "/image2.png",
+    description: "A fun and interactive book to build upon the creative skills of Grade 2 students. Approved by KICD.",
+    stock: 30,
+  },
+  {
+    id: "grade-3",
+    title: "Champion Creative Activities - Grade 3",
+    author: "John Smith",
+    category: "Lower Primary",
+    price: 950,
+    imageUrl: "/image3.png",
+    description: "Encourages creativity and critical thinking with a variety of activities for Grade 3. Approved by KICD.",
+    stock: 15,
+  },
+  {
+    id: "grade-4",
+    title: "Champion Creative Arts - Grade 4",
+    author: "John Smith",
+    category: "Upper Primary",
+    price: 1000,
+    imageUrl: "/image4.png",
+    description: "An introduction to the world of creative arts, covering various mediums and techniques for Grade 4. Approved by KICD.",
+    stock: 22,
+  },
+  {
+    id: "grade-5",
+    title: "Champion Creative Arts - Grade 5",
+    author: "Emily White",
+    category: "Upper Primary",
+    price: 1100,
+    imageUrl: "/image5.png",
+    description: "Develops artistic talents and appreciation with advanced projects and lessons for Grade 5 learners. Approved by KICD.",
+    stock: 18,
+  },
+  {
+    id: "grade-6",
+    title: "Champion Creative Arts - Grade 6",
+    author: "Emily White",
+    category: "Upper Primary",
+    price: 1250,
+    imageUrl: "/image6.png",
+    description: "A comprehensive guide to creative arts for Grade 6, preparing students for more complex artistic expression. Approved by KICD.",
+    stock: 12,
+  },
+  {
+    id: "grade-7",
+    title: "Champion Creative Arts and Sports - Grade 7",
+    author: "Michael Green",
+    category: "Junior Secondary",
+    price: 1400,
+    imageUrl: "/image7.png",
+    description: "An integrated approach to both creative arts and sports, promoting well-rounded development for Grade 7 students. Approved by KICD.",
+    stock: 20,
+  },
+  {
+    id: "grade-8",
+    title: "Champion Creative Arts and Sports - Grade 8",
+    author: "Michael Green",
+    category: "Junior Secondary",
+    price: 1500,
+    imageUrl: "/image8.png",
+    description: "Advanced concepts in creative arts and sports to challenge and inspire Grade 8 learners. Approved by KICD.",
+    stock: 17,
+  }
+];
+
+export const dummyOrders: Order[] = [
+    {
+        id: 'ORD-12345',
+        date: '2025-07-10',
+        status: 'Delivered',
+        total: 2600.00,
+        items: [
+            { ...dummyBooks[0], quantity: 1 },
+            { ...dummyBooks[4], quantity: 1 },
+        ]
+    },
+    {
+        id: 'ORD-67890',
+        date: '2025-07-11',
+        status: 'Processing',
+        total: 3400.00,
+        items: [
+            { ...dummyBooks[6], quantity: 1 },
+            { ...dummyBooks[7], quantity: 1 },
+        ]
+    }
+];
+
+export interface MockUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string; // NOTE: In a real application, NEVER store plain text passwords. This should be a hash.
+  isAdmin: boolean;
+}
+
+export const mockUsers: MockUser[] = [
+  {
+    id: 'user-1',
+    name: 'Valued Customer',
+    email: 'user@example.com',
+    password: 'pass123',
+    isAdmin: false,
+  },
+  {
+    id: 'admin-1',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: 'pass123',
+    isAdmin: true,
+  }
+];
+```
+
+# === app/globals.css ===
 ```css
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -288,9 +347,66 @@ body:hover #cursor-glow {
 }
 ```
 
-#### `app/page.tsx`
-The `btn-shine` class and hover transform have been removed from the main "Explore The Collection" button.
+# === app/layout.tsx ===
+```tsx
+import type { Metadata } from "next";
+import { Oswald, Inter } from "next/font/google";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
+const fontSans = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+});
+
+const fontDisplay = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+});
+
+export const metadata: Metadata = {
+  title: "Doritex Publishing Investments",
+  description: "Your Gateway to Educational Excellence",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen font-sans antialiased",
+          fontSans.variable,
+          fontDisplay.variable
+        )}
+      >
+        <AuthProvider>
+          <CartProvider>
+            <div className="relative flex min-h-dvh flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster richColors closeButton />
+          </CartProvider>
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+# === app/page.tsx ===
 ```tsx
 "use client";
 
@@ -458,9 +574,296 @@ export default function HomePage() {
 }
 ```
 
-#### `app/cart/page.tsx`
-The `btn-shine` class has been removed from the "Explore Books" and "Proceed to Checkout" buttons.
+# === app/admin/layout.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import { LayoutDashboard, Book, ShoppingBag, Settings, Home } from "lucide-react";
 
+const sidebarNavItems = [
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Books", href: "/admin/books", icon: Book },
+  { title: "Orders", href: "/admin/orders", icon: ShoppingBag },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
+];
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Protect admin routes
+    if (!user || !user.isAdmin) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  if (!user || !user.isAdmin) {
+    return <div className="container py-24 text-center">Access Denied. Redirecting...</div>;
+  }
+
+  return (
+    <div className="bg-muted/40 min-h-screen">
+      <div className="container mx-auto grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <aside className="hidden border-r bg-background md:block">
+            <div className="flex h-full max-h-screen flex-col gap-2">
+                <div className="flex h-16 items-center border-b px-6">
+                    <Link href="/admin" className="font-bold text-lg text-primary">Admin Panel</Link>
+                </div>
+                <nav className="flex-1 grid items-start p-4 text-sm font-medium">
+                    {sidebarNavItems.map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        pathname === item.href && "bg-muted text-primary"
+                        )}
+                    >
+                        <item.icon className="h-4 w-4"/>
+                        {item.title}
+                    </Link>
+                    ))}
+                    <Link href="/" className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"><Home className="h-4 w-4"/> Back to Site</Link>
+                </nav>
+            </div>
+        </aside>
+        <main className="flex flex-col gap-4 p-4 lg:p-6">{children}</main>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/admin/page.tsx ===
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book, ShoppingBag, Users } from "lucide-react";
+
+export default function AdminDashboard() {
+  return (
+    <div>
+        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+                    <ShoppingBag className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">1,245</div>
+                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Books</CardTitle>
+                    <Book className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">8</div>
+                    <p className="text-xs text-muted-foreground">All listed publications</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">+235</div>
+                    <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="mt-8">
+            <Card>
+                <CardHeader><CardTitle>Recent Orders</CardTitle></CardHeader>
+                <CardContent>
+                    {/* A table of recent orders would go here */}
+                    <p className="text-muted-foreground">Recent orders will be displayed here.</p>
+                </CardContent>
+            </Card>
+        </div>
+    </div>
+  )
+}
+```
+
+# === app/admin/orders/page.tsx ===
+```tsx
+"use client"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { dummyOrders } from "@/lib/data";
+
+export default function AdminOrdersPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Manage Orders</CardTitle>
+                <CardDescription>View customer orders and update their status.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Order ID</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Customer</TableHead>
+                            <TableHead>Total</TableHead>
+                            <TableHead>Status</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyOrders.map(order => (
+                            <TableRow key={order.id}>
+                                <TableCell className="font-medium">{order.id}</TableCell>
+                                <TableCell>{order.date}</TableCell>
+                                <TableCell>Valued Customer</TableCell>
+                                <TableCell>Kshs {order.total.toFixed(2)}</TableCell>
+                                <TableCell>
+                                    <Select defaultValue={order.status}>
+                                        <SelectTrigger className="w-[120px]">
+                                            <SelectValue placeholder="Status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Placed">Placed</SelectItem>
+                                            <SelectItem value="Processing">Processing</SelectItem>
+                                            <SelectItem value="Shipped">Shipped</SelectItem>
+                                            <SelectItem value="Delivered">Delivered</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+```
+
+# === app/admin/books/page.tsx ===
+```tsx
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dummyBooks } from "@/lib/data";
+import Image from "next/image";
+
+export default function AdminBooksPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Manage Books</CardTitle>
+                        <CardDescription>Add, edit, or delete publications.</CardDescription>
+                    </div>
+                    <Button>Add New Book</Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Author</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Stock</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyBooks.map(book => (
+                            <TableRow key={book.id}>
+                                <TableCell className="hidden sm:table-cell">
+                                    <Image 
+                                        alt={book.title} 
+                                        className="aspect-square rounded-md object-cover" 
+                                        height="64" 
+                                        src={book.imageUrl} 
+                                        width="64"
+                                    />
+                                </TableCell>
+                                <TableCell className="font-medium">{book.title}</TableCell>
+                                <TableCell>{book.author}</TableCell>
+                                <TableCell>Kshs {book.price.toFixed(2)}</TableCell>
+                                <TableCell>{book.stock}</TableCell>
+                                <TableCell>
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="sm">Edit</Button>
+                                        <Button variant="destructive" size="sm">Delete</Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+```
+
+# === app/admin/settings/page.tsx ===
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export default function AdminSettingsPage() {
+  return (
+    <div className="max-w-2xl">
+      <h1 className="text-3xl font-bold tracking-tight mb-6">Admin Settings</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>M-Pesa Configuration</CardTitle>
+          <CardDescription>
+            Configure your M-Pesa Till payment settings.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="till-number">Till Number</Label>
+            <Input id="till-number" placeholder="e.g., 123456" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-key">Consumer Key</Label>
+            <Input id="consumer-key" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-secret">Consumer Secret</Label>
+            <Input id="consumer-secret" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>Save Settings</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === app/cart/page.tsx ===
 ```tsx
 "use client";
 
@@ -556,9 +959,344 @@ export default function CartPage() {
 }
 ```
 
-#### `app/order/confirmation/page.tsx`
-The `btn-shine` class has been removed from the "Continue Shopping" button.
+# === app/login/page.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
+import { mockUsers } from "@/lib/data";
+import { AlertCircle } from "lucide-react";
 
+export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // State for inline error message
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(''); // Clear previous errors on a new attempt
+
+    const foundUser = mockUsers.find(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (foundUser) {
+      // Success: Log user in and show a success toast
+      login({ name: foundUser.name, email: foundUser.email, isAdmin: foundUser.isAdmin });
+      toast.success(`Welcome back, ${foundUser.name}!`);
+      
+      if (foundUser.isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/profile');
+      }
+    } else {
+      // Failure: Set the inline error message instead of showing a toast
+      setError("Invalid email or password. Please try again.");
+      setPassword(''); // Clear password field for security
+    }
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Sign in to continue your journey.
+              <br />
+              (user: user@example.com, admin: admin@example.com. pw: pass123)
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleLogin}>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => { setEmail(e.target.value); setError(''); }} required/>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }} required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              {error && (
+                <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )}
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
+                Login
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Don&rsquo;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}
+```
+
+# === app/books/page.tsx ===
+```tsx
+import { dummyBooks } from '@/lib/data';
+import { BookFilters } from '@/components/shared/BookFilters';
+import { BookGrid } from '@/components/shared/BookGrid';
+
+type Props = {
+  searchParams: Promise<{
+    query?: string;
+    category?: string;
+  }>;
+};
+
+export default async function BooksPage({ searchParams }: Props) {
+  const { query = '', category = 'All' } = await searchParams;
+
+  const filteredBooks = dummyBooks.filter(book => {
+    const matchesCategory = category === 'All' || book.category === category;
+    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) ||
+                          book.author.toLowerCase().includes(query.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent_80%)]"></div>
+      <section className="py-24 md:py-32">
+        <div className="container mx-auto px-4">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-center">
+              Our Collection
+            </h1>
+            <p className="text-center text-muted-foreground text-lg mt-4 mb-12 max-w-2xl mx-auto font-sans">
+              Search and explore our full range of publications. Your next great read is just a click away.
+            </p>
+            <div className="max-w-xl mx-auto mb-20">
+              <BookFilters />
+            </div>
+          </div>
+
+          <BookGrid books={filteredBooks} />
+        </div>
+      </section>
+    </div>
+  );
+}
+```
+
+# === app/books/[id]/page.tsx ===
+```tsx
+import { dummyBooks, Book } from '@/lib/data';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { AddToCart } from '@/components/shared/AddToCart';
+import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  return dummyBooks.map(book => ({
+    id: book.id,
+  }));
+}
+
+function getBook(id: string): Book | undefined {
+  return dummyBooks.find(b => b.id === id);
+}
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function BookDetailPage({ params }: Props) {
+  const { id } = await params;
+
+  const book = getBook(id);
+
+  if (!book) {
+    notFound();
+  }
+
+  return (
+    <div className="bg-dot-grid relative">
+      <div className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_70%)] opacity-30"></div>
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        <div className="mb-12">
+          <Button variant="ghost" asChild>
+            <Link href="/books">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Collection
+            </Link>
+          </Button>
+        </div>
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <div className="relative shadow-2xl shadow-primary/20 rounded-lg overflow-hidden">
+            <Image
+              src={book.imageUrl}
+              alt={book.title}
+              width={800}
+              height={1200}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-3">
+              {book.title}
+            </h1>
+            <p className="text-lg text-muted-foreground font-sans mb-3">by {book.author}</p>
+            <p className="text-4xl font-bold text-primary my-6 font-sans">
+              Kshs {book.price.toFixed(2)}
+            </p>
+            <p className="text-foreground/80 leading-relaxed font-sans mb-10">
+              {book.description}
+            </p>
+
+            <AddToCart book={book} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/register/page.tsx ===
+```tsx
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { AlertCircle } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useAuth } from "@/context/AuthContext"
+import { mockUsers } from "@/lib/data"
+
+export default function RegisterPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const { login } = useAuth();
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!name || !email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (mockUsers.some(user => user.email === email)) {
+      setError("An account with this email already exists.");
+      return;
+    }
+
+    const newUser = { id: `user-${Date.now()}`, name, email, password, isAdmin: false };
+    mockUsers.push(newUser);
+
+    login({ name: newUser.name, email: newUser.email, isAdmin: newUser.isAdmin });
+    toast.success(`Welcome, ${name}! Your account has been created.`);
+    router.push('/profile');
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Begin your educational journey with us.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleRegister}>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              {error && (
+                  <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                    <p>{error}</p>
+                  </div>
+              )}
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Create Account</Button>
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link href="/login" className="font-semibold text-primary hover:underline">
+                  Login
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+# === app/confirmation/page.tsx ===
 ```tsx
 "use client"
 import Link from "next/link"
@@ -598,4 +1336,1203 @@ export default function OrderConfirmationPage() {
 }
 ```
 
+# === app/order/confirmation/page.tsx ===
+```tsx
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { CheckCircle } from "lucide-react"
 
+export default function OrderConfirmationPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 text-center bg-dot-grid">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        className="bg-card/80 backdrop-blur-md p-10 md:p-16 rounded-2xl border"
+      >
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 10 }}>
+          <CheckCircle className="h-20 w-20 text-primary mx-auto mb-6" />
+        </motion.div>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+          Thank You For Your Order!
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-10">
+          Your order has been placed successfully. You will receive a confirmation email shortly with the order details.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20">
+                <Link href="/books">Continue Shopping</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-14 px-8 rounded-full text-base font-bold">
+                <Link href="/profile/orders">View Order History</Link>
+            </Button>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+# === app/checkout/page.tsx ===
+```tsx
+"use client"
+import { useState } from "react";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCart } from "@/context/CartContext"
+import { useAuth } from "@/context/AuthContext";
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+
+export default function CheckoutPage() {
+  const { state } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
+  const { items } = state;
+
+  const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = deliveryMethod === "delivery" && subtotal > 0 ? 500.00 : 0;
+  const total = subtotal + shipping;
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Here you would trigger the M-Pesa STK Push
+    // After successful payment confirmation from your backend:
+    router.push('/order/confirmation');
+  }
+
+  if (items.length === 0) {
+    return (
+        <div className="container mx-auto px-4 py-16 md:py-24 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">Checkout</h1>
+            <p className="text-xl text-muted-foreground">Your cart is empty. Please add books to proceed.</p>
+        </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Checkout</h1>
+      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12 items-start">
+        <div className="lg:col-span-2 space-y-10">
+          <Card className="bg-card/80 border">
+            <CardHeader><CardTitle className="text-2xl">Delivery Method</CardTitle></CardHeader>
+            <CardContent>
+                <RadioGroup defaultValue="delivery" onValueChange={setDeliveryMethod} className="flex flex-col sm:flex-row gap-4">
+                    <Label htmlFor="delivery" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="delivery" id="delivery" />
+                        <div>
+                            <p className="font-semibold">Delivery</p>
+                            <p className="text-sm text-muted-foreground">Shipped to your address.</p>
+                        </div>
+                    </Label>
+                    <Label htmlFor="pickup" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="pickup" id="pickup" />
+                        <div>
+                            <p className="font-semibold">Pickup</p>
+                            <p className="text-sm text-muted-foreground">Collect from our store.</p>
+                        </div>
+                    </Label>
+                </RadioGroup>
+            </CardContent>
+          </Card>
+          
+          {deliveryMethod === 'delivery' && (
+            <Card className="bg-card/80 border">
+                <CardHeader><CardTitle className="text-2xl">Shipping Address</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-full space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" defaultValue={user?.name} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" defaultValue={user?.email} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="address">Address</Label><Input id="address" required /></div>
+                <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" required /></div>
+                <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
+                </CardContent>
+            </Card>
+          )}
+
+          <Card className="bg-card/80 border">
+            <CardHeader><CardTitle className="text-2xl">M-Pesa Payment</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">You will receive an STK Push on your phone to complete the payment.</p>
+                <div className="space-y-2">
+                    <Label htmlFor="phone">M-Pesa Phone Number</Label>
+                    <Input id="phone" placeholder="e.g. 0712345678" required />
+                </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-1">
+          <Card className="bg-card/80 border sticky top-28 shadow-lg">
+            <CardHeader><CardTitle className="text-2xl">Order Summary</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4 mb-6">
+                {items.map(item => (
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-3">
+                        <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded" />
+                        <div>
+                            <p className="font-semibold text-foreground">{item.title}</p>
+                            <p className="text-muted-foreground">Qty: {item.quantity}</p>
+                        </div>
+                    </div>
+                    <p className="font-semibold text-foreground">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2 text-md border-t border-border pt-4">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-semibold text-foreground">Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className="font-semibold text-foreground">Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl mt-2 text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
+              </div>
+               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20">
+                  Place Order
+                </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </form>
+    </div>
+  )
+}
+```
+
+# === app/profile/layout.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import { User, FileText } from "lucide-react"; 
+
+const sidebarNavItems = [
+  { title: "My Profile", href: "/profile", icon: User },
+  { title: "Order History", href: "/profile/orders", icon: FileText },
+];
+
+export default function ProfileLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // In a real app with server-side auth, this redirect would happen in middleware
+    if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  if (!user) {
+    return <div className="container py-24 text-center">Loading or redirecting...</div>;
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">My Account</h1>
+        <p className="text-muted-foreground mt-2">Manage your profile and view your order history.</p>
+      </div>
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <aside className="lg:w-1/4">
+          <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+            {sidebarNavItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "inline-flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                  pathname === item.href && "bg-muted font-bold text-primary"
+                )}
+              >
+                <item.icon className="h-5 w-5"/>
+                <span className="hidden sm:inline">{item.title}</span>
+              </Link>
+            ))}
+          </nav>
+        </aside>
+        <div className="flex-1 lg:max-w-4xl">{children}</div>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/profile/page.tsx ===
+```tsx
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+
+export default function ProfilePage() {
+  const { user } = useAuth();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.info("Profile updated successfully!");
+  }
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+          <CardDescription>Update your personal details here.</CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" defaultValue={user?.name} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" defaultValue={user?.email} />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit">Save Changes</Button>
+          </CardFooter>
+        </form>
+      </Card>
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>Update your password for better security.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="current-password">Current Password</Label>
+            <Input id="current-password" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="new-password">New Password</Label>
+            <Input id="new-password" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+            <Button>Update Password</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === app/profile/orders/page.tsx ===
+```tsx
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { dummyOrders } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+
+export default function OrderHistoryPage() {
+  const orders = dummyOrders;
+
+  if (orders.length === 0) {
+    return (
+      <div className="text-center py-20 bg-muted rounded-lg border">
+        <h2 className="text-2xl font-semibold mb-4 text-foreground">You have no orders yet.</h2>
+        <p className="text-muted-foreground mb-8">
+          All your future orders will appear here.
+        </p>
+        <Button asChild size="lg">
+          <Link href="/books">Start Shopping</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Card className="bg-card/80 border">
+      <CardHeader>
+        <CardTitle>Your Orders</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <Link href={`/profile/orders/${order.id}`} key={order.id} className="block border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+              <div className="flex justify-between items-center">
+                <div className="grid gap-1">
+                  <p className="font-bold text-lg text-primary">Order #{order.id}</p>
+                  <p className="text-sm text-muted-foreground">Date: {order.date}</p>
+                  <p className="text-sm text-muted-foreground">Total: Kshs {order.total.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className={cn(
+                        "text-sm font-bold py-1 px-3 rounded-full",
+                        order.status === 'Delivered' && 'bg-green-100 text-green-800',
+                        order.status === 'Processing' && 'bg-yellow-100 text-yellow-800',
+                        order.status === 'Shipped' && 'bg-blue-100 text-blue-800'
+                    )}>
+                        {order.status}
+                    </span>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+# === app/profile/orders/[orderId]/page.tsx ===
+```tsx
+"use client";
+import { useParams } from "next/navigation";
+import { dummyOrders } from "@/lib/data";
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+const statusSteps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
+
+export default function OrderDetailsPage() {
+  const params = useParams();
+  const order = dummyOrders.find(o => o.id === params.orderId);
+
+  if (!order) {
+    return <div>Order not found.</div>;
+  }
+  
+  const currentStatusIndex = statusSteps.indexOf(order.status);
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Order #{order.id}</CardTitle>
+          <CardDescription>Date: {order.date} · Status: {order.status}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Order Status</h3>
+            <div className="flex justify-between">
+              {statusSteps.map((step, index) => (
+                <div key={step} className="flex-1 flex flex-col items-center relative">
+                  <div className={cn(
+                      "h-8 w-8 rounded-full flex items-center justify-center border-2",
+                      index <= currentStatusIndex ? "bg-primary border-primary text-white" : "bg-muted border-border"
+                  )}>
+                    {index < currentStatusIndex ? '✓' : index + 1}
+                  </div>
+                  <p className={cn("mt-2 text-sm", index <= currentStatusIndex ? "font-bold text-primary" : "text-muted-foreground")}>{step}</p>
+                  {index < statusSteps.length - 1 && (
+                      <div className="absolute top-4 left-1/2 w-full h-0.5 -z-10">
+                          <div className={cn("h-full", index < currentStatusIndex ? 'bg-primary' : 'bg-border')}></div>
+                      </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <Separator className="my-6" />
+
+          <h3 className="text-lg font-semibold mb-4">Items Ordered</h3>
+          <div className="space-y-4">
+            {order.items.map(item => (
+              <div key={item.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Image src={item.imageUrl} alt={item.title} width={60} height={90} className="rounded-md" />
+                  <div>
+                    <p className="font-semibold">{item.title}</p>
+                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                  </div>
+                </div>
+                <p className="font-semibold">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+              </div>
+            ))}
+          </div>
+          
+          <Separator className="my-6" />
+
+          <div className="flex justify-end">
+            <div className="w-full max-w-xs space-y-2">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {(order.total - 500).toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs 500.00</span></div>
+                <Separator/>
+                <div className="flex justify-between font-bold text-lg"><span>Total</span><span>Kshs {order.total.toFixed(2)}</span></div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === context/AuthContext.tsx ===
+```tsx
+"use client";
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+interface User {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (userData: User) => {
+    // In a real app, you'd get a token from your API
+    setUser(userData);
+  };
+
+  const logout = () => {
+    // In a real app, you'd clear the token
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+```
+
+# === context/CartContext.tsx ===
+```tsx
+"use client";
+
+import { Book } from "@/lib/data";
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
+
+interface CartItem extends Book {
+  quantity: number;
+}
+
+type CartState = {
+  items: CartItem[];
+};
+
+type CartAction =
+  | { type: "ADD_ITEM"; payload: { quantity: number } & Book }
+  | { type: "REMOVE_ITEM"; payload: { id: string } }
+  | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } };
+
+const initialState: CartState = {
+  items: [],
+};
+
+const CartContext = createContext<{
+  state: CartState;
+  dispatch: React.Dispatch<CartAction>;
+}>({
+  state: initialState,
+  dispatch: () => null,
+});
+
+const cartReducer = (state: CartState, action: CartAction): CartState => {
+  switch (action.type) {
+    case "ADD_ITEM": {
+      const existingItem = state.items.find(item => item.id === action.payload.id);
+      if (existingItem) {
+        return {
+          ...state,
+          items: state.items.map(item =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + action.payload.quantity }
+              : item
+          ),
+        };
+      }
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, quantity: action.payload.quantity }],
+      };
+    }
+    case "REMOVE_ITEM": {
+      return {
+        ...state,
+        items: state.items.filter(item => item.id !== action.payload.id),
+      };
+    }
+    case "UPDATE_QUANTITY": {
+      return {
+        ...state,
+        items: state.items.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        ).filter(item => item.quantity > 0),
+      };
+    }
+    default:
+      return state;
+  }
+};
+
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  return (
+    <CartContext.Provider value={{ state, dispatch }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useCart = () => useContext(CartContext);
+```
+
+# === components/shared/AddToCart.tsx ===
+```tsx
+"use client";
+
+import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { Book } from '@/lib/data';
+import { Button } from '@/components/ui/button';
+import { Minus, Plus, ShoppingCart } from 'lucide-react';
+import { toast } from 'sonner';
+
+export function AddToCart({ book }: { book: Book }) {
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  
+  const handleAddToCart = () => {
+    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
+    toast.success(`${quantity} x ${book.title} added to cart!`);
+  }
+
+  return (
+    <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center border rounded-full p-1 bg-white/50">
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+          <Minus className="h-4 w-4" />
+        </Button>
+        <span className="w-12 text-center text-lg font-bold">{quantity}</span>
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+      <Button 
+        size="lg" 
+        className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20" 
+        onClick={handleAddToCart}
+      >
+        <ShoppingCart className="mr-2 h-5 w-5" />
+        Add to Cart
+      </Button>
+    </div>
+  );
+}
+```
+
+# === components/shared/BookFilters.tsx ===
+```tsx
+"use client";
+
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
+import { dummyBooks } from '@/lib/data';
+
+const categories = ['All', ...Array.from(new Set(dummyBooks.map(b => b.category)))];
+
+export function BookFilters() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const activeCategory = searchParams.get('category') || 'All';
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('query', term);
+    } else {
+      params.delete('query');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
+
+  const handleCategoryChange = (category: string) => {
+     const params = new URLSearchParams(searchParams);
+    if (category && category !== 'All') {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input 
+          placeholder="Search by title or author..."
+          className="pl-12 h-14 text-lg bg-card border-border focus-visible:ring-primary focus-visible:ring-offset-background rounded-full shadow-sm"
+          defaultValue={searchParams.get('query')?.toString()}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
+       <div className="flex justify-center flex-wrap gap-3">
+        {categories.map(category => (
+          <Button 
+            key={category} 
+            variant={activeCategory === category ? "default" : "outline"}
+            onClick={() => handleCategoryChange(category)}
+            className={cn(
+              "rounded-full px-6 h-11 text-base font-semibold",
+              activeCategory === category && "bg-primary text-primary-foreground"
+            )}
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+# === components/shared/BookGrid.tsx ===
+```tsx
+"use client";
+
+import { motion } from 'framer-motion';
+import { BookCard } from './BookCard';
+import { Book } from '@/lib/data';
+
+export function BookGrid({ books }: { books: Book[] }) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
+  return (
+    <motion.div
+      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      key={books.length} // Re-trigger animation when books change
+    >
+      {books.length > 0 ? (
+        books.map((book, index) => (
+          <motion.div key={book.id} variants={itemVariants}>
+            <BookCard book={book} priority={index < 5} />
+          </motion.div>
+        ))
+      ) : (
+        <p className="col-span-full text-center text-lg text-muted-foreground py-10">
+          No books found matching your criteria.
+        </p>
+      )}
+    </motion.div>
+  );
+}
+```
+
+# === components/shared/BookCard.tsx ===
+```tsx
+import React from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book } from "@/lib/data";
+import { useCart } from "@/context/CartContext";
+import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
+import { cn } from '@/lib/utils';
+
+interface BookCardProps {
+  book: Book;
+  priority?: boolean;
+}
+
+export function BookCard({ book, priority = false }: BookCardProps) {
+  const { dispatch } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch({ type: "ADD_ITEM", payload: { ...book, quantity: 1 } });
+    toast.success(`${book.title} added to cart!`);
+  };
+
+  return (
+    <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
+      <Card className={cn(
+        "flex h-full w-full flex-col overflow-hidden rounded-xl",
+        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
+      )}>
+        <CardHeader className="p-0 relative">
+          <div className="aspect-[2/3] w-full overflow-hidden rounded-t-xl">
+              <Image
+                src={book.imageUrl}
+                alt={book.title}
+                width={300}
+                height={450}
+                className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                priority={priority}
+              />
+          </div>
+        </CardHeader>
+        <CardContent className="flex-grow p-3 flex flex-col bg-transparent">
+          <CardTitle className="text-sm font-bold leading-snug text-foreground/90 flex-grow group-hover:text-primary transition-colors">{book.title}</CardTitle>
+        </CardContent>
+        <CardFooter className="flex justify-between items-center p-3 pt-1 bg-transparent">
+          <p className="text-sm font-bold text-card-foreground/80 font-sans">Kshs {book.price.toFixed(2)}</p>
+          <Button
+            size="icon"
+            className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
+            onClick={handleAddToCart}
+            aria-label="Add to cart"
+          >
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
+    </Link>
+  );
+}
+```
+
+# === components/shared/FeaturedBooks.tsx ===
+```tsx
+"use client";
+
+import { motion } from 'framer-motion';
+import { dummyBooks } from '@/lib/data';
+import { BookCard } from './BookCard';
+
+export function FeaturedBooks() {
+  return (
+    <section className="py-24 md:py-32 relative z-10 bg-background/80 backdrop-blur-sm border-t border-b">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-3xl mx-auto"
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter">
+            Featured Publications
+          </h2>
+          <p className="text-muted-foreground text-lg mt-4 mb-16 font-sans">
+            Each book is a vessel of knowledge, meticulously crafted from ink
+            and inspiration.
+          </p>
+        </motion.div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
+          {dummyBooks.slice(0, 5).map((book) => (
+            <BookCard book={book} key={book.id} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+# === components/layout/Footer.tsx ===
+```tsx
+import Link from "next/link";
+import Image from "next/image";
+import { Twitter, Facebook, Linkedin } from "lucide-react";
+
+export function Footer() {
+  return (
+    <footer className="bg-accent text-white/80 relative overflow-hidden border-t border-white/5">
+      <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
+      <div className="container mx-auto relative py-16 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 max-w-7xl mx-auto">
+          
+          <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/logo2.png"
+                alt="Doritex Logo"
+                width={160}
+                height={45}
+                className="h-11 w-auto filter brightness-0 invert mx-auto sm:mx-0"
+              />
+            </Link>
+            <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto sm:mx-0">
+              Your Gateway to Educational Excellence.
+            </p>
+          </div>
+
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Links
+            </h4>
+            <ul className="space-y-3 text-sm font-sans">
+              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link href="/books" className="hover:text-primary transition-colors">Books</Link></li>
+              <li><Link href="/#about" className="hover:text-primary transition-colors">About Us</Link></li>
+            </ul>
+          </div>
+
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Contact
+            </h4>
+            <ul className="space-y-3 text-sm font-sans break-words">
+              <li>
+                <a href="mailto:investments.doritex@gmail.com" className="hover:text-primary transition-colors">
+                  investments.doritex@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+254722316210" className="hover:text-primary transition-colors">
+                  +254 722 316 210
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Connect
+            </h4>
+            <div className="flex justify-center sm:justify-start gap-4">
+              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Twitter size={22} /></Link>
+              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Facebook size={22} /></Link>
+              <Link href="#" className="hover:text-primary hover:scale-110 transition-all"><Linkedin size={22} /></Link>
+            </div>
+          </div>
+
+        </div>
+        
+        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
+          <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+```
+
+# === components/layout/HeroBackground.tsx ===
+```tsx
+"use client";
+
+import { motion, useMotionValue, animate } from "framer-motion";
+import { useEffect } from "react";
+import * as flubber from "flubber";
+
+export function HeroBackground() {
+  const wave1Paths = [
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+    "M -10,150 C 200,100 450,200 600,150 S 850,100 1010,150 V 610 H -10 Z",
+    "M -10,150 C 250,50 350,250 600,150 S 900,250 1010,150 V 610 H -10 Z",
+  ];
+
+  const wave2Paths = [
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+    "M -10,180 C 250,150 400,230 550,180 S 800,150 1010,160 V 610 H -10 Z",
+    "M -10,180 C 200,100 300,280 550,180 S 850,100 1010,160 V 610 H -10 Z",
+  ];
+
+  const wave1 = useMotionValue(wave1Paths[0]);
+  const wave2 = useMotionValue(wave2Paths[0]);
+
+  useEffect(() => {
+    const wave1Interpolators = wave1Paths.map((_, i) =>
+      flubber.interpolate(wave1Paths[i], wave1Paths[(i + 1) % wave1Paths.length])
+    );
+
+    const wave2Interpolators = wave2Paths.map((_, i) =>
+      flubber.interpolate(wave2Paths[i], wave2Paths[(i + 1) % wave2Paths.length])
+    );
+
+    let wave1Index = 0;
+    let wave2Index = 0;
+
+    const loopWave = (
+      interpolators: ((t: number) => string)[],
+      motionValue: typeof wave1,
+      indexSetter: (val: number) => void,
+      indexGetter: () => number,
+      duration = 4000
+    ) => {
+      const current = indexGetter();
+      const next = (current + 1) % interpolators.length;
+
+      animate(0, 1, {
+        duration: duration / 1000,
+        onUpdate: (t) => {
+          motionValue.set(interpolators[current](t));
+        },
+        onComplete: () => {
+          indexSetter(next);
+          loopWave(interpolators, motionValue, indexSetter, indexGetter, duration);
+        },
+      });
+    };
+
+    loopWave(wave1Interpolators, wave1, (v) => (wave1Index = v), () => wave1Index);
+    loopWave(wave2Interpolators, wave2, (v) => (wave2Index = v), () => wave2Index);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-accent">
+      <svg
+        className="w-full h-full"
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style={{ stopColor: "rgba(0, 170, 235, 0.5)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(56, 113, 193, 0.3)" }} />
+          </linearGradient>
+          <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style={{ stopColor: "rgba(0, 170, 235, 0.3)" }} />
+            <stop offset="100%" style={{ stopColor: "rgba(46, 49, 146, 0.4)" }} />
+          </linearGradient>
+        </defs>
+
+        <motion.path fill="url(#waveGradient1)" d={wave1} />
+        <motion.path fill="url(#waveGradient2)" d={wave2} />
+      </svg>
+    </div>
+  );
+}
+```
+
+# === components/layout/Header.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetClose
+} from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, ShoppingCart, User as UserIcon } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/books", label: "Books" },
+  { href: "/#about", label: "About" },
+];
+
+export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const { state } = useCart();
+  const { user, logout } = useAuth(); // Use auth context
+  const cartItemCount = state.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  }
+
+  const BrandLogo = () => (
+    <Link href="/" className="flex items-center" onClick={() => isOpen && setIsOpen(false)}>
+      <Image
+        src="/logo2.png"
+        alt="Doritex Logo"
+        width={160}
+        height={45}
+        priority
+        className="h-11 w-auto"
+      />
+    </Link>
+  );
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
+      )}
+    >
+      <div className="container mx-auto px-4">
+        <div className="relative flex h-20 items-center justify-between">
+          <div className="flex-shrink-0">
+            <BrandLogo />
+          </div>
+
+          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-base font-medium text-foreground/70 transition-colors hover:text-foreground link-underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-2">
+              {user ? (
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="rounded-full font-medium flex items-center gap-2">
+                        <UserIcon className="h-4 w-4"/>
+                        My Account
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Hi, {user.name}!</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild><Link href="/profile">My Profile</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href="/profile/orders">Order History</Link></DropdownMenuItem>
+                      {user.isAdmin && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
+                        </>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+              ) : (
+                <>
+                  <Button variant="ghost" className="font-medium rounded-full" asChild>
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full shadow-lg shadow-primary/20" asChild>
+                    <Link href="/register">Sign Up</Link>
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <Button variant="outline" size="icon" className="rounded-full relative flex-shrink-0 bg-white/50" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+            
+            <div className="lg:hidden">
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full bg-white/50">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0">
+                  <SheetHeader className="p-6 border-b">
+                    <SheetTitle asChild><Link href="/" onClick={() => setIsOpen(false)}><Image src="/logo2.png" alt="Doritex Logo" width={160} height={45} className="h-11 w-auto" /></Link></SheetTitle>
+                    <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
+                  </SheetHeader>
+                  <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
+                    {navLinks.map((link) => (
+                      <SheetClose asChild key={link.label}>
+                        <Link href={link.href} className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">
+                            {link.label}
+                        </Link>
+                      </SheetClose>
+                    ))}
+                     {user && (
+                        <SheetClose asChild>
+                         <Link href="/profile" className="font-semibold text-foreground/80 transition-colors hover:text-primary py-3 rounded-lg px-4 hover:bg-muted">My Account</Link>
+                        </SheetClose>
+                     )}
+                  </nav>
+                  <div className="mt-auto flex flex-col gap-3 p-6 border-t bg-muted/30">
+                    {user ? (
+                        <Button variant="destructive" size="lg" className="h-12 text-base" onClick={() => { handleLogout(); setIsOpen(false); }}>Logout</Button>
+                    ) : (
+                        <>
+                            <SheetClose asChild><Button asChild variant="outline" size="lg" className="h-12 text-base"><Link href="/login">Login</Link></Button></SheetClose>
+                            <SheetClose asChild><Button asChild size="lg" className="bg-primary h-12 text-base text-primary-foreground font-bold"><Link href="/register">Sign Up</Link></Button></SheetClose>
+                        </>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+```

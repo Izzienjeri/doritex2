@@ -56,8 +56,8 @@
   --popover: #ffffff;
   --popover-foreground: #1e2a78;
 
-  --primary: #00a9e8; /* A vibrant, sky blue */
-  --primary-rgb: 0, 169, 232;
+  --primary: #0077B6; /* A darker, professional blue */
+  --primary-rgb: 0, 119, 182;
   --primary-foreground: #ffffff;
 
   --secondary: #4a7de0; /* A brighter, more energetic blue */

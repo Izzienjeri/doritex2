@@ -52,10 +52,10 @@ export function Header() {
       <Image
         src="/logo2.png"
         alt="Doritex Logo"
-        width={160}
-        height={45}
+        width={200}
+        height={56}
         priority
-        className="h-11 w-auto"
+        className="h-14 w-auto"
       />
     </Link>
   );
@@ -145,7 +145,7 @@ export function Header() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[90%] sm:max-w-sm bg-background/95 backdrop-blur-xl flex flex-col p-0">
                   <SheetHeader className="p-6 border-b">
-                    <SheetTitle asChild><Link href="/" onClick={() => setIsOpen(false)}><Image src="/logo2.png" alt="Doritex Logo" width={160} height={45} className="h-11 w-auto" /></Link></SheetTitle>
+                    <SheetTitle asChild><Link href="/" onClick={() => setIsOpen(false)}><Image src="/logo2.png" alt="Doritex Logo" width={200} height={56} className="h-14 w-auto" /></Link></SheetTitle>
                     <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
                   </SheetHeader>
                   <nav className="flex flex-col gap-2 text-lg p-4 flex-grow">
