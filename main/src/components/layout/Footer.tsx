@@ -59,9 +59,9 @@ export function Footer() {
               Connect
             </h4>
             <div className="flex justify-center sm:justify-start gap-4">
-              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Twitter size={22} /></Link>
-              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Facebook size={22} /></Link>
-              <Link href="#" className="hover:text-accent hover:scale-110 transition-all"><Linkedin size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Follow us on Twitter"><Twitter size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Follow us on Facebook"><Facebook size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Connect with us on LinkedIn"><Linkedin size={22} /></Link>
             </div>
           </div>
 

@@ -24,8 +24,6 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would trigger the M-Pesa STK Push
-    // After successful payment confirmation from your backend:
     router.push('/order/confirmation');
   }
 
@@ -39,12 +37,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
-      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Checkout</h1>
-      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-12 items-start">
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 sm:mb-12 text-center">Checkout</h1>
+      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
         <div className="lg:col-span-2 space-y-10">
           <Card className="bg-card/80 border">
-            <CardHeader><CardTitle className="text-2xl">Delivery Method</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">Delivery Method</CardTitle></CardHeader>
             <CardContent>
                 <RadioGroup defaultValue="delivery" onValueChange={setDeliveryMethod} className="flex flex-col sm:flex-row gap-4">
                     <Label htmlFor="delivery" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
@@ -67,7 +65,7 @@ export default function CheckoutPage() {
           
           {deliveryMethod === 'delivery' && (
             <Card className="bg-card/80 border">
-                <CardHeader><CardTitle className="text-2xl">Shipping Address</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="text-xl sm:text-2xl">Shipping Address</CardTitle></CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="col-span-full space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" defaultValue={user?.name} required /></div>
                 <div className="col-span-full space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" defaultValue={user?.email} required /></div>
@@ -79,7 +77,7 @@ export default function CheckoutPage() {
           )}
 
           <Card className="bg-card/80 border">
-            <CardHeader><CardTitle className="text-2xl">M-Pesa Payment</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">M-Pesa Payment</CardTitle></CardHeader>
             <CardContent className="space-y-4">
                 <p className="text-muted-foreground text-sm">You will receive an STK Push on your phone to complete the payment.</p>
                 <div className="space-y-2">
@@ -92,28 +90,28 @@ export default function CheckoutPage() {
 
         <div className="lg:col-span-1">
           <Card className="bg-card/80 border sticky top-28 shadow-lg">
-            <CardHeader><CardTitle className="text-2xl">Order Summary</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">Order Summary</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-4 mb-6">
                 {items.map(item => (
                   <div key={item.id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-3">
-                        <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded" />
+                        <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded w-10 h-auto" />
                         <div>
-                            <p className="font-semibold text-foreground">{item.title}</p>
+                            <p className="font-semibold text-foreground text-sm sm:text-base leading-tight">{item.title}</p>
                             <p className="text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
                     </div>
-                    <p className="font-semibold text-foreground">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-foreground text-sm sm:text-base">Kshs {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
               </div>
-              <div className="space-y-2 text-md border-t border-border pt-4">
+              <div className="space-y-2 text-sm sm:text-md border-t border-border pt-4">
                 <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-semibold text-foreground">Kshs {subtotal.toFixed(2)}</span></div>
                 <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className="font-semibold text-foreground">Kshs {shipping.toFixed(2)}</span></div>
                 <div className="flex justify-between font-bold text-xl mt-2 text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </div>
-               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20">
+               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 rounded-full shadow-lg shadow-primary/20">
                   Place Order
                 </Button>
             </CardContent>

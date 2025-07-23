@@ -75,7 +75,10 @@ export default function RegisterPage() {
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
               {error && (
-                  <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                  <div
+                    className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive"
+                    role="alert"
+                  >
                     <AlertCircle className="h-4 w-4 flex-shrink-0" />
                     <p>{error}</p>
                   </div>

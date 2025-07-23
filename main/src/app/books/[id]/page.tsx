@@ -24,6 +24,7 @@ type Props = {
 export default async function BookDetailPage({ params }: Props) {
   const { id } = await params;
 
+
   const book = getBook(id);
 
   if (!book) {
@@ -33,8 +34,8 @@ export default async function BookDetailPage({ params }: Props) {
   return (
     <div className="bg-dot-grid relative">
       <div className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_70%)] opacity-30"></div>
-      <div className="container mx-auto px-4 py-16 md:py-24">
-        <div className="mb-12">
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        <div className="mb-8 md:mb-12">
           <Button variant="ghost" asChild>
             <Link href="/books">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -42,7 +43,7 @@ export default async function BookDetailPage({ params }: Props) {
             </Link>
           </Button>
         </div>
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
           <div className="relative shadow-2xl shadow-primary/20 rounded-lg overflow-hidden">
             <Image
               src={book.imageUrl}
@@ -55,34 +56,32 @@ export default async function BookDetailPage({ params }: Props) {
             />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-2">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-2">
               {book.title}
             </h1>
             <p className="text-lg text-muted-foreground font-sans mb-4">by {book.author}</p>
             
-            {/* KICD Badge and School Tag */}
             <div className='flex flex-wrap gap-3 mb-6'>
-                <Badge variant="secondary" className="bg-green-100 hover:bg-green-100 text-green-800 border-green-200 text-sm py-1.5 px-3">
+                <Badge variant="secondary" className="bg-green-100 hover:bg-green-100 text-green-800 border-green-200 text-xs sm:text-sm py-1 px-2 sm:py-1.5 sm:px-3">
                   <ShieldCheck className="mr-2 h-5 w-5" /> KICD Approved
                 </Badge>
-                <Badge variant="outline" className="text-primary border-primary/30 text-sm py-1.5 px-3">
+                <Badge variant="outline" className="text-primary border-primary/30 text-xs sm:text-sm py-1 px-2 sm:py-1.5 sm:px-3">
                   <Star className="mr-2 h-5 w-5 text-yellow-500 fill-current" /> Used in 120+ Kenyan schools
                 </Badge>
             </div>
 
-            <p className="text-4xl font-bold text-primary my-4 font-sans">
+            <p className="text-3xl sm:text-4xl font-bold text-primary my-4 font-sans">
               Kshs {book.price.toFixed(2)}
             </p>
-            <p className="text-foreground/80 leading-relaxed font-sans mb-10">
+            <p className="text-foreground/80 leading-relaxed font-sans mb-8">
               {book.description}
             </p>
 
             <AddToCart book={book} />
 
-            {/* Perfect For & Why Choose Section */}
-            <div className="grid sm:grid-cols-2 gap-8 mt-4 border-t pt-8">
+            <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 mt-8 border-t pt-8">
               <div>
-                <h3 className="font-bold text-lg mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary"/>Perfect for:</h3>
+                <h2 className="font-bold text-lg mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary"/>Perfect for:</h2>
                 <ul className="space-y-2 text-foreground/80 font-sans list-inside">
                   <li className="flex items-start gap-2"><UserCheck className="h-4 w-4 mt-1 text-accent shrink-0"/>Parents supporting home learning</li>
                   <li className="flex items-start gap-2"><Users className="h-4 w-4 mt-1 text-accent shrink-0"/>Teachers using CBC creative arts</li>
@@ -90,7 +89,7 @@ export default async function BookDetailPage({ params }: Props) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-3 flex items-center gap-2"><Check className="h-5 w-5 text-primary"/>Why choose this book:</h3>
+                <h2 className="font-bold text-lg mb-3 flex items-center gap-2"><Check className="h-5 w-5 text-primary"/>Why choose this book:</h2>
                  <ul className="space-y-2 text-foreground/80 font-sans list-inside">
                   <li className="flex items-start gap-2"><ShieldCheck className="h-4 w-4 mt-1 text-accent shrink-0"/>CBC-aligned and approved by KICD</li>
                   <li className="flex items-start gap-2"><PenTool className="h-4 w-4 mt-1 text-accent shrink-0"/>Builds creativity & critical thinking</li>

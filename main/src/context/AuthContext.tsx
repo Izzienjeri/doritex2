@@ -20,12 +20,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (userData: User) => {
-    // In a real app, you'd get a token from your API
     setUser(userData);
   };
 
   const logout = () => {
-    // In a real app, you'd clear the token
     setUser(null);
   };
 

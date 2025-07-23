@@ -17,21 +17,21 @@ export default function AdminOrdersPage() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Order ID</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Customer</TableHead>
+                                <TableHead className="hidden md:table-cell">Date</TableHead>
+                                <TableHead className="hidden md:table-cell">Customer</TableHead>
                                 <TableHead>Total</TableHead>
                                 <TableHead>Status</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {dummyOrders.map(order => (
-                                <TableRow key={order.id}>
-                                    <TableCell className="font-medium">{order.id}</TableCell>
-                                    <TableCell>{order.date}</TableCell>
-                                    <TableCell>Valued Customer</TableCell>
-                                    <TableCell>Kshs {order.total.toFixed(2)}</TableCell>
-                                    <TableCell>
-                                        <Select defaultValue={order.status}>
+                                <TableRow key={order.id} className="text-xs sm:text-sm">
+                                    <TableCell className="font-medium p-2">{order.id}</TableCell>
+                                    <TableCell className="hidden md:table-cell p-2">{order.date}</TableCell>
+                                    <TableCell className="hidden md:table-cell p-2">Valued Customer</TableCell>
+                                    <TableCell className="p-2">Kshs {order.total.toFixed(2)}</TableCell>
+                                    <TableCell className="p-2">
+                                        <Select defaultValue={order.status} >
                                             <SelectTrigger className="w-[120px]">
                                                 <SelectValue placeholder="Status" />
                                             </SelectTrigger>

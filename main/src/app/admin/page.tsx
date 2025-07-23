@@ -39,9 +39,10 @@ export default function AdminDashboard() {
         </div>
         <div className="mt-8">
             <Card>
-                <CardHeader><CardTitle>Recent Orders</CardTitle></CardHeader>
+                <CardHeader>
+                    <CardTitle>Recent Orders</CardTitle>
+                </CardHeader>
                 <CardContent>
-                    {/* A table of recent orders would go here */}
                     <p className="text-muted-foreground">Recent orders will be displayed here.</p>
                 </CardContent>
             </Card>

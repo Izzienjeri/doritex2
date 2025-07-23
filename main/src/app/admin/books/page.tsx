@@ -20,9 +20,9 @@ export default function AdminBooksPage() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
+                            <TableHead className="hidden w-[80px] sm:table-cell">Image</TableHead>
                             <TableHead>Title</TableHead>
-                            <TableHead>Author</TableHead>
+                            <TableHead className="hidden md:table-cell">Author</TableHead>
                             <TableHead>Price</TableHead>
                             <TableHead>Stock</TableHead>
                             <TableHead>Actions</TableHead>
@@ -30,8 +30,8 @@ export default function AdminBooksPage() {
                     </TableHeader>
                     <TableBody>
                         {dummyBooks.map(book => (
-                            <TableRow key={book.id}>
-                                <TableCell className="hidden sm:table-cell">
+                            <TableRow key={book.id} className="text-xs sm:text-sm">
+                                <TableCell className="hidden sm:table-cell p-2">
                                     <Image 
                                         alt={book.title} 
                                         className="aspect-square rounded-md object-cover" 
@@ -40,12 +40,12 @@ export default function AdminBooksPage() {
                                         width="64"
                                     />
                                 </TableCell>
-                                <TableCell className="font-medium">{book.title}</TableCell>
-                                <TableCell>{book.author}</TableCell>
-                                <TableCell>Kshs {book.price.toFixed(2)}</TableCell>
-                                <TableCell>{book.stock}</TableCell>
-                                <TableCell>
-                                    <div className="flex gap-2">
+                                <TableCell className="font-medium p-2">{book.title}</TableCell>
+                                <TableCell className="hidden md:table-cell p-2">{book.author}</TableCell>
+                                <TableCell className="p-2">Kshs {book.price.toFixed(2)}</TableCell>
+                                <TableCell className="p-2">{book.stock}</TableCell>
+                                <TableCell className="p-2">
+                                    <div className="flex flex-col sm:flex-row gap-2">
                                         <Button variant="outline" size="sm">Edit</Button>
                                         <Button variant="destructive" size="sm">Delete</Button>
                                     </div>

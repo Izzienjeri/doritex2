@@ -40,6 +40,7 @@ export function Header() {
         height={56}
         priority
         className="h-14 w-auto"
+        sizes="200px"
       />
     </Link>
   );
@@ -56,7 +57,6 @@ export function Header() {
             <BrandLogo />
           </div>
 
-          {/* --- DESKTOP NAVIGATION --- */}
           <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="flex items-center gap-1 rounded-full bg-primary p-1.5 backdrop-blur-sm border border-white/10 shadow-md">
               <Link
@@ -118,8 +118,21 @@ export function Header() {
               </Link>
             </div>
           </nav>
+
+          <div className="flex items-center gap-2 lg:hidden">
+            <Button size="icon" className="rounded-full relative flex-shrink-0 bg-primary text-primary-foreground hover:bg-secondary" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+          </div>
           
-          {/* --- DESKTOP ACTIONS (Hidden on Mobile) --- */}
           <div className="hidden lg:flex items-center gap-4">
               {user ? (
                  <DropdownMenu>
@@ -157,7 +170,7 @@ export function Header() {
                 </>
               )}
 
-            <Button variant="outline" size="icon" className="rounded-full relative flex-shrink-0 bg-white/50" asChild>
+            <Button size="icon" className="rounded-full relative flex-shrink-0 bg-primary text-primary-foreground hover:bg-secondary" asChild>
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (

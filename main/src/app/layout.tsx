@@ -7,17 +7,17 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
-import { MobileFAB } from "@/components/layout/MobileFAB";
+import { MobileFABLoader } from "@/components/layout/MobileFABLoader";
 
 const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   variable: "--font-sans",
 });
 
 const fontDisplay = Oswald({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "700"],
   variable: "--font-display",
 });
 
@@ -48,7 +48,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
-            <MobileFAB />
+            <MobileFABLoader />
             <Toaster richColors closeButton />
           </CartProvider>
         </AuthProvider>

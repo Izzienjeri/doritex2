@@ -1,26 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -59,7 +45,7 @@
   --primary-rgb: 15, 31, 104;
   --primary-foreground: #ffffff;
 
-  --secondary: #0099FF; /* Using accent color */
+  --secondary: #0099FF;
   --secondary-foreground: #ffffff;
 
   --accent: #0099FF;
@@ -71,7 +57,7 @@
 
   --destructive: hsl(0 84.2% 60.2%); 
 
-  --border: rgba(15, 31, 104, 0.15); /* Based on new primary */
+  --border: rgba(15, 31, 104, 0.15);
   --input: #ffffff;
   --ring: #0099FF;
 }
@@ -112,91 +98,17 @@ body::before {
   100% { transform: translateY(0px); }
 }
 
-#cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 153, 255, 0.15), transparent 60%);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  filter: blur(50px);
-  transition: opacity 0.3s ease;
-}
 
-body:hover #cursor-glow {
-  opacity: 1;
-}
 
-.glass-card {
-  @apply bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl shadow-black/5;
-}
-
-.perspective-container {
-  perspective: 1000px;
-}
 
 .bg-dot-grid {
   background-image: radial-gradient(circle, rgba(15, 31, 104, 0.05) 1px, transparent 1px);
   background-size: 1.25rem 1.25rem;
 }
 
-.text-liquid-ink {
-  @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(110deg, var(--secondary) 15%, var(--accent) 35%, var(--primary) 65%, var(--secondary) 85%);
-  background-size: 300% 100%;
-  animation: liquid-flow 8s ease-in-out infinite;
-}
-@keyframes liquid-flow {
-  0% { background-position: 100% 50%; }
-  50% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
 
-.link-underline {
-  position: relative;
-  display: inline-block;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 2px;
-  background-color: var(--primary);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-}
-.link-underline:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
 
-.blob-container {
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  animation: blob-morph 10s ease-in-out infinite;
-  overflow: hidden;
-  position: relative;
-}
 
-@keyframes blob-morph {
-  0% {
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  }
-  50% {
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  }
-  100% {
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  }
-}
-
-/* --- ADDED FOR FAB PULSE ANIMATION --- */
 @keyframes pulse-fab {
   0%, 100% {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 0 rgba(var(--accent-rgb), 0.5);
@@ -208,4 +120,42 @@ body:hover #cursor-glow {
 
 .animate-pulse-fab {
   animation: pulse-fab 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes waveSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes waveFast {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-wave-slow {
+  animation: waveSlow 12s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.animate-wave-fast {
+  animation: waveFast 8s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+  opacity: 0;
 }

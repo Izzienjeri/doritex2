@@ -17,7 +17,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // In a real app with server-side auth, this redirect would happen in middleware
     if (user === null) {
       router.push('/login');
     }
@@ -28,9 +27,9 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter">My Account</h1>
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <div className="text-center mb-8 md:mb-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter">My Account</h1>
         <p className="text-muted-foreground mt-2">Manage your profile and view your order history.</p>
       </div>
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">

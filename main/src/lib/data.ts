@@ -127,7 +127,7 @@ export interface MockUser {
   id: string;
   name: string;
   email: string;
-  password: string; // NOTE: In a real application, NEVER store plain text passwords. This should be a hash.
+  password: string;
   isAdmin: boolean;
 }
 

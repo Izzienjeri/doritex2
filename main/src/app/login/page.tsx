@@ -24,18 +24,17 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); // State for inline error message
+  const [error, setError] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(''); // Clear previous errors on a new attempt
+    setError('');
 
     const foundUser = mockUsers.find(
       (user) => user.email === email && user.password === password
     );
 
     if (foundUser) {
-      // Success: Log user in and show a success toast
       login({ name: foundUser.name, email: foundUser.email, isAdmin: foundUser.isAdmin });
       toast.success(`Welcome back, ${foundUser.name}!`);
       
@@ -45,9 +44,8 @@ export default function LoginPage() {
         router.push('/profile');
       }
     } else {
-      // Failure: Set the inline error message instead of showing a toast
       setError("Invalid email or password. Please try again.");
-      setPassword(''); // Clear password field for security
+      setPassword('');
     }
   };
 
@@ -81,7 +79,10 @@ export default function LoginPage() {
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
               {error && (
-                <div className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+                <div
+                  className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive"
+                  role="alert"
+                >
                   <AlertCircle className="h-4 w-4 flex-shrink-0" />
                   <p>{error}</p>
                 </div>

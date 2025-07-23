@@ -1,34 +1,2132 @@
-You've hit on a key layout issue. The single column on mobile for the featured books was indeed incorrect, and the previous size adjustments weren't quite right. My apologies for that!
+Of course. Here is the complete, updated code with all comments removed and the cart button styling corrected as requested.
 
-I've made two targeted changes to fix this:
+### Summary of Changes:
+1.  **All Comments Removed:** All code comments (`//`, `/* ... */`, `{/* ... */}`) have been stripped from every file for a cleaner codebase.
+2.  **Cart Button Fixed:** The shopping cart icon in the header now has a blue background by default and transitions to a slightly darker shade of blue on hover, as requested. This fix has been applied to both the mobile and desktop views.
+3.  **Code Cleanup:** A duplicated CSS animation block in `globals.css` was removed.
 
-1.  **Corrected the Grid Layout:** I've updated the `FeaturedBooks` component to use a **two-column grid** on mobile and tablet, which then expands to three columns on larger screens. This fixes the single-column problem.
-2.  **Standardized Card Size:** I've adjusted the `BookCard` component to use a consistent and more compact aspect ratio (`4:5`) across all screen sizes. This prevents the cards from being overly tall on mobile and simplifies the responsive styling for a cleaner look.
+Here is the full, updated code for all 39 files.
 
-These changes ensure the featured books are displayed in a neat, responsive grid that looks great on any device.
+# Extracted Code (.ts, .tsx, .css)
+# Date and Time: 2025-07-23 13:02:14
+# Files Included: 39
 
-Here is the complete updated code for the two files I modified:
+# === lib/utils.ts ===
+```ts
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-### `components/shared/FeaturedBooks.tsx`
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+```
+
+# === lib/data.ts ===
+```ts
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  category: 'Lower Primary' | 'Upper Primary' | 'Junior Secondary';
+  price: number;
+  imageUrl: string;
+  description: string;
+  stock: number;
+}
+
+export interface Order {
+  id: string;
+  date: string;
+  status: 'Placed' | 'Processing' | 'Shipped' | 'Delivered';
+  total: number;
+  items: (Book & { quantity: number })[];
+}
+
+export const dummyBooks: Book[] = [
+  {
+    id: "grade-1",
+    title: "Champion Creative Activities - Grade 1",
+    author: "Jane Doe",
+    category: "Lower Primary",
+    price: 850,
+    imageUrl: "/image1.png",
+    description: "Engaging creative activities for Grade 1 learners, fostering imagination and foundational skills. Approved by KICD.",
+    stock: 25,
+  },
+  {
+    id: "grade-2",
+    title: "Champion Creative Activities - Grade 2",
+    author: "Jane Doe",
+    category: "Lower Primary",
+    price: 900,
+    imageUrl: "/image2.png",
+    description: "A fun and interactive book to build upon the creative skills of Grade 2 students. Approved by KICD.",
+    stock: 30,
+  },
+  {
+    id: "grade-3",
+    title: "Champion Creative Activities - Grade 3",
+    author: "John Smith",
+    category: "Lower Primary",
+    price: 950,
+    imageUrl: "/image3.png",
+    description: "Encourages creativity and critical thinking with a variety of activities for Grade 3. Approved by KICD.",
+    stock: 15,
+  },
+  {
+    id: "grade-4",
+    title: "Champion Creative Arts - Grade 4",
+    author: "John Smith",
+    category: "Upper Primary",
+    price: 1000,
+    imageUrl: "/image4.png",
+    description: "An introduction to the world of creative arts, covering various mediums and techniques for Grade 4. Approved by KICD.",
+    stock: 22,
+  },
+  {
+    id: "grade-5",
+    title: "Champion Creative Arts - Grade 5",
+    author: "Emily White",
+    category: "Upper Primary",
+    price: 1100,
+    imageUrl: "/image5.png",
+    description: "Develops artistic talents and appreciation with advanced projects and lessons for Grade 5 learners. Approved by KICD.",
+    stock: 18,
+  },
+  {
+    id: "grade-6",
+    title: "Champion Creative Arts - Grade 6",
+    author: "Emily White",
+    category: "Upper Primary",
+    price: 1250,
+    imageUrl: "/image6.png",
+    description: "A comprehensive guide to creative arts for Grade 6, preparing students for more complex artistic expression. Approved by KICD.",
+    stock: 12,
+  },
+  {
+    id: "grade-7",
+    title: "Champion Creative Arts and Sports - Grade 7",
+    author: "Michael Green",
+    category: "Junior Secondary",
+    price: 1400,
+    imageUrl: "/image7.png",
+    description: "An integrated approach to both creative arts and sports, promoting well-rounded development for Grade 7 students. Approved by KICD.",
+    stock: 20,
+  },
+  {
+    id: "grade-8",
+    title: "Champion Creative Arts and Sports - Grade 8",
+    author: "Michael Green",
+    category: "Junior Secondary",
+    price: 1500,
+    imageUrl: "/image8.png",
+    description: "Advanced concepts in creative arts and sports to challenge and inspire Grade 8 learners. Approved by KICD.",
+    stock: 17,
+  }
+];
+
+export const dummyOrders: Order[] = [
+    {
+        id: 'ORD-12345',
+        date: '2025-07-10',
+        status: 'Delivered',
+        total: 2600.00,
+        items: [
+            { ...dummyBooks[0], quantity: 1 },
+            { ...dummyBooks[4], quantity: 1 },
+        ]
+    },
+    {
+        id: 'ORD-67890',
+        date: '2025-07-11',
+        status: 'Processing',
+        total: 3400.00,
+        items: [
+            { ...dummyBooks[6], quantity: 1 },
+            { ...dummyBooks[7], quantity: 1 },
+        ]
+    }
+];
+
+export interface MockUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+}
+
+export const mockUsers: MockUser[] = [
+  {
+    id: 'user-1',
+    name: 'Valued Customer',
+    email: 'user@example.com',
+    password: 'pass123',
+    isAdmin: false,
+  },
+  {
+    id: 'admin-1',
+    name: 'Admin User',
+    email: 'admin@example.com',
+    password: 'pass123',
+    isAdmin: true,
+  }
+];
+```
+
+# === app/globals.css ===
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: #F5F8FF;
+  --foreground: #0F1F68;
+
+  --card: #ffffff;
+  --card-foreground: #2b2b2b;
+
+  --popover: #ffffff;
+  --popover-foreground: #0F1F68;
+
+  --primary: #0F1F68;
+  --primary-rgb: 15, 31, 104;
+  --primary-foreground: #ffffff;
+
+  --secondary: #0099FF;
+  --secondary-foreground: #ffffff;
+
+  --accent: #0099FF;
+  --accent-rgb: 0, 153, 255;
+  --accent-foreground: #ffffff;
+
+  --muted: #F0F4FF;
+  --muted-foreground: #3B4B9A;
+
+  --destructive: hsl(0 84.2% 60.2%); 
+
+  --border: rgba(15, 31, 104, 0.15);
+  --input: #ffffff;
+  --ring: #0099FF;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply text-card-foreground antialiased cursor-default overflow-x-hidden;
+    background-color: var(--background);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display uppercase tracking-wider text-balance text-foreground;
+  }
+  
+  h1 {
+    text-shadow: 0 0 60px rgba(var(--primary-rgb), 0.2);
+  }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: radial-gradient(circle at 15% 20%, rgba(var(--primary-rgb), 0.15), transparent 40%),
+                    radial-gradient(circle at 85% 75%, rgba(0, 153, 255, 0.15), transparent 40%);
+  z-index: -1;
+  animation: float-glow 25s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes float-glow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+  100% { transform: translateY(0px); }
+}
+
+
+
+
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(15, 31, 104, 0.05) 1px, transparent 1px);
+  background-size: 1.25rem 1.25rem;
+}
+
+
+
+
+@keyframes pulse-fab {
+  0%, 100% {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 0 rgba(var(--accent-rgb), 0.5);
+  }
+  50% {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.1), 0 0 0 1rem rgba(var(--accent-rgb), 0);
+  }
+}
+
+.animate-pulse-fab {
+  animation: pulse-fab 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes waveSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes waveFast {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-wave-slow {
+  animation: waveSlow 12s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.animate-wave-fast {
+  animation: waveFast 8s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+  opacity: 0;
+}
+```
+
+# === app/layout.tsx ===
 ```tsx
-"use client";
+import type { Metadata } from "next";
+import { Oswald, Inter } from "next/font/google";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
+import { MobileFABLoader } from "@/components/layout/MobileFABLoader";
 
-import { dummyBooks } from '@/lib/data';
-import { BookCard } from './BookCard';
+const fontSans = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-sans",
+});
 
-export function FeaturedBooks() {
+const fontDisplay = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-display",
+});
+
+export const metadata: Metadata = {
+  title: "Champion Creative Series | CBC Books for Kenya",
+  description:
+    "Kenya’s trusted, KICD-approved CBC Creative Arts & Sports books for Grades 1–8. Boost your child's creativity with engaging, practical activities. Order now for fast delivery nationwide.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-      {dummyBooks.slice(0, 3).map((book) => (
-        <BookCard book={book} key={book.id} />
-      ))}
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen font-sans antialiased",
+          fontSans.variable,
+          fontDisplay.variable
+        )}
+      >
+        <AuthProvider>
+          <CartProvider>
+            <div className="relative flex min-h-dvh flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <MobileFABLoader />
+            <Toaster richColors closeButton />
+          </CartProvider>
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+# === app/page.tsx ===
+```tsx
+import dynamic from 'next/dynamic';
+import { HeroSection } from "@/components/page/HeroSection";
+import { Skeleton } from '@/components/ui/skeleton';
+
+const FeaturedPublicationsSection = dynamic(() =>
+  import('@/components/page/FeaturedPublicationsSection').then(mod => mod.FeaturedPublicationsSection),
+  { loading: () => <Skeleton className="h-[500px] w-full" /> }
+);
+const ModernLearnerSection = dynamic(() =>
+  import('@/components/page/ModernLearnerSection').then(mod => mod.ModernLearnerSection),
+  { loading: () => <Skeleton className="h-[500px] w-full" /> }
+);
+const MissionVisionSection = dynamic(() =>
+  import('@/components/page/MissionVisionSection').then(mod => mod.MissionVisionSection),
+  { loading: () => <Skeleton className="h-[500px] w-full" /> }
+);
+const TestimonialsSection = dynamic(() =>
+  import('@/components/page/TestimonialsSection').then(mod => mod.TestimonialsSection),
+  { loading: () => <Skeleton className="h-[500px] w-full" /> }
+);
+
+export default function HomePage() {
+  return (
+    <div className="flex flex-col bg-background">
+      <HeroSection />
+      <FeaturedPublicationsSection />
+      <ModernLearnerSection />
+      <MissionVisionSection />
+      <TestimonialsSection />
+
+      <svg className="absolute w-0 h-0">
+        <defs>
+          <clipPath id="shape-blob-left" clipPathUnits="objectBoundingBox">
+            <path d="M0.81,0.11 C0.93,0.25,0.97,0.5,0.92,0.69 C0.87,0.88,0.72,1.01,0.54,1.02 C0.35,1.03,0.13,0.92,0.04,0.74 C-0.05,0.56,-0.02,0.3,0.11,0.16 C0.24,0.02,0.51,-0.06,0.68,0.03 C0.77,0.08,0.81,0.11,0.81,0.11 Z"></path>
+          </clipPath>
+          <clipPath id="shape-blob-right" clipPathUnits="objectBoundingBox">
+            <path d="M0.11,0.15 C0.25,0.03,0.48,-0.02,0.65,0.04 C0.82,0.1,0.93,0.27,0.95,0.46 C0.97,0.65,0.9,0.84,0.77,0.94 C0.64,1.04,0.44,1.05,0.27,0.97 C0.1,0.89,-0.04,0.72,0,0.52 C0.04,0.32,0.08,0.2,0.11,0.15 Z"></path>
+          </clipPath>
+        </defs>
+      </svg>
     </div>
   );
 }
 ```
 
-### `components/shared/BookCard.tsx`
+# === app/admin/layout.tsx ===
 ```tsx
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import {
+  LayoutDashboard,
+  Book,
+  ShoppingBag,
+  Settings,
+  Home,
+  Menu,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+
+const sidebarNavItems = [
+  { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { title: "Books", href: "/admin/books", icon: Book },
+  { title: "Orders", href: "/admin/orders", icon: ShoppingBag },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
+];
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user || !user.isAdmin) {
+      router.push("/login");
+    }
+  }, [user, router]);
+
+  if (!user || !user.isAdmin) {
+    return (
+      <div className="container py-24 text-center">
+        Access Denied. Redirecting...
+      </div>
+    );
+  }
+
+  const NavContent = () => (
+    <nav className="grid items-start p-4 text-sm font-medium">
+      {sidebarNavItems.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+            pathname === item.href && "bg-muted text-primary"
+          )}
+        >
+          <item.icon className="h-4 w-4" />
+          {item.title}
+        </Link>
+      ))}
+      <Link
+        href="/"
+        className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+      >
+        <Home className="h-4 w-4" /> Back to Site
+      </Link>
+    </nav>
+  );
+
+  return (
+    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <aside className="hidden border-r bg-background md:block">
+        <div className="flex h-full max-h-screen flex-col">
+          <div className="flex h-16 items-center border-b px-6">
+            <Link href="/admin" className="font-bold text-lg text-primary">
+              Admin Panel
+            </Link>
+          </div>
+          <div className="flex-1 overflow-auto py-2">
+            <NavContent />
+          </div>
+        </div>
+      </aside>
+      <div className="flex flex-col">
+        <header className="flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="flex flex-col p-0">
+              <div className="flex h-16 items-center border-b px-6">
+                 <Link href="/admin" className="font-bold text-lg text-primary">
+                    <SheetClose>Admin Panel</SheetClose>
+                 </Link>
+              </div>
+              <div className="flex-1 overflow-auto py-2">
+                <nav className="grid items-start p-4 text-sm font-medium">
+                  {sidebarNavItems.map((item) => (
+                    <SheetClose asChild key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          pathname === item.href && "bg-muted text-primary"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {item.title}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                   <SheetClose asChild>
+                    <Link
+                      href="/"
+                      className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    >
+                      <Home className="h-4 w-4" /> Back to Site
+                    </Link>
+                   </SheetClose>
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
+          <div className="w-full flex-1">
+          </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:p-6 bg-muted/30">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/admin/page.tsx ===
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Book, ShoppingBag, Users } from "lucide-react";
+
+export default function AdminDashboard() {
+  return (
+    <div>
+        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+                    <ShoppingBag className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">1,245</div>
+                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Books</CardTitle>
+                    <Book className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">8</div>
+                    <p className="text-xs text-muted-foreground">All listed publications</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground"/>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">+235</div>
+                    <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="mt-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Recent Orders</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Recent orders will be displayed here.</p>
+                </CardContent>
+            </Card>
+        </div>
+    </div>
+  )
+}
+```
+
+# === app/admin/orders/page.tsx ===
+```tsx
+"use client"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { dummyOrders } from "@/lib/data";
+
+export default function AdminOrdersPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Manage Orders</CardTitle>
+                <CardDescription>View customer orders and update their status.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Order ID</TableHead>
+                                <TableHead className="hidden md:table-cell">Date</TableHead>
+                                <TableHead className="hidden md:table-cell">Customer</TableHead>
+                                <TableHead>Total</TableHead>
+                                <TableHead>Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {dummyOrders.map(order => (
+                                <TableRow key={order.id} className="text-xs sm:text-sm">
+                                    <TableCell className="font-medium p-2">{order.id}</TableCell>
+                                    <TableCell className="hidden md:table-cell p-2">{order.date}</TableCell>
+                                    <TableCell className="hidden md:table-cell p-2">Valued Customer</TableCell>
+                                    <TableCell className="p-2">Kshs {order.total.toFixed(2)}</TableCell>
+                                    <TableCell className="p-2">
+                                        <Select defaultValue={order.status} >
+                                            <SelectTrigger className="w-[120px]">
+                                                <SelectValue placeholder="Status" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Placed">Placed</SelectItem>
+                                                <SelectItem value="Processing">Processing</SelectItem>
+                                                <SelectItem value="Shipped">Shipped</SelectItem>
+                                                <SelectItem value="Delivered">Delivered</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+```
+
+# === app/admin/books/page.tsx ===
+```tsx
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { dummyBooks } from "@/lib/data";
+import Image from "next/image";
+
+export default function AdminBooksPage() {
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex justify-between items-center">
+                    <div>
+                        <CardTitle>Manage Books</CardTitle>
+                        <CardDescription>Add, edit, or delete publications.</CardDescription>
+                    </div>
+                    <Button>Add New Book</Button>
+                </div>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="hidden w-[80px] sm:table-cell">Image</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead className="hidden md:table-cell">Author</TableHead>
+                            <TableHead>Price</TableHead>
+                            <TableHead>Stock</TableHead>
+                            <TableHead>Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyBooks.map(book => (
+                            <TableRow key={book.id} className="text-xs sm:text-sm">
+                                <TableCell className="hidden sm:table-cell p-2">
+                                    <Image 
+                                        alt={book.title} 
+                                        className="aspect-square rounded-md object-cover" 
+                                        height="64" 
+                                        src={book.imageUrl} 
+                                        width="64"
+                                    />
+                                </TableCell>
+                                <TableCell className="font-medium p-2">{book.title}</TableCell>
+                                <TableCell className="hidden md:table-cell p-2">{book.author}</TableCell>
+                                <TableCell className="p-2">Kshs {book.price.toFixed(2)}</TableCell>
+                                <TableCell className="p-2">{book.stock}</TableCell>
+                                <TableCell className="p-2">
+                                    <div className="flex flex-col sm:flex-row gap-2">
+                                        <Button variant="outline" size="sm">Edit</Button>
+                                        <Button variant="destructive" size="sm">Delete</Button>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    )
+}
+```
+
+# === app/admin/settings/page.tsx ===
+```tsx
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export default function AdminSettingsPage() {
+  return (
+    <div className="max-w-2xl">
+      <h1 className="text-3xl font-bold tracking-tight mb-6">Admin Settings</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>M-Pesa Configuration</CardTitle>
+          <CardDescription>
+            Configure your M-Pesa Till payment settings.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="till-number">Till Number</Label>
+            <Input id="till-number" placeholder="e.g., 123456" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-key">Consumer Key</Label>
+            <Input id="consumer-key" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="consumer-secret">Consumer Secret</Label>
+            <Input id="consumer-secret" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>Save Settings</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === app/cart/page.tsx ===
+```tsx
+"use client";
+
+import { useCart } from "@/context/CartContext";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function CartPage() {
+  const { state, dispatch } = useCart();
+  const { items } = state;
+
+  const updateQuantity = (id: string, quantity: number) => {
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
+  };
+  
+  const removeItem = (id: string) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: { id } });
+  };
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = subtotal > 0 ? 500 : 0;
+  const total = subtotal + shipping;
+
+  return (
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 sm:mb-12 text-center">Shopping Cart</h1>
+      
+      {items.length === 0 ? (
+        <div className="text-center py-20 bg-muted rounded-lg border">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">Your cart is empty.</h2>
+          <p className="text-muted-foreground mb-8">
+            Looks like you haven&rsquo;t added any books yet.
+          </p>
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 px-8 rounded-full shadow-lg shadow-primary/20">
+            <Link href="/books">Explore Books</Link>
+          </Button>
+        </div>
+      ) : (
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="lg:col-span-2 space-y-6">
+            {items.map(item => (
+              <Card key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center p-3 sm:p-4 gap-4 bg-card/80 border">
+                <Image src={item.imageUrl} alt={item.title} width={80} height={120} className="w-20 sm:w-24 h-auto rounded-md object-cover self-center sm:self-start shrink-0" />
+                <div className="flex-grow w-full">
+                    <h3 className="text-base sm:text-lg font-bold text-foreground">{item.title}</h3>
+                    <p className="text-base sm:text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-2 sm:gap-4 self-center justify-between sm:justify-end w-full sm:w-auto">
+                    <div className="flex items-center border rounded-full p-1 bg-white/50">
+                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label={`Decrease quantity of ${item.title}`}>
+                            <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center font-bold" aria-live="polite">{item.quantity}</span>
+                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label={`Increase quantity of ${item.title}`}>
+                            <Plus className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.id)} aria-label={`Remove ${item.title} from cart`}>
+                        <Trash2 className="h-5 w-5" />
+                    </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <div className="lg:col-span-1">
+            <Card className="bg-card/80 backdrop-blur-sm border shadow-lg sticky top-28">
+              <CardHeader>
+                <CardTitle className="text-2xl text-foreground">Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 text-base sm:text-lg">
+                <div className="flex justify-between text-card-foreground/80"><span>Subtotal</span><span className='font-semibold text-foreground'>Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-card-foreground/80"><span>Shipping</span><span className='font-semibold text-foreground'>Kshs {shipping.toFixed(2)}</span></div>
+                <hr className="border-border" />
+                <div className="flex justify-between font-bold text-xl text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
+              </CardContent>
+              <CardFooter>
+                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 rounded-full shadow-lg shadow-primary/20">
+                    <Link href="/checkout">
+                        Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                 </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+# === app/login/page.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
+import { mockUsers } from "@/lib/data";
+import { AlertCircle } from "lucide-react";
+
+export default function LoginPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    const foundUser = mockUsers.find(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (foundUser) {
+      login({ name: foundUser.name, email: foundUser.email, isAdmin: foundUser.isAdmin });
+      toast.success(`Welcome back, ${foundUser.name}!`);
+      
+      if (foundUser.isAdmin) {
+        router.push('/admin');
+      } else {
+        router.push('/profile');
+      }
+    } else {
+      setError("Invalid email or password. Please try again.");
+      setPassword('');
+    }
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Sign in to continue your journey.
+              <br />
+              (user: user@example.com, admin: admin@example.com. pw: pass123)
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleLogin}>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => { setEmail(e.target.value); setError(''); }} required/>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }} required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              {error && (
+                <div
+                  className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive"
+                  role="alert"
+                >
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  <p>{error}</p>
+                </div>
+              )}
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
+                Login
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Don&rsquo;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}
+```
+
+# === app/books/page.tsx ===
+```tsx
+import { dummyBooks } from '@/lib/data';
+import { BookFilters } from '@/components/shared/BookFilters';
+import { BookGrid } from '@/components/shared/BookGrid';
+
+type Props = {
+  searchParams: Promise<{
+    query?: string;
+    category?: string;
+  }>;
+};
+
+export default async function BooksPage({ searchParams }: Props) {
+  const { query = '', category = 'All' } = await searchParams;
+
+  const filteredBooks = dummyBooks.filter(book => {
+    const matchesCategory = category === 'All' || book.category === category;
+    const matchesSearch = book.title.toLowerCase().includes(query.toLowerCase()) ||
+                          book.author.toLowerCase().includes(query.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 -z-10 bg-dot-grid [mask-image:linear-gradient(to_bottom,white,transparent_80%)]"></div>
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tighter text-center">
+              Our Collection
+            </h1>
+            <p className="text-center text-muted-foreground text-base sm:text-lg mt-4 mb-8 md:mb-12 max-w-2xl mx-auto font-sans">
+              Search and explore our full range of publications. Your next great read is just a click away.
+            </p>
+            <div className="max-w-xl mx-auto mb-12 md:mb-16">
+              <BookFilters />
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <BookGrid books={filteredBooks} />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+```
+
+# === app/books/[id]/page.tsx ===
+```tsx
+import { dummyBooks, Book } from '@/lib/data';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Check, Target, PenTool, Users, Home, School, ShieldCheck, Star, UserCheck, BookOpen } from 'lucide-react';
+import Link from 'next/link';
+import { AddToCart } from '@/components/shared/AddToCart';
+import { notFound } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+
+export async function generateStaticParams() {
+  return dummyBooks.map(book => ({
+    id: book.id,
+  }));
+}
+
+function getBook(id: string): Book | undefined {
+  return dummyBooks.find(b => b.id === id);
+}
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function BookDetailPage({ params }: Props) {
+  const { id } = await params;
+
+
+  const book = getBook(id);
+
+  if (!book) {
+    notFound();
+  }
+
+  return (
+    <div className="bg-dot-grid relative">
+      <div className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,white_20%,transparent_70%)] opacity-30"></div>
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        <div className="mb-8 md:mb-12">
+          <Button variant="ghost" asChild>
+            <Link href="/books">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Collection
+            </Link>
+          </Button>
+        </div>
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
+          <div className="relative shadow-2xl shadow-primary/20 rounded-lg overflow-hidden">
+            <Image
+              src={book.imageUrl}
+              alt={book.title}
+              width={800}
+              height={1200}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-foreground mb-2">
+              {book.title}
+            </h1>
+            <p className="text-lg text-muted-foreground font-sans mb-4">by {book.author}</p>
+            
+            <div className='flex flex-wrap gap-3 mb-6'>
+                <Badge variant="secondary" className="bg-green-100 hover:bg-green-100 text-green-800 border-green-200 text-xs sm:text-sm py-1 px-2 sm:py-1.5 sm:px-3">
+                  <ShieldCheck className="mr-2 h-5 w-5" /> KICD Approved
+                </Badge>
+                <Badge variant="outline" className="text-primary border-primary/30 text-xs sm:text-sm py-1 px-2 sm:py-1.5 sm:px-3">
+                  <Star className="mr-2 h-5 w-5 text-yellow-500 fill-current" /> Used in 120+ Kenyan schools
+                </Badge>
+            </div>
+
+            <p className="text-3xl sm:text-4xl font-bold text-primary my-4 font-sans">
+              Kshs {book.price.toFixed(2)}
+            </p>
+            <p className="text-foreground/80 leading-relaxed font-sans mb-8">
+              {book.description}
+            </p>
+
+            <AddToCart book={book} />
+
+            <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 mt-8 border-t pt-8">
+              <div>
+                <h2 className="font-bold text-lg mb-3 flex items-center gap-2"><Target className="h-5 w-5 text-primary"/>Perfect for:</h2>
+                <ul className="space-y-2 text-foreground/80 font-sans list-inside">
+                  <li className="flex items-start gap-2"><UserCheck className="h-4 w-4 mt-1 text-accent shrink-0"/>Parents supporting home learning</li>
+                  <li className="flex items-start gap-2"><Users className="h-4 w-4 mt-1 text-accent shrink-0"/>Teachers using CBC creative arts</li>
+                  <li className="flex items-start gap-2"><School className="h-4 w-4 mt-1 text-accent shrink-0"/>Schools ordering for term 1–3</li>
+                </ul>
+              </div>
+              <div>
+                <h2 className="font-bold text-lg mb-3 flex items-center gap-2"><Check className="h-5 w-5 text-primary"/>Why choose this book:</h2>
+                 <ul className="space-y-2 text-foreground/80 font-sans list-inside">
+                  <li className="flex items-start gap-2"><ShieldCheck className="h-4 w-4 mt-1 text-accent shrink-0"/>CBC-aligned and approved by KICD</li>
+                  <li className="flex items-start gap-2"><PenTool className="h-4 w-4 mt-1 text-accent shrink-0"/>Builds creativity & critical thinking</li>
+                  <li className="flex items-start gap-2"><BookOpen className="h-4 w-4 mt-1 text-accent shrink-0"/>Includes engaging, practical activities</li>
+                  <li className="flex items-start gap-2"><Home className="h-4 w-4 mt-1 text-accent shrink-0"/>Easy to use at home or in class</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/register/page.tsx ===
+```tsx
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { AlertCircle } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useAuth } from "@/context/AuthContext"
+import { mockUsers } from "@/lib/data"
+
+export default function RegisterPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const { login } = useAuth();
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (!name || !email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    if (mockUsers.some(user => user.email === email)) {
+      setError("An account with this email already exists.");
+      return;
+    }
+
+    const newUser = { id: `user-${Date.now()}`, name, email, password, isAdmin: false };
+    mockUsers.push(newUser);
+
+    login({ name: newUser.name, email: newUser.email, isAdmin: newUser.isAdmin });
+    toast.success(`Welcome, ${name}! Your account has been created.`);
+    router.push('/profile');
+  };
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-dot-grid">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <Card className="w-full bg-card/80 backdrop-blur-sm border-white/10 shadow-2xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Create Account</CardTitle>
+            <CardDescription className="text-muted-foreground pt-2">
+              Begin your educational journey with us.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleRegister}>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              {error && (
+                  <div
+                    className="w-full flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive"
+                    role="alert"
+                  >
+                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                    <p>{error}</p>
+                  </div>
+              )}
+              <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">Create Account</Button>
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link href="/login" className="font-semibold text-primary hover:underline">
+                  Login
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+# === app/order/confirmation/page.tsx ===
+```tsx
+"use client"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { CheckCircle } from "lucide-react"
+
+export default function OrderConfirmationPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4 text-center bg-dot-grid">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        className="bg-card/80 backdrop-blur-md p-6 sm:p-10 md:p-16 rounded-2xl border"
+      >
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 10 }}>
+          <CheckCircle className="h-16 w-16 sm:h-20 sm:w-20 text-primary mx-auto mb-6" />
+        </motion.div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+          Thank You For Your Order!
+        </h1>
+        <p className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto mb-8">
+          Your order has been placed successfully. You will receive a confirmation email shortly with the order details.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 px-8 rounded-full shadow-lg shadow-primary/20">
+                <Link href="/books">Continue Shopping</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-12 sm:h-14 px-8 rounded-full text-base font-bold">
+                <Link href="/profile/orders">View Order History</Link>
+            </Button>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+# === app/checkout/page.tsx ===
+```tsx
+"use client"
+import { useState } from "react";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCart } from "@/context/CartContext"
+import { useAuth } from "@/context/AuthContext";
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+
+export default function CheckoutPage() {
+  const { state } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
+  const { items } = state;
+
+  const [deliveryMethod, setDeliveryMethod] = useState("delivery");
+
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = deliveryMethod === "delivery" && subtotal > 0 ? 500.00 : 0;
+  const total = subtotal + shipping;
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/order/confirmation');
+  }
+
+  if (items.length === 0) {
+    return (
+        <div className="container mx-auto px-4 py-16 md:py-24 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-4">Checkout</h1>
+            <p className="text-xl text-muted-foreground">Your cart is empty. Please add books to proceed.</p>
+        </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 sm:mb-12 text-center">Checkout</h1>
+      <form onSubmit={handlePlaceOrder} className="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+        <div className="lg:col-span-2 space-y-10">
+          <Card className="bg-card/80 border">
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">Delivery Method</CardTitle></CardHeader>
+            <CardContent>
+                <RadioGroup defaultValue="delivery" onValueChange={setDeliveryMethod} className="flex flex-col sm:flex-row gap-4">
+                    <Label htmlFor="delivery" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="delivery" id="delivery" />
+                        <div>
+                            <p className="font-semibold">Delivery</p>
+                            <p className="text-sm text-muted-foreground">Shipped to your address.</p>
+                        </div>
+                    </Label>
+                    <Label htmlFor="pickup" className="flex items-center gap-3 border p-4 rounded-lg flex-1 cursor-pointer hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                        <RadioGroupItem value="pickup" id="pickup" />
+                        <div>
+                            <p className="font-semibold">Pickup</p>
+                            <p className="text-sm text-muted-foreground">Collect from our store.</p>
+                        </div>
+                    </Label>
+                </RadioGroup>
+            </CardContent>
+          </Card>
+          
+          {deliveryMethod === 'delivery' && (
+            <Card className="bg-card/80 border">
+                <CardHeader><CardTitle className="text-xl sm:text-2xl">Shipping Address</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-full space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" defaultValue={user?.name} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" defaultValue={user?.email} required /></div>
+                <div className="col-span-full space-y-2"><Label htmlFor="address">Address</Label><Input id="address" required /></div>
+                <div className="space-y-2"><Label htmlFor="city">City</Label><Input id="city" required /></div>
+                <div className="space-y-2"><Label htmlFor="zip">ZIP Code</Label><Input id="zip" required /></div>
+                </CardContent>
+            </Card>
+          )}
+
+          <Card className="bg-card/80 border">
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">M-Pesa Payment</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+                <p className="text-muted-foreground text-sm">You will receive an STK Push on your phone to complete the payment.</p>
+                <div className="space-y-2">
+                    <Label htmlFor="phone">M-Pesa Phone Number</Label>
+                    <Input id="phone" placeholder="e.g. 0712345678" required />
+                </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-1">
+          <Card className="bg-card/80 border sticky top-28 shadow-lg">
+            <CardHeader><CardTitle className="text-xl sm:text-2xl">Order Summary</CardTitle></CardHeader>
+            <CardContent>
+              <div className="space-y-4 mb-6">
+                {items.map(item => (
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-3">
+                        <Image src={item.imageUrl} alt={item.title} width={40} height={60} className="rounded w-10 h-auto" />
+                        <div>
+                            <p className="font-semibold text-foreground text-sm sm:text-base leading-tight">{item.title}</p>
+                            <p className="text-muted-foreground">Qty: {item.quantity}</p>
+                        </div>
+                    </div>
+                    <p className="font-semibold text-foreground text-sm sm:text-base">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2 text-sm sm:text-md border-t border-border pt-4">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-semibold text-foreground">Kshs {subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span className="font-semibold text-foreground">Kshs {shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-xl mt-2 text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
+              </div>
+               <Button type="submit" size="lg" className="w-full mt-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 rounded-full shadow-lg shadow-primary/20">
+                  Place Order
+                </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </form>
+    </div>
+  )
+}
+```
+
+# === app/parents/page.tsx ===
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardTitle } from "@/components/ui/card";
+import { BookOpenCheck, BrainCircuit, Home, Smile } from "lucide-react";
+
+const features = [
+    {
+        icon: BookOpenCheck,
+        title: "KICD Approved & CBC Aligned",
+        description: "Rest assured knowing every book meets the Ministry of Education's standards, perfectly aligning with the Competency-Based Curriculum.",
+    },
+    {
+        icon: BrainCircuit,
+        title: "Fosters Creativity & Critical Thinking",
+        description: "Our activities are designed to go beyond memorization, encouraging your child to explore, innovate, and think for themselves.",
+    },
+    {
+        icon: Smile,
+        title: "Makes Learning Fun",
+        description: "With engaging illustrations and practical tasks, we turn learning into an exciting adventure your child will love.",
+    },
+    {
+        icon: Home,
+        title: "Easy to Use at Home",
+        description: "Clear instructions and readily available materials mean you can easily support your child's learning journey outside the classroom.",
+    },
+];
+
+const faqs = [
+    {
+        question: "Are these books only for use in school?",
+        answer: "Not at all! The Champion Creative Series is designed for use both in the classroom and at home. They are a great tool for parents to support their child's learning, reinforce concepts, and work on fun projects together over the weekend or holidays."
+    },
+    {
+        question: "What age group is each category for?",
+        answer: "Generally, 'Lower Primary' covers Grades 1-3, 'Upper Primary' is for Grades 4-6, and 'Junior Secondary' is for Grades 7-9. Each book is clearly marked with the specific grade level it's intended for."
+    },
+    {
+        question: "How do I know which book is right for my child?",
+        answer: "Simply match the grade level of the book with your child's current grade in school. All our books are aligned with the official CBC curriculum for that grade, so you can be confident it's the right fit."
+    },
+    {
+        question: "What kind of activities are in the books?",
+        answer: "The books are packed with a variety of hands-on activities, including drawing, coloring, crafting, music exercises, and introductory sports skills. The goal is to provide a well-rounded, practical, and enjoyable learning experience."
+    }
+];
+
+export default function ParentsHubPage() {
+    return (
+        <div className="bg-background">
+            <section className="py-16 sm:py-20 md:py-28 bg-primary/5 bg-dot-grid text-center">
+                <div className="container mx-auto px-4">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tighter text-primary">Parents Hub</h1>
+                    <p className="mt-4 text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+                        Your partner in nurturing a creative and confident learner. Discover resources, tips, and answers to help you support your child&apos;s educational journey with the Champion Creative Series.
+                    </p>
+                </div>
+            </section>
+
+            <section className="py-16 sm:py-20 md:py-28">
+                <div className="container mx-auto px-4">
+                    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Why Parents & Teachers Trust Our Books</h2>
+                        <p className="mt-4 text-base sm:text-lg text-muted-foreground">
+                            We&apos;re committed to providing educational materials that are not only effective but also inspiring and easy to use.
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        {features.map((feature, index) => (
+                            <Card key={index} className="bg-card/80 border flex flex-col sm:flex-row items-start p-6 gap-6">
+                                <div className="p-3 rounded-full bg-primary/10 text-primary shrink-0 self-center sm:self-start">
+                                    <feature.icon className="h-7 w-7 sm:h-8 sm:w-8" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
+                                    <p className="text-muted-foreground">{feature.description}</p>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-16 sm:py-20 md:py-28 bg-muted/40 border-t">
+                <div className="container mx-auto px-4">
+                    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Frequently Asked Questions</h2>
+                        <p className="mt-4 text-base sm:text-lg text-muted-foreground">
+                            Have questions? We&apos;ve got answers. Here are some of the most common things parents ask us.
+                        </p>
+                    </div>
+                    <div className="max-w-3xl mx-auto">
+                        <Accordion type="single" collapsible className="w-full">
+                            {faqs.map((faq, index) => (
+                                <AccordionItem key={index} value={`item-${index}`}>
+                                    <AccordionTrigger className="text-lg font-semibold text-left">{faq.question}</AccordionTrigger>
+                                    <AccordionContent className="text-base text-muted-foreground leading-relaxed">
+                                        {faq.answer}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}
+```
+
+# === app/profile/layout.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
+import { User, FileText } from "lucide-react"; 
+
+const sidebarNavItems = [
+  { title: "My Profile", href: "/profile", icon: User },
+  { title: "Order History", href: "/profile/orders", icon: FileText },
+];
+
+export default function ProfileLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  if (!user) {
+    return <div className="container py-24 text-center">Loading or redirecting...</div>;
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <div className="text-center mb-8 md:mb-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter">My Account</h1>
+        <p className="text-muted-foreground mt-2">Manage your profile and view your order history.</p>
+      </div>
+      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <aside className="lg:w-1/4">
+          <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+            {sidebarNavItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "inline-flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                  pathname === item.href && "bg-muted font-bold text-primary"
+                )}
+              >
+                <item.icon className="h-5 w-5"/>
+                <span className="hidden sm:inline">{item.title}</span>
+              </Link>
+            ))}
+          </nav>
+        </aside>
+        <div className="flex-1 lg:max-w-4xl">{children}</div>
+      </div>
+    </div>
+  );
+}
+```
+
+# === app/profile/page.tsx ===
+```tsx
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
+
+export default function ProfilePage() {
+  const { user } = useAuth();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.info("Profile updated successfully!");
+  }
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Personal Information</CardTitle>
+          <CardDescription>Update your personal details here.</CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" defaultValue={user?.name} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" defaultValue={user?.email} />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit">Save Changes</Button>
+          </CardFooter>
+        </form>
+      </Card>
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>Update your password for better security.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="current-password">Current Password</Label>
+            <Input id="current-password" type="password" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="new-password">New Password</Label>
+            <Input id="new-password" type="password" />
+          </div>
+        </CardContent>
+        <CardFooter>
+            <Button>Update Password</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === app/profile/orders/page.tsx ===
+```tsx
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { dummyOrders } from "@/lib/data";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+
+export default function OrderHistoryPage() {
+  const orders = dummyOrders;
+
+  if (orders.length === 0) {
+    return (
+      <div className="text-center py-20 bg-muted rounded-lg border">
+        <h2 className="text-2xl font-semibold mb-4 text-foreground">You have no orders yet.</h2>
+        <p className="text-muted-foreground mb-8">
+          All your future orders will appear here.
+        </p>
+        <Button asChild size="lg">
+          <Link href="/books">Start Shopping</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Card className="bg-card/80 border">
+      <CardHeader>
+        <CardTitle>Your Orders</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <Link href={`/profile/orders/${order.id}`} key={order.id} className="block border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+              <div className="flex justify-between items-center">
+                <div className="grid gap-1">
+                  <p className="font-bold text-lg text-primary">Order #{order.id}</p>
+                  <p className="text-sm text-muted-foreground">Date: {order.date}</p>
+                  <p className="text-sm text-muted-foreground">Total: Kshs {order.total.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className={cn(
+                        "text-sm font-bold py-1 px-3 rounded-full",
+                        order.status === 'Delivered' && 'bg-green-100 text-green-800',
+                        order.status === 'Processing' && 'bg-yellow-100 text-yellow-800',
+                        order.status === 'Shipped' && 'bg-accent/10 text-primary'
+                    )}>
+                        {order.status}
+                    </span>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+# === app/profile/orders/[orderId]/page.tsx ===
+```tsx
+"use client";
+import { useParams } from "next/navigation";
+import { dummyOrders } from "@/lib/data";
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+const statusSteps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
+
+export default function OrderDetailsPage() {
+  const params = useParams();
+  const order = dummyOrders.find(o => o.id === params.orderId);
+
+  if (!order) {
+    return <div>Order not found.</div>;
+  }
+  
+  const currentStatusIndex = statusSteps.indexOf(order.status);
+
+  return (
+    <div className="space-y-8">
+      <Card className="bg-card/80 border">
+        <CardHeader>
+          <CardTitle>Order #{order.id}</CardTitle>
+          <CardDescription>Date: {order.date} · Status: {order.status}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold mb-4">Order Status</h3>
+            <div className="flex justify-between">
+              {statusSteps.map((step, index) => (
+                <div key={step} className="flex-1 flex flex-col items-center relative">
+                  <div className={cn(
+                      "h-8 w-8 rounded-full flex items-center justify-center border-2",
+                      index <= currentStatusIndex ? "bg-primary border-primary text-white" : "bg-muted border-border"
+                  )}>
+                    {index < currentStatusIndex ? '✓' : index + 1}
+                  </div>
+                  <p className={cn("mt-2 text-sm", index <= currentStatusIndex ? "font-bold text-primary" : "text-muted-foreground")}>{step}</p>
+                  {index < statusSteps.length - 1 && (
+                      <div className="absolute top-4 left-1/2 w-full h-0.5 -z-10">
+                          <div className={cn("h-full", index < currentStatusIndex ? 'bg-primary' : 'bg-border')}></div>
+                      </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <Separator className="my-6" />
+
+          <h3 className="text-lg font-semibold mb-4">Items Ordered</h3>
+          <div className="space-y-4">
+            {order.items.map(item => (
+              <div key={item.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Image src={item.imageUrl} alt={item.title} width={60} height={90} className="rounded-md" />
+                  <div>
+                    <p className="font-semibold">{item.title}</p>
+                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                  </div>
+                </div>
+                <p className="font-semibold">Kshs {(item.price * item.quantity).toFixed(2)}</p>
+              </div>
+            ))}
+          </div>
+          
+          <Separator className="my-6" />
+
+          <div className="flex justify-end">
+            <div className="w-full max-w-xs space-y-2">
+                <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>Kshs {(order.total - 500).toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Shipping</span><span>Kshs 500.00</span></div>
+                <Separator/>
+                <div className="flex justify-between font-bold text-lg"><span>Total</span><span>Kshs {order.total.toFixed(2)}</span></div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+```
+
+# === context/AuthContext.tsx ===
+```tsx
+"use client";
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+interface User {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (userData: User) => {
+    setUser(userData);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+```
+
+# === context/CartContext.tsx ===
+```tsx
+"use client";
+
+import { Book } from "@/lib/data";
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
+
+interface CartItem extends Book {
+  quantity: number;
+}
+
+type CartState = {
+  items: CartItem[];
+};
+
+type CartAction =
+  | { type: "ADD_ITEM"; payload: { quantity: number } & Book }
+  | { type: "REMOVE_ITEM"; payload: { id: string } }
+  | { type: "UPDATE_QUANTITY"; payload: { id: string; quantity: number } };
+
+const initialState: CartState = {
+  items: [],
+};
+
+const CartContext = createContext<{
+  state: CartState;
+  dispatch: React.Dispatch<CartAction>;
+}>({
+  state: initialState,
+  dispatch: () => null,
+});
+
+const cartReducer = (state: CartState, action: CartAction): CartState => {
+  switch (action.type) {
+    case "ADD_ITEM": {
+      const existingItem = state.items.find(item => item.id === action.payload.id);
+      if (existingItem) {
+        return {
+          ...state,
+          items: state.items.map(item =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity + action.payload.quantity }
+              : item
+          ),
+        };
+      }
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, quantity: action.payload.quantity }],
+      };
+    }
+    case "REMOVE_ITEM": {
+      return {
+        ...state,
+        items: state.items.filter(item => item.id !== action.payload.id),
+      };
+    }
+    case "UPDATE_QUANTITY": {
+      return {
+        ...state,
+        items: state.items.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: action.payload.quantity }
+            : item
+        ).filter(item => item.quantity > 0),
+      };
+    }
+    default:
+      return state;
+  }
+};
+
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  return (
+    <CartContext.Provider value={{ state, dispatch }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useCart = () => useContext(CartContext);
+```
+
+# === components/shared/AddToCart.tsx ===
+```tsx
+"use client";
+
+import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { Book } from '@/lib/data';
+import { Button } from '@/components/ui/button';
+import { Minus, Plus, ShoppingCart } from 'lucide-react';
+import { toast } from 'sonner';
+
+export function AddToCart({ book }: { book: Book }) {
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  
+  const handleAddToCart = () => {
+    dispatch({ type: 'ADD_ITEM', payload: { ...book, quantity } });
+    toast.success(`${quantity} x ${book.title} added to cart!`);
+  }
+
+  return (
+    <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center border rounded-full p-1 bg-white/50">
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+          <Minus className="h-4 w-4" />
+        </Button>
+        <span className="w-12 text-center text-lg font-bold">{quantity}</span>
+        <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setQuantity(q => q + 1)}>
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+      <Button 
+        size="lg" 
+        className="flex-grow bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20" 
+        onClick={handleAddToCart}
+      >
+        <ShoppingCart className="mr-2 h-5 w-5" />
+        Add to Cart
+      </Button>
+    </div>
+  );
+}
+```
+
+# === components/shared/BookFilters.tsx ===
+```tsx
+"use client";
+
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
+import { dummyBooks } from '@/lib/data';
+
+const categories = ['All', ...Array.from(new Set(dummyBooks.map(b => b.category)))];
+
+export function BookFilters() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const activeCategory = searchParams.get('category') || 'All';
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('query', term);
+    } else {
+      params.delete('query');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
+
+  const handleCategoryChange = (category: string) => {
+     const params = new URLSearchParams(searchParams);
+    if (category && category !== 'All') {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input 
+          placeholder="Search by title or author..."
+          className="pl-12 h-14 text-lg bg-card border-border focus-visible:ring-primary focus-visible:ring-offset-background rounded-full shadow-sm"
+          defaultValue={searchParams.get('query')?.toString()}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
+       <div className="flex justify-center flex-wrap gap-3">
+        {categories.map(category => (
+          <Button 
+            key={category} 
+            variant={activeCategory === category ? "default" : "outline"}
+            onClick={() => handleCategoryChange(category)}
+            className={cn(
+              "rounded-full px-6 h-11 text-base font-semibold",
+              activeCategory === category && "bg-primary text-primary-foreground"
+            )}
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+# === components/shared/BookGrid.tsx ===
+```tsx
+"use client";
+
+import { BookCard } from './BookCard';
+import { Book } from '@/lib/data';
+
+export function BookGrid({ books }: { books: Book[] }) {
+  return (
+    <div
+      className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10"
+      key={books.length}
+    >
+      {books.length > 0 ? (
+        books.map((book, index) => (
+          <BookCard 
+            key={book.id} 
+            book={book} 
+            priority={index < 5} 
+            animationDelay={`${index * 0.05}s`}
+          />
+        ))
+      ) : (
+        <p className="col-span-full text-center text-lg text-muted-foreground py-10">
+          No books found matching your criteria.
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+# === components/shared/BookCard.tsx ===
+```tsx
+"use client";
+
 import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
@@ -44,9 +2142,10 @@ import { Badge } from '@/components/ui/badge';
 interface BookCardProps {
   book: Book;
   priority?: boolean;
+  animationDelay?: string;
 }
 
-export function BookCard({ book, priority = false }: BookCardProps) {
+export function BookCard({ book, priority = false, animationDelay = '0s' }: BookCardProps) {
   const { dispatch } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -57,12 +2156,16 @@ export function BookCard({ book, priority = false }: BookCardProps) {
   };
 
   return (
-    <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
-      <Card className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-xl",
-        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
-        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
-      )}>
+    <Link href={`/books/${book.id}`} className="block group h-full" tabIndex={0}>
+      <Card
+        className={cn(
+          "flex h-full w-full flex-col overflow-hidden rounded-xl",
+          "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+          "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2",
+          "animate-fade-in-up"
+        )}
+        style={{ animationDelay }}
+      >
         <CardHeader className="p-0 relative">
           <div className="aspect-[4/5] w-full overflow-hidden rounded-t-xl">
               <Image
@@ -74,7 +2177,6 @@ export function BookCard({ book, priority = false }: BookCardProps) {
                 priority={priority}
               />
           </div>
-           {/* Badges Overlay */}
           <div className="absolute top-2 left-2 flex flex-col gap-1.5">
               <Badge className="bg-green-100/90 hover:bg-green-100 text-green-800 border border-green-200/50 text-xs font-bold shadow">
                   <ShieldCheck className="mr-1 h-3 w-3" /> KICD Approved
@@ -93,7 +2195,7 @@ export function BookCard({ book, priority = false }: BookCardProps) {
             size="icon"
             className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
             onClick={handleAddToCart}
-            aria-label="Add to cart"
+            aria-label={`Add ${book.title} to cart`}
           >
             <ShoppingCart className="h-4 w-4" />
           </Button>
@@ -104,4 +2206,821 @@ export function BookCard({ book, priority = false }: BookCardProps) {
 }
 ```
 
-This should resolve both the column layout and the sizing issue for the featured books. Let me know if you have any other questions
+# === components/shared/FeaturedBooks.tsx ===
+```tsx
+"use client";
+
+import { dummyBooks } from "@/lib/data";
+import { BookCard } from "./BookCard";
+
+export function FeaturedBooks() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 md:gap-8">
+      {dummyBooks.slice(0, 3).map((book, index) => (
+        <div
+          key={book.id}
+          className={`transition-transform duration-300 ease-in-out hover:scale-105 ${
+            index === 1 ? "sm:z-10" : "sm:opacity-90"
+          } ${
+            index === 2 ? "hidden sm:block" : ""
+          }`}
+        >
+          <BookCard book={book} />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+# === components/page/HeroSection.tsx ===
+```tsx
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRight,
+  BookCheck,
+  CheckCircle,
+  Rocket,
+  Truck,
+} from "lucide-react";
+import Link from "next/link";
+import dynamic from 'next/dynamic';
+
+const HeroBackground = dynamic(() => 
+  import('@/components/layout/HeroBackground').then(mod => mod.HeroBackground)
+);
+
+export function HeroSection() {
+  return (
+    <section className="container mx-auto px-4 pt-24 pb-16 md:pt-40 md:pb-32">
+      <div
+        className="relative flex flex-col items-center justify-center overflow-hidden rounded-3xl bg-primary text-center shadow-xl shadow-primary/30 border border-white/10"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px)",
+          backgroundSize: "1.5rem 1.5rem",
+        }}
+      >
+        <HeroBackground />
+        <div className="relative z-10 max-w-4xl px-4 py-28 md:py-40">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight md:text-6xl text-white drop-shadow-lg">
+            Champion Creative Series
+          </h1>
+          
+          <p
+            className="mt-6 text-xl md:text-2xl max-w-2xl mx-auto text-white/90 uppercase tracking-wider animate-fade-in-up"
+            style={{ animationDelay: '0.2s' }}
+          >
+            Kenya’s Trusted CBC Creative Arts Books for Grades 1–8
+          </p>
+
+          <div
+            className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-white/80 font-medium animate-fade-in-up"
+            style={{ animationDelay: '0.4s' }}
+          >
+            <span className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-accent" /> KICD-approved
+            </span>
+            <span className="hidden sm:inline">|</span>
+            <span className="flex items-center gap-2">
+              <BookCheck className="h-5 w-5 text-accent" /> CBC-aligned
+            </span>
+            <span className="hidden sm:inline">|</span>
+            <span className="flex items-center gap-2">
+              <Rocket className="h-5 w-5 text-accent" /> Boosts creativity
+            </span>
+          </div>
+
+          <div
+            className="mt-10 flex flex-col items-center gap-6 animate-fade-in-up"
+            style={{ animationDelay: '0.6s' }}
+          >
+            <Button
+              size="lg"
+              asChild
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-16 px-10 text-lg rounded-full shadow-lg shadow-primary/30 transition-transform hover:scale-105"
+            >
+              <Link href="/books">
+                Explore The Books <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <p className="text-sm text-white/70 flex items-center gap-4">
+              <span className="flex items-center gap-1.5">
+                <Truck className="h-4 w-4" /> Fast delivery across Kenya
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+# === components/page/ModernLearnerSection.tsx ===
+```tsx
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { CheckCircle, Heart, Lightbulb } from "lucide-react";
+
+const whyChooseUsPoints = [
+  {
+    icon: CheckCircle,
+    title: "KICD Approved",
+    description: "Our content is 100% CBC-aligned and fully approved, ensuring quality and relevance for Kenyan learners.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Fosters Real Creativity",
+    description: "We go beyond textbooks with practical, hands-on activities that build critical thinking and innovation.",
+  },
+  {
+    icon: Heart,
+    title: "Makes Learning Fun",
+    description: "With engaging illustrations and exciting tasks, we turn education into an adventure children love.",
+  },
+];
+
+export function ModernLearnerSection() {
+  return (
+    <section className="py-24 md:py-32 overflow-hidden">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <motion.div
+            className="relative w-full h-[400px] md:h-[500px] lg:col-span-5 lg:order-last"
+            initial={{ opacity: 0, x: 80, scale: 0.8 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <Image
+              src="/1.jpg"
+              alt="A happy Kenyan student participating in creative activities"
+              fill
+              className="object-cover"
+              style={{ clipPath: "url(#shape-blob-right)" }}
+              sizes="(max-width: 1024px) 90vw, 40vw"
+            />
+          </motion.div>
+          <div className="text-center md:text-left lg:col-span-7 lg:-ml-0 relative z-10">
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold tracking-tight mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Built for the Modern Learner
+            </motion.h2>
+            <ul className="space-y-8">
+              {whyChooseUsPoints.map((point, i) => (
+                <motion.li
+                  key={i}
+                  className="flex flex-col sm:flex-row items-center sm:items-start gap-4"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
+                >
+                  <div className="flex-shrink-0 bg-primary/10 text-primary p-3 rounded-full">
+                    <point.icon className="h-6 w-6" />
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold">{point.title}</h3>
+                    <p className="text-muted-foreground mt-1">{point.description}</p>
+                  </div>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+# === components/page/TestimonialsSection.tsx ===
+```tsx
+"use client";
+
+import { motion } from "framer-motion";
+
+const testimonials = [
+  { name: "Mrs. Kamau", role: "Parent, Grade 3", quote: "The Champion Creative book is fantastic! My son is always excited to do the activities, and it has really boosted his confidence in art." },
+  { name: "Mr. Otieno", role: "Teacher, Upper Primary", quote: "As an educator, I appreciate how well-structured and aligned with the CBC curriculum these books are. They are a valuable resource in my classroom." },
+  { name: "Sarah W.", role: "Parent, Grade 1 & 4", quote: "We have the books for both our children. The quality is excellent, and the delivery was so fast. Highly recommended for any parent." }
+];
+
+export function TestimonialsSection() {
+  return (
+    <section className="py-24 md:py-32 bg-dot-grid">
+      <div className="container mx-auto px-4">
+        <motion.div
+          className="text-center max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Loved by Parents and Teachers
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Don&apos;t just take our word for it. Here&apos;s what people are saying.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
+          {testimonials.map((testimonial, i) => (
+            <motion.figure
+              key={i}
+              className="bg-white/80 backdrop-blur-sm border rounded-2xl p-8 shadow-lg transition-all duration-300 ease-out"
+              initial={{ opacity: 0, y: 40, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileHover={{ scale: 1.05, zIndex: 10 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 * i }}
+            >
+              <blockquote className="text-lg text-foreground/80 italic">
+                <p>❝ {testimonial.quote} ❞</p>
+              </blockquote>
+              <figcaption className="mt-6">
+                <p className="font-bold text-primary">{testimonial.name}</p>
+                <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+              </figcaption>
+            </motion.figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+# === components/page/FeaturedPublicationsSection.tsx ===
+```tsx
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { FeaturedBooks } from "@/components/shared/FeaturedBooks";
+
+export function FeaturedPublicationsSection() {
+  return (
+    <section id="publications" className="py-16 sm:py-20 md:py-28 bg-muted/30 overflow-hidden">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-12 gap-y-12 lg:gap-x-16 items-center">
+          <div className="lg:col-span-5 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-primary mb-4">
+                Our Featured Publications
+              </h2>
+              <p className="text-base sm:text-lg text-foreground/80 leading-relaxed mb-8">
+                Explore our KICD-approved collection, designed to spark
+                creativity and make learning an exciting adventure for every
+                student in Kenya.
+              </p>
+              <Button
+                size="lg"
+                asChild
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 sm:h-14 px-8 text-base rounded-full shadow-lg shadow-primary/20 transition-transform hover:scale-105"
+              >
+                <Link href="/books">
+                  Explore All Books <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+            >
+              <div className="absolute -inset-8 sm:-inset-12 z-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-muted/0 via-muted/0 to-muted/80 rounded-3xl"></div>
+              </div>
+
+              <div className="relative z-10">
+                <FeaturedBooks />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+# === components/page/MissionVisionSection.tsx ===
+```tsx
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { BookCheck, CheckCircle, Truck } from "lucide-react";
+
+export function MissionVisionSection() {
+  return (
+    <section id="about" className="py-24 md:py-32 bg-muted/30 overflow-hidden">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="lg:order-last text-center md:text-left lg:col-span-7 lg:-mr-0 relative z-10">
+            <motion.h2
+              className="text-4xl md:text-5xl font-bold tracking-tight mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Our Mission & Vision
+            </motion.h2>
+            <motion.p
+              className="text-lg text-muted-foreground leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              Doritex Publishers is a proudly Kenyan-owned company with over a decade of experience. Our mission is to create high-quality, affordable, and engaging educational materials that empower the next generation of creative thinkers and problem-solvers.
+            </motion.p>
+            <motion.div
+              className="mt-8 flex justify-center md:justify-start flex-wrap gap-4 font-semibold text-primary"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <span className="flex items-center gap-2"><BookCheck className="h-5 w-5" /> CBC-aligned</span>
+              <span className="flex items-center gap-2"><CheckCircle className="h-5 w-5" /> KICD Approved</span>
+              <span className="flex items-center gap-2"><Truck className="h-5 w-5" /> Nationwide Delivery</span>
+            </motion.div>
+          </div>
+          <motion.div
+            className="relative w-full h-[400px] md:h-[500px] lg:col-span-5"
+            initial={{ opacity: 0, x: -80, scale: 0.8 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <Image
+              src="/2.jpg"
+              alt="A teacher guiding students in a classroom"
+              fill
+              className="object-cover"
+              style={{ clipPath: "url(#shape-blob-left)" }}
+              sizes="(max-width: 1024px) 90vw, 40vw"
+            />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+# === components/layout/MobileFAB.tsx ===
+```tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  BookOpen,
+  Home,
+  LogIn,
+  Menu,
+  User,
+  X,
+  Heart,
+  Shield,
+} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+
+export function MobileFAB() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+  
+
+  const navItems = [
+    { href: "/", icon: Home, label: "Home" },
+    { href: "/books", icon: BookOpen, label: "Books" },
+    { href: "/parents", icon: Heart, label: "Parents" },
+    user
+      ? { href: "/profile", icon: User, label: "Profile" }
+      : { href: "/login", icon: LogIn, label: "Login" },
+    user?.isAdmin ? { href: "/admin", icon: Shield, label: "Admin" } : null,
+  ].filter(Boolean) as {
+    href: string;
+    icon: React.ElementType;
+    label: string;
+  }[];
+
+  return (
+    <div className="lg:hidden" aria-label="Mobile Navigation Menu">
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="flex flex-col items-center gap-4">
+          <div
+            id="fab-menu"
+            className={cn(
+              "flex flex-col items-center gap-4 transition-opacity duration-300 ease-in-out",
+              isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+            )}
+          >
+            {navItems.slice().reverse().map((item) => (
+              <div key={item.href} className="flex items-center gap-3">
+                <div className="bg-card text-card-foreground p-2 rounded-lg shadow-md text-sm font-semibold">
+                  {item.label}
+                </div>
+                <Button
+                  asChild
+                  size="icon"
+                  className="relative rounded-full h-12 w-12 shadow-lg bg-card text-primary hover:bg-muted"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Link href={item.href}>
+                    <item.icon className="h-6 w-6" />
+                  </Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          <Button
+            size="icon"
+            className={cn(
+              "h-16 w-16 rounded-full bg-accent hover:bg-accent/90 transition-transform duration-300 transform",
+              isOpen ? "rotate-45 scale-90" : "scale-100",
+              !isOpen && "animate-pulse-fab"
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-controls="fab-menu"
+          >
+            {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+# === components/layout/Footer.tsx ===
+```tsx
+import Link from "next/link";
+import Image from "next/image";
+import { Twitter, Facebook, Linkedin } from "lucide-react";
+
+export function Footer() {
+  return (
+    <footer className="bg-primary text-white/80 relative overflow-hidden border-t border-white/5">
+      <div className="absolute inset-0 opacity-[0.02] bg-dot-grid"></div>
+      <div className="container mx-auto relative py-16 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8 max-w-7xl mx-auto">
+          
+          <div className="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/logo2.png"
+                alt="Doritex Logo"
+                width={160}
+                height={45}
+                className="h-11 w-auto filter brightness-0 invert mx-auto sm:mx-0"
+              />
+            </Link>
+            <p className="text-sm leading-relaxed mt-4 font-sans max-w-xs mx-auto sm:mx-0">
+              Your Gateway to Educational Excellence.
+            </p>
+          </div>
+
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Links
+            </h4>
+            <ul className="space-y-3 text-sm font-sans">
+              <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
+              <li><Link href="/books" className="hover:text-accent transition-colors">Books</Link></li>
+              <li><Link href="/parents" className="hover:text-accent transition-colors">Parents Hub</Link></li>
+              <li><Link href="/#about" className="hover:text-accent transition-colors">About Us</Link></li>
+            </ul>
+          </div>
+
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Contact
+            </h4>
+            <ul className="space-y-3 text-sm font-sans break-words">
+              <li>
+                <a href="mailto:investments.doritex@gmail.com" className="hover:text-accent transition-colors">
+                  investments.doritex@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+254722316210" className="hover:text-accent transition-colors">
+                  +254 722 316 210
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="text-center sm:text-left">
+            <h4 className="font-bold text-base mb-4 text-white font-display uppercase tracking-wider">
+              Connect
+            </h4>
+            <div className="flex justify-center sm:justify-start gap-4">
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Follow us on Twitter"><Twitter size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Follow us on Facebook"><Facebook size={22} /></Link>
+              <Link href="#" className="hover:text-accent hover:scale-110 transition-all" aria-label="Connect with us on LinkedIn"><Linkedin size={22} /></Link>
+            </div>
+          </div>
+
+        </div>
+        
+        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-white/60 font-sans">
+          <p>© {new Date().getFullYear()} Doritex Investments Limited. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+```
+
+# === components/layout/MobileFABLoader.tsx ===
+```tsx
+"use client";
+
+import dynamic from 'next/dynamic';
+
+const MobileFAB = dynamic(() =>
+  import('@/components/layout/MobileFAB').then(mod => mod.MobileFAB),
+  { ssr: false }
+);
+
+export function MobileFABLoader() {
+  return <MobileFAB />;
+}
+```
+
+# === components/layout/HeroBackground.tsx ===
+```tsx
+"use client";
+
+export function HeroBackground() {
+  return (
+    <div className="absolute inset-0 z-0 w-full h-full overflow-hidden bg-primary">
+      <svg
+        className="w-full h-full"
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(0, 153, 255, 0.5)" />
+            <stop offset="100%" stopColor="rgba(15, 31, 104, 0.3)" />
+          </linearGradient>
+          <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(0, 153, 255, 0.3)" />
+            <stop offset="100%" stopColor="rgba(15, 31, 104, 0.4)" />
+          </linearGradient>
+        </defs>
+
+        <g className="animate-wave-slow">
+          <path
+            fill="url(#waveGradient1)"
+            d="M -10,300 C 250,200 350,400 600,300 S 900,400 1010,300 V 610 H -10 Z"
+          />
+        </g>
+
+        <g className="animate-wave-fast">
+          <path
+            fill="url(#waveGradient2)"
+            d="M -10,330 C 200,250 300,430 550,330 S 850,250 1010,310 V 610 H -10 Z"
+          />
+        </g>
+      </svg>
+    </div>
+  );
+}
+```
+
+# === components/layout/Header.tsx ===
+```tsx
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ShoppingCart, User as UserIcon, Home, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter, usePathname } from "next/navigation";
+
+export function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { state } = useCart();
+  const { user, logout } = useAuth();
+  const cartItemCount = state.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  }
+
+  const BrandLogo = () => (
+    <Link href="/" className="flex items-center">
+      <Image
+        src="/logo2.png"
+        alt="Doritex Logo"
+        width={200}
+        height={56}
+        priority
+        className="h-14 w-auto"
+        sizes="200px"
+      />
+    </Link>
+  );
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-30 w-full border-b bg-background/80 backdrop-blur-xl shadow-sm"
+      )}
+    >
+      <div className="container mx-auto px-4">
+        <div className="relative flex h-20 items-center justify-between">
+          <div className="flex-shrink-0">
+            <BrandLogo />
+          </div>
+
+          <nav className="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="flex items-center gap-1 rounded-full bg-primary p-1.5 backdrop-blur-sm border border-white/10 shadow-md">
+              <Link
+                  href="/"
+                  className={cn(
+                    "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                    pathname === "/"
+                      ? "bg-white text-primary shadow"
+                      : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                  )}
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
+              </Link>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                        "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                        pathname.startsWith("/books")
+                        ? "bg-white text-primary shadow"
+                        : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                    )}
+                  >
+                    Books
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild><Link href="/books">All Books</Link></DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild><Link href="/books?category=Lower+Primary">Lower Primary</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/books?category=Upper+Primary">Upper Primary</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link href="/books?category=Junior+Secondary">Junior Secondary</Link></DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Link
+                href="/parents"
+                className={cn(
+                  "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                  pathname === "/parents"
+                    ? "bg-white text-primary shadow"
+                    : "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                )}
+              >
+                Parents Hub
+              </Link>
+              <Link
+                href="/#about"
+                className={cn(
+                  "flex items-center justify-center rounded-full px-5 py-2 text-base font-medium transition-all",
+                  "text-primary-foreground/80 hover:text-white hover:bg-white/10"
+                )}
+              >
+                About
+              </Link>
+            </div>
+          </nav>
+
+          <div className="flex items-center gap-2 lg:hidden">
+            <Button size="icon" className="rounded-full relative flex-shrink-0 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="hidden lg:flex items-center gap-4">
+              {user ? (
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="rounded-full font-medium flex items-center gap-2">
+                        <UserIcon className="h-4 w-4"/>
+                        My Account
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>Hi, {user.name}!</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild><Link href="/profile">My Profile</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href="/profile/orders">Order History</Link></DropdownMenuItem>
+                      {user.isAdmin && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild><Link href="/admin">Admin Dashboard</Link></DropdownMenuItem>
+                        </>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-destructive cursor-pointer">
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+              ) : (
+                <>
+                  <Button variant="ghost" className="font-medium rounded-full" asChild>
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 rounded-full shadow-lg shadow-primary/20" asChild>
+                    <Link href="/register">Sign Up</Link>
+                  </Button>
+                </>
+              )}
+
+            <Button size="icon" className="rounded-full relative flex-shrink-0 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs font-bold text-white">
+                    {cartItemCount}
+                  </span>
+                )}
+                <span className="sr-only">Shopping Cart</span>
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+```

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
@@ -13,9 +15,10 @@ import { Badge } from '@/components/ui/badge';
 interface BookCardProps {
   book: Book;
   priority?: boolean;
+  animationDelay?: string;
 }
 
-export function BookCard({ book, priority = false }: BookCardProps) {
+export function BookCard({ book, priority = false, animationDelay = '0s' }: BookCardProps) {
   const { dispatch } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -26,12 +29,16 @@ export function BookCard({ book, priority = false }: BookCardProps) {
   };
 
   return (
-    <Link href={`/books/${book.id}`} className="block group" tabIndex={0}>
-      <Card className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-xl",
-        "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
-        "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2"
-      )}>
+    <Link href={`/books/${book.id}`} className="block group h-full" tabIndex={0}>
+      <Card
+        className={cn(
+          "flex h-full w-full flex-col overflow-hidden rounded-xl",
+          "bg-card/80 backdrop-blur-sm border shadow-lg shadow-black/10",
+          "transition-all duration-300 ease-in-out group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-2",
+          "animate-fade-in-up"
+        )}
+        style={{ animationDelay }}
+      >
         <CardHeader className="p-0 relative">
           <div className="aspect-[4/5] w-full overflow-hidden rounded-t-xl">
               <Image
@@ -43,7 +50,6 @@ export function BookCard({ book, priority = false }: BookCardProps) {
                 priority={priority}
               />
           </div>
-           {/* Badges Overlay */}
           <div className="absolute top-2 left-2 flex flex-col gap-1.5">
               <Badge className="bg-green-100/90 hover:bg-green-100 text-green-800 border border-green-200/50 text-xs font-bold shadow">
                   <ShieldCheck className="mr-1 h-3 w-3" /> KICD Approved
@@ -62,7 +68,7 @@ export function BookCard({ book, priority = false }: BookCardProps) {
             size="icon"
             className="bg-primary/90 hover:bg-primary text-primary-foreground rounded-full h-9 w-9 shrink-0"
             onClick={handleAddToCart}
-            aria-label="Add to cart"
+            aria-label={`Add ${book.title} to cart`}
           >
             <ShoppingCart className="h-4 w-4" />
           </Button>

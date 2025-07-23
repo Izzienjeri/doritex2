@@ -128,9 +128,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </SheetContent>
           </Sheet>
           <div className="w-full flex-1">
-            {/* Header content like a search bar could go here */}
           </div>
-          {/* User account button can be added here if needed */}
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:p-6 bg-muted/30">
           {children}

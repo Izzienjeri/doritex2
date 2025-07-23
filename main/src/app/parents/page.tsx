@@ -47,30 +47,28 @@ const faqs = [
 export default function ParentsHubPage() {
     return (
         <div className="bg-background">
-            {/* Hero Section */}
-            <section className="py-20 md:py-32 bg-primary/5 bg-dot-grid text-center">
+            <section className="py-16 sm:py-20 md:py-28 bg-primary/5 bg-dot-grid text-center">
                 <div className="container mx-auto px-4">
-                    <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-primary">Parents Hub</h1>
-                    <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tighter text-primary">Parents Hub</h1>
+                    <p className="mt-4 text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
                         Your partner in nurturing a creative and confident learner. Discover resources, tips, and answers to help you support your child&apos;s educational journey with the Champion Creative Series.
                     </p>
                 </div>
             </section>
 
-            {/* Why Our Books Section */}
-            <section className="py-24 md:py-32">
+            <section className="py-16 sm:py-20 md:py-28">
                 <div className="container mx-auto px-4">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Why Parents & Teachers Trust Our Books</h2>
-                        <p className="mt-4 text-lg text-muted-foreground">
+                    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Why Parents & Teachers Trust Our Books</h2>
+                        <p className="mt-4 text-base sm:text-lg text-muted-foreground">
                             We&apos;re committed to providing educational materials that are not only effective but also inspiring and easy to use.
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         {features.map((feature, index) => (
                             <Card key={index} className="bg-card/80 border flex flex-col sm:flex-row items-start p-6 gap-6">
-                                <div className="p-3 rounded-full bg-primary/10 text-primary shrink-0">
-                                    <feature.icon className="h-8 w-8" />
+                                <div className="p-3 rounded-full bg-primary/10 text-primary shrink-0 self-center sm:self-start">
+                                    <feature.icon className="h-7 w-7 sm:h-8 sm:w-8" />
                                 </div>
                                 <div>
                                     <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
@@ -82,12 +80,11 @@ export default function ParentsHubPage() {
                 </div>
             </section>
 
-            {/* FAQ Section */}
-            <section className="py-24 md:py-32 bg-muted/40 border-t">
+            <section className="py-16 sm:py-20 md:py-28 bg-muted/40 border-t">
                 <div className="container mx-auto px-4">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Frequently Asked Questions</h2>
-                        <p className="mt-4 text-lg text-muted-foreground">
+                    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">Frequently Asked Questions</h2>
+                        <p className="mt-4 text-base sm:text-lg text-muted-foreground">
                             Have questions? We&apos;ve got answers. Here are some of the most common things parents ask us.
                         </p>
                     </div>

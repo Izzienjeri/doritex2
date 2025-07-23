@@ -24,8 +24,8 @@ export default function CartPage() {
   const total = subtotal + shipping;
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24 bg-dot-grid">
-      <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-12 text-center">Shopping Cart</h1>
+    <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 bg-dot-grid">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 sm:mb-12 text-center">Shopping Cart</h1>
       
       {items.length === 0 ? (
         <div className="text-center py-20 bg-muted rounded-lg border">
@@ -33,31 +33,31 @@ export default function CartPage() {
           <p className="text-muted-foreground mb-8">
             Looks like you haven&rsquo;t added any books yet.
           </p>
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 px-8 rounded-full shadow-lg shadow-primary/20">
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 px-8 rounded-full shadow-lg shadow-primary/20">
             <Link href="/books">Explore Books</Link>
           </Button>
         </div>
       ) : (
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
           <div className="lg:col-span-2 space-y-6">
             {items.map(item => (
-              <Card key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center p-4 gap-4 bg-card/80 border">
-                <Image src={item.imageUrl} alt={item.title} width={100} height={150} className="rounded-md object-cover self-center sm:self-start shrink-0" />
+              <Card key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center p-3 sm:p-4 gap-4 bg-card/80 border">
+                <Image src={item.imageUrl} alt={item.title} width={80} height={120} className="w-20 sm:w-24 h-auto rounded-md object-cover self-center sm:self-start shrink-0" />
                 <div className="flex-grow w-full">
-                    <h3 className="text-lg font-bold text-foreground">{item.title}</h3>
-                    <p className="text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
+                    <h3 className="text-base sm:text-lg font-bold text-foreground">{item.title}</h3>
+                    <p className="text-base sm:text-lg font-bold text-primary mt-2">Kshs {item.price.toFixed(2)}</p>
                 </div>
-                <div className="flex items-center gap-4 self-stretch sm:self-center justify-end w-full sm:w-auto">
+                <div className="flex items-center gap-2 sm:gap-4 self-center justify-between sm:justify-end w-full sm:w-auto">
                     <div className="flex items-center border rounded-full p-1 bg-white/50">
-                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label={`Decrease quantity of ${item.title}`}>
                             <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center font-bold">{item.quantity}</span>
-                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                        <span className="w-8 text-center font-bold" aria-live="polite">{item.quantity}</span>
+                        <Button variant="ghost" size="icon" className="rounded-full h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label={`Increase quantity of ${item.title}`}>
                             <Plus className="h-4 w-4" />
                         </Button>
                     </div>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.id)}>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.id)} aria-label={`Remove ${item.title} from cart`}>
                         <Trash2 className="h-5 w-5" />
                     </Button>
                 </div>
@@ -70,14 +70,14 @@ export default function CartPage() {
               <CardHeader>
                 <CardTitle className="text-2xl text-foreground">Order Summary</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-lg">
+              <CardContent className="space-y-4 text-base sm:text-lg">
                 <div className="flex justify-between text-card-foreground/80"><span>Subtotal</span><span className='font-semibold text-foreground'>Kshs {subtotal.toFixed(2)}</span></div>
                 <div className="flex justify-between text-card-foreground/80"><span>Shipping</span><span className='font-semibold text-foreground'>Kshs {shipping.toFixed(2)}</span></div>
                 <hr className="border-border" />
                 <div className="flex justify-between font-bold text-xl text-foreground"><span>Total</span><span>Kshs {total.toFixed(2)}</span></div>
               </CardContent>
               <CardFooter>
-                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-14 rounded-full shadow-lg shadow-primary/20">
+                 <Button asChild size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base h-12 sm:h-14 rounded-full shadow-lg shadow-primary/20">
                     <Link href="/checkout">
                         Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
